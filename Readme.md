@@ -1,5 +1,7 @@
 # Руководство по работе с проектом
 
+* Наставник: [Денис Дудин](https://htmlacademy.ru/profile/den777).
+
 Данный проект создан с помощью [Create React App](https://github.com/facebook/create-react-app).
 
 ## Структура проекта
