@@ -30,7 +30,7 @@ class Movie
     }
 }
 
-// Интерфейс репозитория для модели класса Movi
+// Интерфейс репозитория для модели класса Movie
 interface MovieRepositoryInterface
 {
     public function getMovie(int $imdbId);
