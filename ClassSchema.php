@@ -8,7 +8,7 @@
 // Класс модели фильм
 class Movie
 {
-    private array $moviInfo = [
+    private array $movieInfo = [
         'imdbID', // Идентификатор фильма IMDb в OMDb (например, tt1285016)
         'title', // Название фильма
         'poster', // Афиша фильма
@@ -31,7 +31,7 @@ class Movie
 }
 
 // Интерфейс репозитория для модели класса Movi
-interface MoviRepositoryInterface
+interface MovieRepositoryInterface
 {
     public function getMovie(int $imdbId);
 }
