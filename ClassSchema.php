@@ -6,7 +6,7 @@
 */
 
 // Класс модели фильм
-class Movi
+class Movie
 {
     private array $moviInfo = [
         'imdbID', // Идентификатор фильма IMDb в OMDb (например, tt1285016)
@@ -24,9 +24,9 @@ class Movi
      * 
      * @return array - массив с информацией о фильме
      */
-    public function getMoviInfo(): array
+    public function getMovieInfo(): array
     {
-        return $this->moviInfo;
+        return $this->movieInfo;
     }
 }
 
