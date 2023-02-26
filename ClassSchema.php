@@ -8,7 +8,7 @@
 // Класс модели фильм
 class Movie
 {
-    private array $movieInfo = [
+    private array $fillable = [
         'imdbID', // Идентификатор фильма IMDb в OMDb (например, tt1285016)
         'title', // Название фильма
         'poster', // Афиша фильма
@@ -26,7 +26,7 @@ class Movie
      */
     public function getMovieInfo(): array
     {
-        return $this->movieInfo;
+        return $this->fillable;
     }
 }
 
