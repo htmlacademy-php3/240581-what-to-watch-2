@@ -9,10 +9,10 @@
 class Movie
 {
     private array $fillable = [
-        'imdbID', // Идентификатор фильма IMDb в OMDb (например, tt1285016)
+        'imdb_id', // Идентификатор фильма IMDb в OMDb (например, tt1285016)
         'title', // Название фильма
         'poster', // Афиша фильма
-        'releaseYear', // Год выпуска
+        'year', // Год выпуска
         'duration', // Продолжительность фильма
         'genres', // Жанры фильма
         'director', // Режиссёр фильма
