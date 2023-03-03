@@ -27,4 +27,5 @@ yarn-error.log*
 .vscode
 
 backend/parameters/*
-OpenMovieDatabase.php
+package-lock.json
+vendor/*

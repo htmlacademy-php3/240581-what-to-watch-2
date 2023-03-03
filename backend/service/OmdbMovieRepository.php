@@ -1,7 +1,9 @@
 <?php
 
-require_once('OpenMovieDatabase.php');
-require_once('MovieRepositoryInterface.php');
+namespace backend\service;
+
+use backend\service\MovieRepositoryInterface;
+use backend\parameters\OpenMovieDatabase;
 
 /**
  * Репозиторий The Open Movie Database для класса Movie
@@ -33,7 +35,6 @@ class OmdbMovieRepository implements MovieRepositoryInterface
         $query = [
             'i' => $imdbId,
             'apikey' => OpenMovieDatabase::getApikey(),
-            'r' => 'json',
         ];
 
         $response = $this->httpClient->request('GET', self::OMDB_URI, ['query' => $query]);

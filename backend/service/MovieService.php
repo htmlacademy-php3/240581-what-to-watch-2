@@ -1,20 +1,19 @@
 <?php
 
+namespace backend\service;
+
 /** 
  * Прикладной сервис MovieService,
  * используя MovieRepositoryInterface осуществляет все операции с сущностью Movie
- * @property $movieInfo - массив с информацией о фильме
- * (в последствии будет заменён на модель класса Movie),
- * полученный из базы данных OMDB через конкретную реализацию интерфейса репозитория
- * MovieRepositoryInterface
+ * @property MovieRepositoryInterface $movieRepository
  */
 class MovieService
 {
-    private $movie;
+    private MovieRepositoryInterface $movieRepository;
 
-    public function __construct(MovieRepositoryInterface $movie)
+    public function __construct(MovieRepositoryInterface $movieRepository)
     {
-        $this->movie = $movie;
+        $this->movieRepository = $movieRepository;
     }
 
     /**
@@ -25,6 +24,6 @@ class MovieService
      */
     public function searchMovie(string $imdbId): ?array // TODO: Movie
     {
-        return $this->movie->findById($imdbId);
+        return $this->movieRepository->findById($imdbId);
     }
 }

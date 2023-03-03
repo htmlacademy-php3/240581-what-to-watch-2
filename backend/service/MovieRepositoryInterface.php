@@ -1,5 +1,8 @@
 <?php
 
+namespace backend\service;
+
+
 /**
  * Интерфейс репозитория для класса Movie
  * 

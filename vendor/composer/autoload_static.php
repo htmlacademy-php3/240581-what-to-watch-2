@@ -14,6 +14,10 @@ class ComposerStaticInit5c01042d4b65eb8704dad7513e1b1105
     );
 
     public static $prefixLengthsPsr4 = array (
+        'b' => 
+        array (
+            'backend\\' => 8,
+        ),
         'P' => 
         array (
             'Psr\\Http\\Message\\' => 17,
@@ -25,13 +29,13 @@ class ComposerStaticInit5c01042d4b65eb8704dad7513e1b1105
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
         ),
-        2 => 
-        array (
-            '240581-what-to-watch-2\\' => 23,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'backend\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/backend',
+        ),
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-factory/src',
@@ -52,10 +56,6 @@ class ComposerStaticInit5c01042d4b65eb8704dad7513e1b1105
         'GuzzleHttp\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
-        ),
-        '240581-what-to-watch-2\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/src',
         ),
     );
 
