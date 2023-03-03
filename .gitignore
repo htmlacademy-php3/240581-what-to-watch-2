@@ -28,4 +28,4 @@ yarn-error.log*
 
 backend/parameters/*
 package-lock.json
-vendor/*
+/vendor
