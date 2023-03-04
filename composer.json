@@ -1,0 +1,13 @@
+{
+    "name": "vya58/240581-what-to-watch-2",
+    "type": "project",
+    "license": "BSD-3-Clause",
+    "autoload": {
+        "psr-4": {
+            "backend\\": "backend/"
+        }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^7.5"
+    }
+}

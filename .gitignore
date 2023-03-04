@@ -25,3 +25,7 @@ yarn-error.log*
 .idea
 *.sublime*
 .vscode
+
+backend/parameters/*
+package-lock.json
+/vendor
