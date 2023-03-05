@@ -1,11 +1,11 @@
 <?php
 
-namespace backend\service;
+//namespace app;
 
-use backend\service\MovieService;
-use backend\service\OmdbMovieRepository;
+use app\services\MovieService;
+use app\repositories\OmdbMovieRepository;
 
-require_once('../../vendor/autoload.php');
+//require_once('../../vendor/autoload.php');
 use GuzzleHttp\Client;
 
 // Тест 1. Поиск по действительному идентификатору фильма

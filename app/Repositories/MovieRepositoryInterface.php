@@ -1,11 +1,11 @@
 <?php
 
-namespace backend\service;
+namespace App\repositories;
 
 
 /**
  * Интерфейс репозитория для класса Movie
- * 
+ *
  * @property string $id - id фильма
  */
 interface MovieRepositoryInterface
