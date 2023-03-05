@@ -1,15 +1,15 @@
 <?php
 
-namespace backend\service;
+namespace App\repositories;
 
-use backend\service\MovieRepositoryInterface;
-use backend\parameters\OpenMovieDatabase;
+use App\repositories\MovieRepositoryInterface;
+//use backend\parameters\OpenMovieDatabase;
 
 /**
  * Репозиторий The Open Movie Database для класса Movie
- * 
+ *
  * @property $httpClient - http-клиент
- * 
+ *
  * @return array|null - массив с информацией о фильме или null, если информация не найдена
  */
 class OmdbMovieRepository implements MovieRepositoryInterface
@@ -26,15 +26,15 @@ class OmdbMovieRepository implements MovieRepositoryInterface
     /**
      * Метод поиска фильма по его id в базе данных OMDB (https://www.omdbapi.com/)
      * @param string $imdbId - Действительный идентификатор IMDb в The Open Movie Database (например, tt1285016)
-     * 
-     * @return array|null - массив с информацией о фильме (в последствии будет заменён на модель класса Movie), полученный из базы данных OMDB через конкретную реализацию интерфейса репозитория MovieRepositoryInterface 
-     * 
+     *
+     * @return array|null - массив с информацией о фильме (в последствии будет заменён на модель класса Movie), полученный из базы данных OMDB через конкретную реализацию интерфейса репозитория MovieRepositoryInterface
+     *
      */
     public function findById(string $imdbId): ?array
     {
         $query = [
             'i' => $imdbId,
-            'apikey' => OpenMovieDatabase::getApikey(),
+            'apikey' => '8aadef61',
         ];
 
         $response = $this->httpClient->request('GET', self::OMDB_URI, ['query' => $query]);
