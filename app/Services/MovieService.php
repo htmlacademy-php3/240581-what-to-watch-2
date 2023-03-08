@@ -20,7 +20,7 @@ class MovieService
 
     /**
      * Метод поиска фильма по его id в базе данных OMDB (https://www.omdbapi.com/)
-     * @param string $imdbId - id фильма в базе данных OMDB
+     * @param  string $imdbId - id фильма в базе данных OMDB
      *
      * @return array|null - массив с информацией о фильме (в последствии будет заменён на модель класса Movie), полученный из базы данных OMDB через конкретную реализацию интерфейса репозитория MovieRepositoryInterface
      */
