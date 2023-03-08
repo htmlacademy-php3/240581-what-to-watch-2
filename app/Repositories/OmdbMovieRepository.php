@@ -25,7 +25,7 @@ class OmdbMovieRepository implements MovieRepositoryInterface
 
     /**
      * Метод поиска фильма по его id в базе данных OMDB (https://www.omdbapi.com/)
-     * @param string $imdbId - Действительный идентификатор IMDb в The Open Movie Database (например, tt1285016)
+     * @param  string $imdbId - Действительный идентификатор IMDb в The Open Movie Database (например, tt1285016)
      *
      * @return array|null - массив с информацией о фильме (в последствии будет заменён на модель класса Movie), полученный из базы данных OMDB через конкретную реализацию интерфейса репозитория MovieRepositoryInterface
      *

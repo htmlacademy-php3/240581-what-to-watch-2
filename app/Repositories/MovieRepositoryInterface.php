@@ -2,7 +2,6 @@
 
 namespace App\repositories;
 
-
 /**
  * Интерфейс репозитория для класса Movie
  *
@@ -10,5 +9,5 @@ namespace App\repositories;
  */
 interface MovieRepositoryInterface
 {
-   public function findById(string $id);
+    public function findById(string $id);
 }
