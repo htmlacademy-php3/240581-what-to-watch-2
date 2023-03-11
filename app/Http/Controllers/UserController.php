@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use App\Models\Test;
 
 class UserController extends Controller
 {
@@ -14,7 +16,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        if (/*Не авторизован или не владелец ресурса или не модератор*/false) {
+            return $this->getResponse([], Response::HTTP_FORBIDDEN);
+        }
+        return $this->getResponse(Test::test());
     }
 
     /**
@@ -25,7 +30,10 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        if (/*Не авторизован или не владелец ресурса или не модератор*/false) {
+            return $this->getResponse([], Response::HTTP_FORBIDDEN);
+        }
+        return $this->getResponse(Test::test());
     }
 
     /**
@@ -37,7 +45,10 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if (/*Не авторизован или не владелец ресурса или не модератор*/false) {
+            return $this->getResponse([], Response::HTTP_FORBIDDEN);
+        }
+        return $this->getResponse(Test::test());
     }
 
     /**
@@ -49,6 +60,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (/*Не авторизован или не владелец ресурса или не модератор*/false) {
+            return $this->getResponse([], Response::HTTP_FORBIDDEN);
+        }
+        return $this->getResponse(Test::test(), Response::HTTP_NO_CONTENT);
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use App\Models\Test;
 
 class SimilarController extends Controller
 {
@@ -13,6 +15,6 @@ class SimilarController extends Controller
      */
     public function index()
     {
-        //
+        return $this->getResponse(Test::test());
     }
 }

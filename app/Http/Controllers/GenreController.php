@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use App\Models\Test;
 
 class GenreController extends Controller
 {
@@ -13,7 +15,7 @@ class GenreController extends Controller
      */
     public function index()
     {
-        //
+        return $this->getResponse(Test::test());
     }
 
     /**
@@ -26,7 +28,10 @@ class GenreController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if (/*Не модератор*/false) {
+            return $this->getResponse([], Response::HTTP_FORBIDDEN);
+        }
+        return $this->getResponse(Test::test(), Response::HTTP_CREATED);
     }
 
     /**
@@ -38,7 +43,10 @@ class GenreController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if (/*Не модератор*/false) {
+            return $this->getResponse([], Response::HTTP_FORBIDDEN);
+        }
+        return $this->getResponse(Test::test(), Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -51,6 +59,9 @@ class GenreController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (/*Не модератор*/false) {
+            return $this->getResponse([], Response::HTTP_FORBIDDEN);
+        }
+        return $this->getResponse(Test::test(), Response::HTTP_NO_CONTENT);
     }
 }

@@ -3,7 +3,6 @@
 namespace App\repositories;
 
 use App\repositories\MovieRepositoryInterface;
-//use backend\parameters\OpenMovieDatabase;
 
 /**
  * Репозиторий The Open Movie Database для класса Movie
@@ -41,11 +40,7 @@ class OmdbMovieRepository implements MovieRepositoryInterface
 
         $body = $response->getBody();
 
-        $movieInfo = json_decode($body->getContents(), true);
-
-        if (array_key_exists('Error', $movieInfo)) {
-            return null;
-        }
+        return $movieInfo = json_decode($body->getContents(), true);
 
         // TODO: $movie = new Movie(); Заполнение полученными данными из movieInfo
 

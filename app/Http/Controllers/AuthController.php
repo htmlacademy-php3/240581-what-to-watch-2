@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use App\Models\Test;
 
 class AuthController extends Controller
 {
@@ -14,7 +16,10 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        //
+        if (/*Авторизация*/false) {
+            return $this->getResponse(Test::test(), Response::HTTP_UNAUTHORIZED);
+        }
+        return $this->getResponse(Test::test());
     }
 
     /**
@@ -24,7 +29,7 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        //
+        return $this->getResponse(Test::test(), Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -35,6 +40,6 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        //
+        return $this->getResponse(Test::test(), Response::HTTP_CREATED);
     }
 }

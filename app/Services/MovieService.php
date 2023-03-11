@@ -2,7 +2,7 @@
 
 namespace App\services;
 
-use App\repositories\MovieRepositoryInterface;
+use App\Repositories\MovieRepositoryInterface;
 
 /**
  * Прикладной сервис MovieService,
@@ -24,7 +24,7 @@ class MovieService
      *
      * @return array|null - массив с информацией о фильме (в последствии будет заменён на модель класса Movie), полученный из базы данных OMDB через конкретную реализацию интерфейса репозитория MovieRepositoryInterface
      */
-    public function searchMovie(string $imdbId): ?array // TODO: Movie
+    public function searchMovie(string $imdbId) // TODO: Movie
     {
         return $this->movieRepository->findById($imdbId);
     }
