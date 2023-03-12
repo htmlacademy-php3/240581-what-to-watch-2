@@ -6,16 +6,15 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
-use App\Http\Responses\AbstractApiResponse;
 
 class CommentController extends Controller
 {
     /**
      * Получение списка отзывов к фильму.
      *
-     * @return AbstractApiResponse
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function index(/* TO DO Film $Film */): AbstractApiResponse
+    public function index(/* TO DO Film $Film */): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse();
     }
@@ -24,9 +23,9 @@ class CommentController extends Controller
      * Добавление отзыва к фильму.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return AbstractApiResponse
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function store(Request $request/* TO DO , Film $Film */): AbstractApiResponse
+    public function store(Request $request/* TO DO , Film $Film */): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiErrorResponse();
     }
@@ -36,9 +35,9 @@ class CommentController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return AbstractApiResponse
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function update(Request $request, $id/* TO DO , Film $Film */): AbstractApiResponse
+    public function update(Request $request, $id/* TO DO , Film $Film */): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse();
     }
@@ -47,9 +46,9 @@ class CommentController extends Controller
      * Удаление отзыва к фильму.
      *
      * @param  int  $id
-     * @return AbstractApiResponse
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function destroy($id/* TO DO , Film $Film */): AbstractApiResponse
+    public function destroy($id/* TO DO , Film $Film */): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiErrorResponse([], Response::HTTP_FORBIDDEN, 'Комментарий удалить невозможно.');
     }

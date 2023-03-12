@@ -29,7 +29,6 @@ class ApiErrorResponse extends AbstractApiResponse
     protected function makeResponseData(): array
     {
         $response = [
-            'data' => $this->prepareData(),
             'message' => $this->getMessage(),
         ];
         return $response;

@@ -6,16 +6,15 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
-use App\Http\Responses\AbstractApiResponse;
 
 class GenreController extends Controller
 {
     /**
      * Получение списка жанров.
      *
-     * @return AbstractApiResponse
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function index(): AbstractApiResponse
+    public function index(): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse();
     }
@@ -26,9 +25,9 @@ class GenreController extends Controller
      * !!!Но, если что, удалю.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return AbstractApiResponse
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function store(Request $request): AbstractApiResponse
+    public function store(Request $request): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse([], Response::HTTP_CREATED);
     }
@@ -38,9 +37,9 @@ class GenreController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return AbstractApiResponse
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function update(Request $request, $id): AbstractApiResponse
+    public function update(Request $request, $id): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse([], Response::HTTP_NO_CONTENT);
     }
@@ -51,9 +50,9 @@ class GenreController extends Controller
      * !!!Но, если что, удалю.
      *
      * @param  int  $id
-     * @return AbstractApiResponse
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function destroy($id): AbstractApiResponse
+    public function destroy($id): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiErrorResponse([], Response::HTTP_NOT_FOUND);
     }

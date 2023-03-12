@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
-use App\Http\Responses\AbstractApiResponse;
 
 class AuthController extends Controller
 {
@@ -14,9 +13,9 @@ class AuthController extends Controller
      * Аутентификация пользователя
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return AbstractApiResponse
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function login(Request $request): AbstractApiResponse
+    public function login(Request $request): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiErrorResponse([], Response::HTTP_UNAUTHORIZED, 'Ошибка авторизации.');
     }
@@ -24,9 +23,9 @@ class AuthController extends Controller
     /**
      * Выход пользователяиз системы
      *
-     * @return AbstractApiResponse
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function logout(): AbstractApiResponse
+    public function logout(): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse([], Response::HTTP_NO_CONTENT);
     }
@@ -35,9 +34,9 @@ class AuthController extends Controller
      * Регистрация пользователя
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return AbstractApiResponse
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function register(Request $request): AbstractApiResponse
+    public function register(Request $request): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse([], Response::HTTP_CREATED);
     }

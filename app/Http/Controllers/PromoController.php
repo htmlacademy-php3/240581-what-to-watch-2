@@ -6,16 +6,15 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
-use App\Http\Responses\AbstractApiResponse;
 
 class PromoController extends Controller
 {
     /**
      * Получение промо-фильма.
      *
-     * @return AbstractApiResponse
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function index(): AbstractApiResponse
+    public function index(): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiErrorResponse([], Response::HTTP_NOT_FOUND);
     }
@@ -24,9 +23,9 @@ class PromoController extends Controller
      * Установка промо-фильма.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return AbstractApiResponse
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function store(Request $request, $id): AbstractApiResponse
+    public function store(Request $request, $id): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse([], Response::HTTP_CREATED);
     }
@@ -35,9 +34,9 @@ class PromoController extends Controller
      * Снятие установки промо- с фильма.(Удаление его из списка Promo)
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function destroy($id)
+    public function destroy($id): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse([], Response::HTTP_NO_CONTENT);
     }

@@ -6,16 +6,15 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
-use App\Http\Responses\AbstractApiResponse;
 
 class FilmController extends Controller
 {
     /**
      * Получение списка фильмов.
      *
-     * @return AbstractApiResponse
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function index(): AbstractApiResponse
+    public function index(): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse();
     }
@@ -24,9 +23,9 @@ class FilmController extends Controller
      * Добавление фильма в базу.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return AbstractApiResponse
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function store(Request $request): AbstractApiResponse
+    public function store(Request $request): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse([], Response::HTTP_CREATED);
     }
@@ -35,9 +34,9 @@ class FilmController extends Controller
      * Получение информации о фильме.
      *
      * @param  int  $id
-     * @return AbstractApiResponse
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function show($id): AbstractApiResponse
+    public function show($id): ApiSuccessResponse|ApiErrorResponse
     {
         $data = ['Error' => 'Error getting data.'];
         return new ApiErrorResponse($data);
@@ -48,9 +47,9 @@ class FilmController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return AbstractApiResponse
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function update(Request $request, $id): AbstractApiResponse
+    public function update(Request $request, $id): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse([], Response::HTTP_NO_CONTENT);
     }
