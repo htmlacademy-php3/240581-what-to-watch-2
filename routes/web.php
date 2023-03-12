@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TestController;
-use App\Http\Controllers\FilmController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes

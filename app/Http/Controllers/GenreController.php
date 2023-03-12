@@ -3,17 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use App\Http\Responses\ApiSuccessResponse;
+use App\Http\Responses\ApiErrorResponse;
 
 class GenreController extends Controller
 {
     /**
      * Получение списка жанров.
      *
-     * @return \Illuminate\Http\Response
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function index()
+    public function index(): ApiSuccessResponse|ApiErrorResponse
     {
-        //
+        return new ApiSuccessResponse();
     }
 
     /**
@@ -22,11 +25,11 @@ class GenreController extends Controller
      * !!!Но, если что, удалю.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): ApiSuccessResponse|ApiErrorResponse
     {
-        //
+        return new ApiSuccessResponse([], Response::HTTP_CREATED);
     }
 
     /**
@@ -34,11 +37,11 @@ class GenreController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): ApiSuccessResponse|ApiErrorResponse
     {
-        //
+        return new ApiSuccessResponse([], Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -47,10 +50,10 @@ class GenreController extends Controller
      * !!!Но, если что, удалю.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function destroy($id)
+    public function destroy($id): ApiSuccessResponse|ApiErrorResponse
     {
-        //
+        return new ApiErrorResponse([], Response::HTTP_NOT_FOUND);
     }
 }
