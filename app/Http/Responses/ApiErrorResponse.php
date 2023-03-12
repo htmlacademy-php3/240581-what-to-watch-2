@@ -3,7 +3,6 @@
 namespace App\Http\Responses;
 
 use Symfony\Component\HttpFoundation\Response;
-use Throwable;
 use App\Http\Responses\AbstractApiResponse;
 
 class ApiErrorResponse extends AbstractApiResponse
@@ -16,11 +15,10 @@ class ApiErrorResponse extends AbstractApiResponse
      * @param  int $code
      */
     public function __construct(
-        protected mixed $data,
+        protected mixed $data = [],
         public int $code = Response::HTTP_BAD_REQUEST,
         private ?string $message = null
     ) {
-        parent::__construct([], $code);
     }
 
     /**
@@ -31,8 +29,26 @@ class ApiErrorResponse extends AbstractApiResponse
     protected function makeResponseData(): array
     {
         $response = [
-            'message' => $this->message,
+            'data' => $this->prepareData(),
+            'message' => $this->getMessage(),
         ];
         return $response;
+    }
+
+    /**
+     * Метод получения сообщений об ошибке, соответстующих коду
+     *
+     * @return string
+     */
+    private function getMessage(): string
+    {
+        if ($this->message) {
+            return $this->message;
+        }
+
+        if (array_key_exists('Error', $this->data) || $this->code === Response::HTTP_NOT_FOUND) {
+            return 'Запрашиваемая страница не существует.';
+        }
+        return Response::$statusTexts[$this->code];
     }
 }

@@ -36,7 +36,6 @@ abstract class AbstractApiResponse implements Responsable
         if ($this->data instanceof Arrayable) {
             return $this->data->toArray();
         }
-
         return $this->data;
     }
 

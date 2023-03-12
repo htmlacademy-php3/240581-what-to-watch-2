@@ -4,32 +4,31 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\Test;
+use App\Http\Responses\ApiSuccessResponse;
+use App\Http\Responses\ApiErrorResponse;
+use App\Http\Responses\AbstractApiResponse;
 
 class CommentController extends Controller
 {
     /**
      * Получение списка отзывов к фильму.
      *
-     * @return \Illuminate\Http\Response
+     * @return AbstractApiResponse
      */
-    public function index(/* TO DO Film $Film */)
+    public function index(/* TO DO Film $Film */): AbstractApiResponse
     {
-        return $this->getResponse(Test::test());
+        return new ApiSuccessResponse();
     }
 
     /**
      * Добавление отзыва к фильму.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return AbstractApiResponse
      */
-    public function store(Request $request/* TO DO , Film $Film */)
+    public function store(Request $request/* TO DO , Film $Film */): AbstractApiResponse
     {
-        if (/*Не авторизован*/false) {
-            return $this->getResponse([], Response::HTTP_FORBIDDEN);
-        }
-        return $this->getResponse(Test::test(), Response::HTTP_CREATED);
+        return new ApiErrorResponse();
     }
 
     /**
@@ -37,27 +36,21 @@ class CommentController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return AbstractApiResponse
      */
-    public function update(Request $request, $id/* TO DO , Film $Film */)
+    public function update(Request $request, $id/* TO DO , Film $Film */): AbstractApiResponse
     {
-        if (/*Не владелец ресурса*/false) {
-            return $this->getResponse([], Response::HTTP_FORBIDDEN);
-        }
-        return $this->getResponse(Test::test());
+        return new ApiSuccessResponse();
     }
 
     /**
      * Удаление отзыва к фильму.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return AbstractApiResponse
      */
-    public function destroy($id/* TO DO , Film $Film */)
+    public function destroy($id/* TO DO , Film $Film */): AbstractApiResponse
     {
-        if (/*(Владелец ресурса и у комментария нет ответов) или мдератор */false) {
-            return $this->getResponse(Test::test(), Response::HTTP_NO_CONTENT);
-        }
-        return $this->getResponse([], Response::HTTP_FORBIDDEN, 'Комментарий удалить невозможно.');
+        return new ApiErrorResponse([], Response::HTTP_FORBIDDEN, 'Комментарий удалить невозможно.');
     }
 }

@@ -4,35 +4,31 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\Test;
+use App\Http\Responses\ApiSuccessResponse;
+use App\Http\Responses\ApiErrorResponse;
+use App\Http\Responses\AbstractApiResponse;
 
 class PromoController extends Controller
 {
     /**
      * Получение промо-фильма.
-     * Согласно ТЗ промо-фильм один, но это не всегда может быть так.
-     * В любом случае, один фильм - частный случай списка фильмов.
-     * Также возможна ситуация отсутствия промо-фильма в какой-то момент времени.
      *
-     * @return \Illuminate\Http\Response
+     * @return AbstractApiResponse
      */
-    public function index()
+    public function index(): AbstractApiResponse
     {
-        return $this->getResponse(Test::test());
+        return new ApiErrorResponse([], Response::HTTP_NOT_FOUND);
     }
 
     /**
      * Установка промо-фильма.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return AbstractApiResponse
      */
-    public function store(Request $request, $id)
+    public function store(Request $request, $id): AbstractApiResponse
     {
-        if (/*Не модератор*/false) {
-            return $this->getResponse([], Response::HTTP_FORBIDDEN);
-        }
-        return $this->getResponse(Test::test(), Response::HTTP_CREATED);
+        return new ApiSuccessResponse([], Response::HTTP_CREATED);
     }
 
     /**
@@ -43,6 +39,6 @@ class PromoController extends Controller
      */
     public function destroy($id)
     {
-        return $this->getResponse(Test::test(), Response::HTTP_NO_CONTENT);
+        return new ApiSuccessResponse([], Response::HTTP_NO_CONTENT);
     }
 }

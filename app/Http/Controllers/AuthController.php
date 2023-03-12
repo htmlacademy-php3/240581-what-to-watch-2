@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\Test;
+use App\Http\Responses\ApiSuccessResponse;
+use App\Http\Responses\ApiErrorResponse;
+use App\Http\Responses\AbstractApiResponse;
 
 class AuthController extends Controller
 {
@@ -12,34 +14,31 @@ class AuthController extends Controller
      * Аутентификация пользователя
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return AbstractApiResponse
      */
-    public function login(Request $request)
+    public function login(Request $request): AbstractApiResponse
     {
-        if (/*Авторизация*/false) {
-            return $this->getResponse(Test::test(), Response::HTTP_UNAUTHORIZED);
-        }
-        return $this->getResponse(Test::test());
+        return new ApiErrorResponse([], Response::HTTP_UNAUTHORIZED, 'Ошибка авторизации.');
     }
 
     /**
      * Выход пользователяиз системы
      *
-     * @return \Illuminate\Http\Response
+     * @return AbstractApiResponse
      */
-    public function logout()
+    public function logout(): AbstractApiResponse
     {
-        return $this->getResponse(Test::test(), Response::HTTP_NO_CONTENT);
+        return new ApiSuccessResponse([], Response::HTTP_NO_CONTENT);
     }
 
     /**
      * Регистрация пользователя
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return AbstractApiResponse
      */
-    public function register(Request $request)
+    public function register(Request $request): AbstractApiResponse
     {
-        return $this->getResponse(Test::test(), Response::HTTP_CREATED);
+        return new ApiSuccessResponse([], Response::HTTP_CREATED);
     }
 }

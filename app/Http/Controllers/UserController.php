@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\Test;
+use App\Http\Responses\ApiSuccessResponse;
+use App\Http\Responses\ApiErrorResponse;
+use App\Http\Responses\AbstractApiResponse;
 
 class UserController extends Controller
 {
@@ -12,28 +14,22 @@ class UserController extends Controller
      * Получение списка пользователей.
      * !!! В ТЗ не указано, но наверняка нажно для модератора
      *
-     * @return \Illuminate\Http\Response
+     * @return AbstractApiResponse
      */
-    public function index()
+    public function index(): AbstractApiResponse
     {
-        if (/*Не авторизован или не владелец ресурса или не модератор*/false) {
-            return $this->getResponse([], Response::HTTP_FORBIDDEN);
-        }
-        return $this->getResponse(Test::test());
+        return new ApiSuccessResponse();
     }
 
     /**
      * Получение профиля пользователя.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return AbstractApiResponse
      */
-    public function show($id)
+    public function show($id): AbstractApiResponse
     {
-        if (/*Не авторизован или не владелец ресурса или не модератор*/false) {
-            return $this->getResponse([], Response::HTTP_FORBIDDEN);
-        }
-        return $this->getResponse(Test::test());
+        return new ApiErrorResponse([], Response::HTTP_NOT_FOUND);
     }
 
     /**
@@ -41,14 +37,11 @@ class UserController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return AbstractApiResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): AbstractApiResponse
     {
-        if (/*Не авторизован или не владелец ресурса или не модератор*/false) {
-            return $this->getResponse([], Response::HTTP_FORBIDDEN);
-        }
-        return $this->getResponse(Test::test());
+        return new ApiSuccessResponse();
     }
 
     /**
@@ -56,13 +49,10 @@ class UserController extends Controller
      * !!! В ТЗ не предусмотрено, но на всякий случай зарезервировал
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return AbstractApiResponse
      */
-    public function destroy($id)
+    public function destroy($id): AbstractApiResponse
     {
-        if (/*Не авторизован или не владелец ресурса или не модератор*/false) {
-            return $this->getResponse([], Response::HTTP_FORBIDDEN);
-        }
-        return $this->getResponse(Test::test(), Response::HTTP_NO_CONTENT);
+        return new ApiSuccessResponse([], Response::HTTP_NO_CONTENT);
     }
 }
