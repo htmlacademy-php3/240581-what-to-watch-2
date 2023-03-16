@@ -8,6 +8,7 @@ class CreateUsersTable extends Migration
 {
     /**
      * Run the migrations.
+     * Таблица хранения данных пользователей
      *
      * @return void
      */
@@ -15,12 +16,15 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name', 255)->comment('Имя пользователя');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->string('file')->nullable()->comment('Ссылка на изображение аватара пользователя');
+            $table->boolean('is_moderator')->default(0)->comment('Имеет ли пользователь права модератора');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
