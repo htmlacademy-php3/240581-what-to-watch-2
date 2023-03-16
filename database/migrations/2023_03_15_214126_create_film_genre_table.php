@@ -8,6 +8,7 @@ class CreateFilmGenreTable extends Migration
 {
     /**
      * Run the migrations.
+     * Промежуточная таблица для связи фильмов с жанрами
      *
      * @return void
      */
@@ -15,8 +16,8 @@ class CreateFilmGenreTable extends Migration
     {
         Schema::create('film_genre', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('film_id')->constrained()->onDelete('cascade');
-            $table->foreignId('genre_id')->constrained()->onDelete('cascade');
+            $table->foreignId('film_id')->constrained()->onDelete('cascade')->comment('id фильма');
+            $table->foreignId('genre_id')->constrained()->onDelete('cascade')->comment('id жанра, соответствующего фильму');
             $table->timestamps();
         });
     }

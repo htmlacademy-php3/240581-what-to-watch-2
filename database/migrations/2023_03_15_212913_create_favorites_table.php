@@ -8,6 +8,7 @@ class CreateFavoritesTable extends Migration
 {
     /**
      * Run the migrations.
+     * Таблица хранения фильмов, добавленных пользователем в "Избранное"
      *
      * @return void
      */
@@ -15,8 +16,8 @@ class CreateFavoritesTable extends Migration
     {
         Schema::create('favorites', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('film_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade')->comment('id пользователя, добавившего фильм в "Избранное"');
+            $table->foreignId('film_id')->constrained()->onDelete('cascade')->comment('id фильма, добавленного в "Избранное"');
             $table->timestamps();
         });
     }

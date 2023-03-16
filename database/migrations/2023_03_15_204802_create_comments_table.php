@@ -8,6 +8,7 @@ class CreateCommentsTable extends Migration
 {
     /**
      * Run the migrations.
+     * Таблица хранения комментариев к фильмам
      *
      * @return void
      */
@@ -15,10 +16,11 @@ class CreateCommentsTable extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('film_id');
-            $table->unsignedInteger('parent_id')->nullable();
-            $table->text('body');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade')->comment('id пользователя, оставившего комментарий. Комментарии, загруженные из внешнего источника, не имеют связи с пользователем сайта. Для них поле user_id оставляем пустым');
+            $table->foreignId('film_id')->constrained('films')->onDelete('cascade')->comment('id комментируемого фильма');
+            $table->unsignedInteger('parent_id')->nullable()->comment('id комментария, к которому оставлен этот комментарий (при наличии)');
+            $table->string('text', 400)->comment('текст комментария');
+            $table->tinyInteger('rating')->nullable()->comment('Оценка фильма');
             $table->timestamps();
         });
     }

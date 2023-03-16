@@ -8,6 +8,7 @@ class CreateActorsTable extends Migration
 {
     /**
      * Run the migrations.
+     * Таблица хранения списка актёров
      *
      * @return void
      */
@@ -15,7 +16,7 @@ class CreateActorsTable extends Migration
     {
         Schema::create('actors', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->comment('Имя актёра');
             $table->timestamps();
         });
     }
