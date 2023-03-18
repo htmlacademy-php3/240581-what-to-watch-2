@@ -4,20 +4,20 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFilmActorTable extends Migration
+class CreateFilmsGenresTable extends Migration
 {
     /**
      * Run the migrations.
-     * Промежуточная таблица для связи фильмов с участвовавшими в нём актёрами
+     * Промежуточная таблица для связи фильмов с жанрами
      *
      * @return void
      */
     public function up()
     {
-        Schema::create('film_actor', function (Blueprint $table) {
+        Schema::create('films_genres', function (Blueprint $table) {
             $table->id();
             $table->foreignId('film_id')->constrained()->onDelete('cascade')->comment('id фильма');
-            $table->foreignId('actor_id')->constrained()->onDelete('cascade')->comment('id актёра, снимавшегося в фильме');
+            $table->foreignId('genre_id')->constrained()->onDelete('cascade')->comment('id жанра, соответствующего фильму');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateFilmActorTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('film_actor');
+        Schema::dropIfExists('films_genres');
     }
 }
