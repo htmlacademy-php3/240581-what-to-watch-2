@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
@@ -25,7 +26,13 @@ class AuthController extends Controller
             abort(Response::HTTP_UNAUTHORIZED, trans('auth.failed'));
         }
 
-        $token = Auth::user()->createToken('auth-token');
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            abort(Response::HTTP_UNAUTHORIZED, trans('auth.failed'));
+        }
+
+        $token = $user->createToken('auth-token');
 
         $data = ['token' => $token->plainTextToken];
         return new ApiSuccessResponse($data);
@@ -52,8 +59,11 @@ class AuthController extends Controller
     public function register(RegisterRequest $request): ApiSuccessResponse|ApiErrorResponse
     {
         $params = $request->safe()->except('file');
-        $params['password'] = bcrypt($params['password']);
+
+        $params['password'] = Hash::make($params['password']);
+
         $user = User::create($params);
+
         $token = $user->createToken('auth-token');
 
         $data = [
