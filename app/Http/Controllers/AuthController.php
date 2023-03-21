@@ -52,6 +52,7 @@ class AuthController extends Controller
     public function register(RegisterRequest $request): ApiSuccessResponse|ApiErrorResponse
     {
         $params = $request->safe()->except('file');
+        $params['password'] = bcrypt($params['password']);
         $user = User::create($params);
         $token = $user->createToken('auth-token');
 
