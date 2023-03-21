@@ -16,7 +16,7 @@ class PromoController extends Controller
      */
     public function index(): ApiSuccessResponse|ApiErrorResponse
     {
-        return new ApiErrorResponse([], Response::HTTP_NOT_FOUND);
+        return new ApiSuccessResponse();
     }
 
     /**

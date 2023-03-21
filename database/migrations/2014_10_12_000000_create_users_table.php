@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->string('avatar')->nullable()->comment('Ссылка на изображение аватара пользователя');
+            $table->string('file')->nullable()->comment('Ссылка на изображение аватара пользователя');
             $table->boolean('is_moderator')->default(false)->comment('Имеет ли пользователь права модератора');
             $table->timestamps();
             $table->softDeletes();

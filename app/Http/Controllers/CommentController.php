@@ -19,6 +19,7 @@ class CommentController extends Controller
         return new ApiSuccessResponse();
     }
 
+
     /**
      * Добавление отзыва к фильму.
      *
@@ -27,7 +28,7 @@ class CommentController extends Controller
      */
     public function store(Request $request/* TO DO , Film $Film */): ApiSuccessResponse|ApiErrorResponse
     {
-        return new ApiErrorResponse();
+        return new ApiSuccessResponse();
     }
 
     /**
@@ -50,6 +51,6 @@ class CommentController extends Controller
      */
     public function destroy($id/* TO DO , Film $Film */): ApiSuccessResponse|ApiErrorResponse
     {
-        return new ApiErrorResponse([], Response::HTTP_FORBIDDEN, 'Комментарий удалить невозможно.');
+        return new ApiSuccessResponse();
     }
 }
