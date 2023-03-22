@@ -38,8 +38,7 @@ class FilmController extends Controller
      */
     public function show($id): ApiSuccessResponse|ApiErrorResponse
     {
-        $data = ['Error' => 'Error getting data.'];
-        return new ApiErrorResponse($data);
+        return new ApiSuccessResponse();
     }
 
     /**

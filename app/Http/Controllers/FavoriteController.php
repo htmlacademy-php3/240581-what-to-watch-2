@@ -38,6 +38,6 @@ class FavoriteController extends Controller
      */
     public function destroy($id/* TO DO , User $User */): ApiSuccessResponse|ApiErrorResponse
     {
-        return new ApiErrorResponse([], Response::HTTP_UNPROCESSABLE_ENTITY, 'Фильм отсутствует в списке избранного');
+        return new ApiSuccessResponse();
     }
 }
