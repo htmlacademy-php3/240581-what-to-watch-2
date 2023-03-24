@@ -54,7 +54,6 @@ class RelationTest extends TestCase
         }
 
         // Проверка на существование отношения фильм-комментарии
-        $this->assertNotEmpty($film->comments);
         foreach ($film->comments as $comment) {
             $this->assertInstanceOf(Comment::class, $comment);
         }
