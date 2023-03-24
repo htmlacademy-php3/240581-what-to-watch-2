@@ -4,8 +4,6 @@ namespace Tests\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Database\Eloquent\Factories\Sequence;
-//use PHPUnit\Framework\TestCase;
-use Database\Seeders\DatabaseSeeder;
 use \App\Models\Comment;
 use \App\Models\Film;
 use \App\Models\User;
@@ -14,7 +12,6 @@ use Tests\TestCase;
 class CommentTest extends TestCase
 {
     use RefreshDatabase;
-
 
     /**
      * Проверка, что у комментария есть специальное свойство для возврата имени автора и это свойство действительно содержит имя пользователя, который написал данный комментарий.
