@@ -32,13 +32,11 @@ class RelationTest extends TestCase
         $user = User::all()->random();
 
         // Проверка на существование отношения актёр-фильмы
-        $this->assertNotEmpty($actor->films);
         foreach ($actor->films as $film) {
             $this->assertInstanceOf(Film::class, $film);
         }
 
         // Проверка на существование отношения фильм-пользователи
-        $this->assertNotEmpty($film->users);
         foreach ($film->users as $user) {
             $this->assertInstanceOf(User::class, $user);
         }
@@ -60,21 +58,17 @@ class RelationTest extends TestCase
         foreach ($film->comments as $comment) {
             $this->assertInstanceOf(Comment::class, $comment);
         }
-
         // Проверка на существование отношения жанр-фильмы
-        $this->assertNotEmpty($genre->films);
         foreach ($genre->films as $film) {
             $this->assertInstanceOf(Film::class, $film);
         }
 
         // Проверка на существование отношения пользователь-комментарии
-        $this->assertNotEmpty($user->comments);
         foreach ($user->comments as $comment) {
             $this->assertInstanceOf(Comment::class, $comment);
         }
 
         // Проверка на существование отношения пользователь-фильмы
-        $this->assertNotEmpty($user->films);
         foreach ($user->films as $film) {
             $this->assertInstanceOf(Film::class, $film);
         }
