@@ -26,7 +26,6 @@ class FilmFactory extends Factory
             'run_time' => $this->faker->numberBetween(30, 200),
             'released' => $this->faker->year(),
             'imdb_id' => 'tt' . $this->faker->unique()->randomNumber(7, true),
-            'rating' => $this->faker->numberBetween(1, 10),
         ];
     }
 }
