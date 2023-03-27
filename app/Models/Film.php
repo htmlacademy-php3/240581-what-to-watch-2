@@ -60,11 +60,21 @@ class Film extends Model
     }
 
     /**
+     * Метод получения рейтинга фильма по количеству голосов (отзывов) пользователей.
+     *
+     * @return int Среднее арифметическое от оценок, оставленных пользователями
+     */
+    public function getRating(): int
+    {
+        return $this->comments->count('rating');
+    }
+
+    /**
      * Метод получения рейтинга фильма по оценкам, оставленным пользователями.
      *
      * @return float Среднее арифметическое от оценок, оставленных пользователями
      */
-    public function getRating(): float
+    public function getTotalRating(): float
     {
         return round($this->comments->avg('rating'), 1);
     }
