@@ -51,6 +51,6 @@ class CommentController extends Controller
      */
     public function destroy($id/* TO DO , Film $Film */): ApiSuccessResponse|ApiErrorResponse
     {
-        return new ApiSuccessResponse();
+        return new ApiSuccessResponse([], Response::HTTP_NO_CONTENT);
     }
 }

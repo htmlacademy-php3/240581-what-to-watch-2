@@ -50,6 +50,6 @@ class FilmController extends Controller
      */
     public function update(Request $request, $id): ApiSuccessResponse|ApiErrorResponse
     {
-        return new ApiSuccessResponse([], Response::HTTP_NO_CONTENT);
+        return new ApiSuccessResponse();
     }
 }
