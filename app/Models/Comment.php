@@ -37,7 +37,7 @@ class Comment extends Model
     {
         return $this->belongsTo(User::class)
             ->withDefault([
-                'name' => 'Автор неизвестен',
+                'name' => 'Гость',
             ]);
     }
 }

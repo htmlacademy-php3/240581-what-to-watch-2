@@ -51,6 +51,6 @@ class CommentTest extends TestCase
 
         $autor = $comment->user;
 
-        $this->assertEquals('Автор неизвестен', $autor->name);
+        $this->assertEquals('Гость', $autor->name);
     }
 }
