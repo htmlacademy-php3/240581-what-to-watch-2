@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Laravel\Sanctum\Sanctum;
+use \App\Models\User;
 
 class GenreRouteTest extends TestCase
 {
@@ -18,6 +20,28 @@ class GenreRouteTest extends TestCase
     {
         // Проверка, если пользователь неаутентифицирован
         $response = $this->getJson('/api/genres');
+
+        $response
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => []
+            ]);
+
+        // Проверка, если пользователь аутентифицирован
+        $user = Sanctum::actingAs(User::factory()->create());
+
+        $response = $this->actingAs($user)->getJson('/api/genres');
+
+        $response
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => []
+            ]);
+
+            // Проверка, если пользователь аутентифицирован как модератор
+        $user = Sanctum::actingAs(User::factory()->moderator()->create());
+
+        $response = $this->actingAs($user)->getJson('/api/genres');
 
         $response
             ->assertOk()
@@ -39,5 +63,23 @@ class GenreRouteTest extends TestCase
         $response = $this->patchJson("/api/genres/{$genresId}");
 
         $response->assertUnauthorized();
+
+        // Проверка, если пользователь аутентифицирован
+        $user = Sanctum::actingAs(User::factory()->create());
+
+        $response = $this->actingAs($user)->patchJson("/api/genres/{$genresId}");
+
+        $response->assertForbidden();
+
+        // Проверка, если пользователь аутентифицирован как модератор
+        $user = Sanctum::actingAs(User::factory()->moderator()->create());
+
+        $response = $this->actingAs($user)->patchJson("/api/genres/{$genresId}");
+
+        $response
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => []
+            ]);
     }
 }

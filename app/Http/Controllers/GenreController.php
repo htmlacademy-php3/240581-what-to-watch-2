@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
+use App\services\PermissionCheckService;
 
 class GenreController extends Controller
 {
@@ -27,6 +29,10 @@ class GenreController extends Controller
      */
     public function update(Request $request, $id): ApiSuccessResponse|ApiErrorResponse
     {
+        if (!PermissionCheckService::checkPermission() ) {
+            abort(Response::HTTP_FORBIDDEN, trans('auth.failed'));
+        }
+
         return new ApiSuccessResponse();
     }
 }

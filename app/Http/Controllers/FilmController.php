@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
+use App\services\PermissionCheckService;
 
 class FilmController extends Controller
 {
@@ -27,6 +28,10 @@ class FilmController extends Controller
      */
     public function store(Request $request): ApiSuccessResponse|ApiErrorResponse
     {
+        if (!PermissionCheckService::checkPermission()) {
+            abort(Response::HTTP_FORBIDDEN, trans('auth.failed'));
+        }
+
         return new ApiSuccessResponse([], Response::HTTP_CREATED);
     }
 
@@ -50,6 +55,10 @@ class FilmController extends Controller
      */
     public function update(Request $request, $id): ApiSuccessResponse|ApiErrorResponse
     {
+        if (!PermissionCheckService::checkPermission()) {
+            abort(Response::HTTP_FORBIDDEN, trans('auth.failed'));
+        }
+
         return new ApiSuccessResponse();
     }
 }
