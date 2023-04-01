@@ -32,7 +32,7 @@ class PermissionCheckService
      * @param  $resource - ресурс, авторство, которого проверяется
      * @return bool
      */
-    private static function isAutor($resource): bool
+    private static function isAuthor($resource): bool
     {
         if (isset($resource->user->id)) {
             return $resource->user->id === Auth::user()->id;
@@ -61,7 +61,7 @@ class PermissionCheckService
             return true;
         }
 
-        if (self::isAutor($resource)) {
+        if (self::isAuthor($resource)) {
             return true;
         }
         return false;
