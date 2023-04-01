@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
 
@@ -15,7 +14,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function show($id): ApiSuccessResponse|ApiErrorResponse
+    public function show(int $id): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse();
     }
@@ -23,11 +22,11 @@ class UserController extends Controller
     /**
      * Обновление профиля пользователя.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @param  int  $id
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function update(Request $request, $id): ApiSuccessResponse|ApiErrorResponse
+    public function update(Request $request,int $id): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse();
     }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
+use App\services\PermissionCheckService;
 
 class FilmController extends Controller
 {
@@ -22,11 +23,15 @@ class FilmController extends Controller
     /**
      * Добавление фильма в базу.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return ApiSuccessResponse|ApiErrorResponse
      */
     public function store(Request $request): ApiSuccessResponse|ApiErrorResponse
     {
+        if (!PermissionCheckService::checkPermission()) {
+            abort(Response::HTTP_FORBIDDEN, trans('auth.failed'));
+        }
+
         return new ApiSuccessResponse([], Response::HTTP_CREATED);
     }
 
@@ -36,7 +41,7 @@ class FilmController extends Controller
      * @param  int  $id
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function show($id): ApiSuccessResponse|ApiErrorResponse
+    public function show(int $id): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse();
     }
@@ -44,12 +49,16 @@ class FilmController extends Controller
     /**
      * Редактирование фильма.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @param  int  $id
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function update(Request $request, $id): ApiSuccessResponse|ApiErrorResponse
+    public function update(Request $request,int $id): ApiSuccessResponse|ApiErrorResponse
     {
-        return new ApiSuccessResponse([], Response::HTTP_NO_CONTENT);
+        if (!PermissionCheckService::checkPermission()) {
+            abort(Response::HTTP_FORBIDDEN, trans('auth.failed'));
+        }
+
+        return new ApiSuccessResponse();
     }
 }

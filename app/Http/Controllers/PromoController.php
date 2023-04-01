@@ -22,10 +22,10 @@ class PromoController extends Controller
     /**
      * Установка промо-фильма.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function store(Request $request, $id): ApiSuccessResponse|ApiErrorResponse
+    public function store(Request $request,int $id): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse([], Response::HTTP_CREATED);
     }
@@ -36,7 +36,7 @@ class PromoController extends Controller
      * @param  int  $id
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function destroy($id): ApiSuccessResponse|ApiErrorResponse
+    public function destroy(int $id): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse([], Response::HTTP_NO_CONTENT);
     }

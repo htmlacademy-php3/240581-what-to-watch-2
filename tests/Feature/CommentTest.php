@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -51,6 +51,6 @@ class CommentTest extends TestCase
 
         $autor = $comment->user;
 
-        $this->assertEquals('Автор неизвестен', $autor->name);
+        $this->assertEquals('Гость', $autor->name);
     }
 }

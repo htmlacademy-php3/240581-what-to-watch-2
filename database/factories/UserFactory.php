@@ -37,4 +37,18 @@ class UserFactory extends Factory
             ];
         });
     }
+
+    /**
+     * Установка роли 'модератор' пользователю.
+     *
+     * @return UserFactory
+     */
+    public function moderator(): UserFactory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_moderator' => true,
+            ];
+        });
+    }
 }
