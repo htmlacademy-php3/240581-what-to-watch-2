@@ -22,7 +22,7 @@ class UserController extends Controller
     /**
      * Обновление профиля пользователя.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @param  int  $id
      * @return ApiSuccessResponse|ApiErrorResponse
      */

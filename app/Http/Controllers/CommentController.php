@@ -25,7 +25,7 @@ class CommentController extends Controller
     /**
      * Добавление отзыва к фильму.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return ApiSuccessResponse|ApiErrorResponse
      */
     public function store(Request $request/* TO DO , Film $Film */): ApiSuccessResponse|ApiErrorResponse

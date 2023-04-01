@@ -22,7 +22,7 @@ class PromoController extends Controller
     /**
      * Установка промо-фильма.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return ApiSuccessResponse|ApiErrorResponse
      */
     public function store(Request $request,int $id): ApiSuccessResponse|ApiErrorResponse

@@ -23,7 +23,7 @@ class GenreController extends Controller
     /**
      * Редактирование жанра.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @param  int  $id
      * @return ApiSuccessResponse|ApiErrorResponse
      */

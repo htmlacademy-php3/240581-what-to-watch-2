@@ -23,7 +23,7 @@ class FilmController extends Controller
     /**
      * Добавление фильма в базу.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return ApiSuccessResponse|ApiErrorResponse
      */
     public function store(Request $request): ApiSuccessResponse|ApiErrorResponse
@@ -49,7 +49,7 @@ class FilmController extends Controller
     /**
      * Редактирование фильма.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @param  int  $id
      * @return ApiSuccessResponse|ApiErrorResponse
      */

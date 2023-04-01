@@ -22,7 +22,7 @@ class FavoriteController extends Controller
     /**
      * Добавление фильма в избранное.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return ApiSuccessResponse|ApiErrorResponse
      */
     public function store(Request $request/* TO DO , User $User */): ApiSuccessResponse|ApiErrorResponse
