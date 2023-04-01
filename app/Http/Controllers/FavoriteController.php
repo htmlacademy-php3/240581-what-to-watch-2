@@ -36,7 +36,7 @@ class FavoriteController extends Controller
      * @param  int  $id
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function destroy($id/* TO DO , User $User */): ApiSuccessResponse|ApiErrorResponse
+    public function destroy(int $id/* TO DO , User $User */): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse();
     }

@@ -41,7 +41,7 @@ class CommentController extends Controller
      * @param  int  $id - id отзыва
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function update(Request $request, $id/* TO DO , Film $Film */): ApiSuccessResponse|ApiErrorResponse
+    public function update(Request $request,int $id/* TO DO , Film $Film */): ApiSuccessResponse|ApiErrorResponse
     {
         $comment = Comment::find($id);
 
@@ -59,7 +59,7 @@ class CommentController extends Controller
      * @param  int  $id - id отзыва
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function destroy($id/* TO DO , Film $Film */): ApiSuccessResponse|ApiErrorResponse
+    public function destroy(int $id/* TO DO , Film $Film */): ApiSuccessResponse|ApiErrorResponse
     {
         $comment = Comment::find($id);
 

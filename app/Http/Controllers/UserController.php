@@ -14,7 +14,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function show($id): ApiSuccessResponse|ApiErrorResponse
+    public function show(int $id): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse();
     }
@@ -26,7 +26,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function update(Request $request, $id): ApiSuccessResponse|ApiErrorResponse
+    public function update(Request $request,int $id): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse();
     }
