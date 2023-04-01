@@ -54,7 +54,7 @@ class PermissionCheckService
     public static function checkPermission($resource = null, User $user = null): bool
     {
         if (!$user) {
-            $user = $user = Auth::user();
+            $user = Auth::user();
         }
 
         if (self::isModerator($user)) {
