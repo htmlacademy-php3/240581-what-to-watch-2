@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
 use App\Models\Film;
-use App\services\PermissionCheckService;
 
 class FilmController extends Controller
 {
