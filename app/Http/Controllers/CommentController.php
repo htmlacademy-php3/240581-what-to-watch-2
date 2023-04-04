@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
 use \App\Models\Comment;
-use App\services\PermissionCheckService;
+
 
 class CommentController extends Controller
 {
@@ -41,15 +41,11 @@ class CommentController extends Controller
      * @param  int  $id - id отзыва
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function update(Request $request,int $id/* TO DO , Film $Film */): ApiSuccessResponse|ApiErrorResponse
+    public function update(Request $request, int $id/* TO DO , Film $Film */): ApiSuccessResponse|ApiErrorResponse
     {
         $comment = Comment::find($id);
-
-        if (PermissionCheckService::checkPermission($comment)) {
-            return new ApiSuccessResponse();
-        }
-
-        abort(Response::HTTP_FORBIDDEN, trans('auth.failed'));
+        $this->authorize('update', $comment);
+        return new ApiSuccessResponse();
     }
 
     /**
@@ -62,11 +58,7 @@ class CommentController extends Controller
     public function destroy(int $id/* TO DO , Film $Film */): ApiSuccessResponse|ApiErrorResponse
     {
         $comment = Comment::find($id);
-
-        if (PermissionCheckService::checkPermission($comment)) {
-            return new ApiSuccessResponse([], Response::HTTP_NO_CONTENT);
-        }
-
-        abort(Response::HTTP_FORBIDDEN, trans('auth.failed'));
+        $this->authorize('delete', $comment);
+        return new ApiSuccessResponse([], Response::HTTP_NO_CONTENT);
     }
 }
