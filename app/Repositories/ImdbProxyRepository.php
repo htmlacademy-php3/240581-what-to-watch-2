@@ -5,15 +5,15 @@ namespace App\repositories;
 use App\repositories\MovieRepositoryInterface;
 
 /**
- * Репозиторий The Open Movie Database для класса Movie
+ * Репозиторий для класса Movie, работающий с учебным сервисом IMDB Proxi (http://guide.phpdemo.ru/api/documentation)
  *
  * @property $httpClient - http-клиент
  *
  * @return array|null - массив с информацией о фильме или null, если информация не найдена
  */
-class OmdbMovieRepository implements MovieRepositoryInterface
+class ImdbProxyRepository implements MovieRepositoryInterface
 {
-    private const OMDB_URI = 'http://www.omdbapi.com/';
+    private const IMDB_URI = 'http://guide.phpdemo.ru/api/films/';
 
     private $httpClient;
 
@@ -23,20 +23,15 @@ class OmdbMovieRepository implements MovieRepositoryInterface
     }
 
     /**
-     * Метод поиска фильма по его id в базе данных OMDB (https://www.omdbapi.com/)
-     * @param  string $imdbId - Действительный идентификатор IMDb в The Open Movie Database (например, tt1285016)
+     * Метод поиска фильма по его id в базе данных IMDB Proxi (http://guide.phpdemo.ru/api/films/)
+     * @param  string $imdbId - Действительный идентификатор IMDb в MDB Proxi (tt0111161)
      *
      * @return array|null - массив с информацией о фильме (в последствии будет заменён на модель класса Movie), полученный из базы данных OMDB через конкретную реализацию интерфейса репозитория MovieRepositoryInterface
      *
      */
     public function findById(string $imdbId): ?array
     {
-        $query = [
-            'i' => $imdbId,
-            'apikey' => '8aadef61',
-        ];
-
-        $response = $this->httpClient->request('GET', self::OMDB_URI, ['query' => $query]);
+        $response = $this->httpClient->request('GET', self::IMDB_URI . $imdbId);
 
         $body = $response->getBody();
 
