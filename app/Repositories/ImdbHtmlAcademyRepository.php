@@ -5,13 +5,13 @@ namespace App\repositories;
 use App\repositories\MovieRepositoryInterface;
 
 /**
- * Репозиторий для класса Movie, работающий с учебным сервисом IMDB Proxi (http://guide.phpdemo.ru/api/documentation)
+ * Репозиторий для класса Film, работающий с учебным сервисом IMDB Proxi (http://guide.phpdemo.ru/api/documentation)
  *
  * @property $httpClient - http-клиент
  *
  * @return array|null - массив с информацией о фильме или null, если информация не найдена
  */
-class ImdbProxyRepository implements MovieRepositoryInterface
+class ImdbHtmlAcademyRepository implements MovieRepositoryInterface
 {
     private const IMDB_URI = 'http://guide.phpdemo.ru/api/films/';
 
@@ -23,10 +23,12 @@ class ImdbProxyRepository implements MovieRepositoryInterface
     }
 
     /**
-     * Метод поиска фильма по его id в базе данных IMDB Proxi (http://guide.phpdemo.ru/api/films/)
+     * Метод поиска фильма по его id в базе данных IMDB Proxi
+     * (http://guide.phpdemo.ru/api/films/)
+     *
      * @param  string $imdbId - Действительный идентификатор IMDb в MDB Proxi (tt0111161)
      *
-     * @return array|null - массив с информацией о фильме (в последствии будет заменён на модель класса Movie), полученный из базы данных OMDB через конкретную реализацию интерфейса репозитория MovieRepositoryInterface
+     * @return array|null - массив с информацией о фильме, полученный из базы данных OMDB через конкретную реализацию интерфейса репозитория MovieRepositoryInterface
      *
      */
     public function findById(string $imdbId): ?array

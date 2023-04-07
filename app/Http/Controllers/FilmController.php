@@ -6,7 +6,18 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
+use App\Http\Requests\AddFilmRequest;
+use App\Models\Actor;
 use App\Models\Film;
+use App\Jobs\AddFilmJob;
+use App\Services\FilmService;
+use App\repositories\OmdbMovieRepository;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class FilmController extends Controller
 {
@@ -26,9 +37,10 @@ class FilmController extends Controller
      * @param  Request  $request
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function store(Request $request): ApiSuccessResponse|ApiErrorResponse
+    public function store(AddFilmRequest $request): ApiSuccessResponse|ApiErrorResponse
     {
         $this->authorize('create', Film::class);
+
         return new ApiSuccessResponse([], Response::HTTP_CREATED);
     }
 
@@ -50,7 +62,7 @@ class FilmController extends Controller
      * @param  int  $id
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function update(Request $request,int $id): ApiSuccessResponse|ApiErrorResponse
+    public function update(Request $request, int $id): ApiSuccessResponse|ApiErrorResponse
     {
         $this->authorize('update', Film::class);
         return new ApiSuccessResponse();

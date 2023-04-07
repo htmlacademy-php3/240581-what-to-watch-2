@@ -5,7 +5,7 @@ namespace App\repositories;
 use App\repositories\MovieRepositoryInterface;
 
 /**
- * Репозиторий The Open Movie Database для класса Movie
+ * Репозиторий The Open Movie Database для класса Film
  *
  * @property $httpClient - http-клиент
  *
@@ -26,7 +26,7 @@ class OmdbMovieRepository implements MovieRepositoryInterface
      * Метод поиска фильма по его id в базе данных OMDB (https://www.omdbapi.com/)
      * @param  string $imdbId - Действительный идентификатор IMDb в The Open Movie Database (например, tt1285016)
      *
-     * @return array|null - массив с информацией о фильме (в последствии будет заменён на модель класса Movie), полученный из базы данных OMDB через конкретную реализацию интерфейса репозитория MovieRepositoryInterface
+     * @return array|null - массив с информацией о фильме, полученный из базы данных OMDB через конкретную реализацию интерфейса репозитория MovieRepositoryInterface
      *
      */
     public function findById(string $imdbId): ?array

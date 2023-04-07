@@ -18,6 +18,15 @@ class Actor extends Model
     protected $table = 'actors';
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+    ];
+
+    /**
      * Получение фильмов, в которых снимался актёр.
      *
      * @return BelongsToMany

@@ -3,11 +3,11 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use App\Services\FilmService;
 
 class AddFilmJob implements ShouldQueue
 {
@@ -18,9 +18,8 @@ class AddFilmJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(private string $imdbId)
     {
-        //
     }
 
     /**
@@ -28,8 +27,10 @@ class AddFilmJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
-        //
+        $service = new FilmService();
+        $filmData = $service->searchFilm($this->imdbId);
+        $service->saveFilm($filmData);
     }
 }
