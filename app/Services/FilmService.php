@@ -9,6 +9,7 @@ use App\Models\Film;
 use App\Models\Genre;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Прикладной сервис MovieService,
@@ -94,7 +95,7 @@ class FilmService
             DB::commit();
         } catch (\Exception $exception) {
             DB::rollBack();
-            log($exception->getMessage());
+            Log::warning($exception->getMessage());
         }
     }
 }
