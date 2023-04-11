@@ -39,7 +39,7 @@ class FilmService
      *
      * @param  array $filmData - массив с данными фильма из базы данных OMDB
      *
-     * @return Film|null - вновьсозданная, несохранённая в БД модель класса Film
+     * @return Film - вновьсозданная, несохранённая в БД модель класса Film
      */
     private function createFilm(array $filmData): Film
     {
