@@ -3,10 +3,10 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use App\repositories\ImdbProxyRepository;
+use App\repositories\ImdbHtmlAcademyRepository;
 use GuzzleHttp\Client;
 
-class ImdbProxyRepositoryTest extends TestCase
+class ImdbHtmlAcademyRepositoryTest extends TestCase
 {
     /**
      * Тест ImdbProxyRepository.
@@ -17,7 +17,7 @@ class ImdbProxyRepositoryTest extends TestCase
     {
 
         $httpClient = new Client();
-        $repository = new ImdbProxyRepository($httpClient);
+        $repository = new ImdbHtmlAcademyRepository($httpClient);
         $successData = [
             "imdb_id",
             "name",
