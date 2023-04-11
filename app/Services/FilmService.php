@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Log;
 class FilmService
 {
     public function __construct(
-        private MovieRepositoryInterface $movieRepository = new ImdbHtmlAcademyRepository(new Client()),
+        private readonly MovieRepositoryInterface $movieRepository = new ImdbHtmlAcademyRepository(new Client()),
     ) {
     }
 
@@ -30,7 +30,7 @@ class FilmService
      * @return array|null - массив с информацией о фильме,
      * полученный из базы данных OMDB через конкретную реализацию интерфейса репозитория MovieRepositoryInterface
      */
-    public function searchFilm(string $imdbId): array
+    public function searchFilm(string $imdbId): array|null
     {
         return $this->movieRepository->findById($imdbId);
     }
