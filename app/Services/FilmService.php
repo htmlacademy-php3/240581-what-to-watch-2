@@ -4,7 +4,9 @@ namespace App\services;
 
 use App\Repositories\MovieRepositoryInterface;
 use App\repositories\ImdbHtmlAcademyRepository;
+use App\Models\Actor;
 use App\Models\Film;
+use App\Models\Genre;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
 
@@ -15,35 +17,6 @@ use Illuminate\Support\Facades\DB;
  */
 class FilmService
 {
-    /**
-     * Метод поиска или создания, в случае отсутствия в БД,
-     * моделей классов Actor и Genre с переданным именем класса по именам,
-     * перечисленным в $data и выдачей массива с id этих моделей.
-     *
-     * @param  string $className - имя класса
-     * @param  array $modelNames - массив с именами искомых (создаваемых) моделей
-     * @param  string $separator - разделитель данных в переданной строке данными
-     *
-     * @return array|\Exception - массив с id созданных или найденных моделей
-     */
-    private function findOrCreateModelsAndGetIds(string $className, array $modelNames): array|\Exception
-    {
-        $modelId = [];
-        $name = 'name';
-
-        if ('Genre' === $className) {
-            $name = 'title';
-        }
-
-        $modelClass = 'App\\Models\\' . $className;
-
-        foreach ($modelNames as $modelName) {
-            $modelId[] = app($modelClass)::firstOrCreate(["{$name}" => $modelName])->id;
-        }
-
-        return $modelId;
-    }
-
     public function __construct(
         private MovieRepositoryInterface $movieRepository = new ImdbHtmlAcademyRepository(new Client()),
     ) {
@@ -84,28 +57,37 @@ class FilmService
     }
 
     /**
-     * Метод добавления фильма в базу
+     * Метод сохранения фильма в базе
      *
      * @param  array $filmData - массив с данными фильма из базы данных OMDB
-     *
-     * @return mixed - либо void, если транзакция успешна,
-     * либо сообщение об ошибке
      */
-    public function saveFilm(array $filmData) //: mixed
+    public function saveFilm(array $filmData)
     {
         try {
+            $actorsId = [];
+            $genresId = [];
+            $actors = $filmData['actors'];
+            $genres = $filmData['genres'];
+
             DB::beginTransaction();
 
+            if (is_iterable($actors)) {
+                foreach ($actors as $actor) {
+                    $actorsId[] = Actor::firstOrCreate(['name' => $actor])->id;
+                }
+            }
 
-            $actorsId = $this->findOrCreateModelsAndGetIds('Actor', $filmData['actors']);
-            $genresId = $this->findOrCreateModelsAndGetIds('Genre', $filmData['genres']);
+            if (is_iterable($genres)) {
+                foreach ($genres as $genre) {
+                    $genresId[] = Genre::firstOrCreate(['title' => $genre])->id;
+                }
+            }
 
             $film = $this->createFilm($filmData);
             $film->save();
 
             $film->actors()->attach($actorsId);
             $film->genres()->attach($genresId);
-
 
             DB::commit();
         } catch (\Exception $exception) {
