@@ -60,8 +60,10 @@ class FilmService
      * Метод сохранения фильма в базе
      *
      * @param  array $filmData - массив с данными фильма из базы данных OMDB
+     *
+     * @return void
      */
-    public function saveFilm(array $filmData)
+    public function saveFilm(array $filmData): void
     {
         try {
             $actorsId = [];
@@ -92,7 +94,7 @@ class FilmService
             DB::commit();
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $exception->getMessage();
+            log($exception->getMessage());
         }
     }
 }
