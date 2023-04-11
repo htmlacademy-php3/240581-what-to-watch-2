@@ -18,6 +18,15 @@ class Genre extends Model
     protected $table = 'genres';
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'title',
+    ];
+
+    /**
      * Получение фильмов, принадлежащих жанру.
      *
      * @return BelongsToMany

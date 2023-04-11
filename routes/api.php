@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
@@ -35,7 +34,7 @@ Route::prefix('films')->middleware('auth:sanctum')->group(function () {
         Route::get('/{id}/similar', [SimilarController::class, 'index']);
         Route::get('/{id}/comments', [CommentController::class, 'index']);
     });
-    Route::post('/{id}', [FilmController::class, 'store']);
+    Route::post('/', [FilmController::class, 'store']);
     Route::patch('/{id}', [FilmController::class, 'update']);
     Route::post('/{id}/comments', [CommentController::class, 'store']);
     Route::post('/{id}/favorite', [FavoriteController::class, 'store']);

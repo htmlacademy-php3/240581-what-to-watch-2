@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-
 class Film extends Model
 {
     use HasFactory;
+
+    public const PENDING = 'pending';
+    public const ON_MODERATION = 'on moderation';
+    public const READY = 'ready';
 
     /**
      * Таблица БД, ассоциированная с моделью.
@@ -18,6 +21,23 @@ class Film extends Model
      * @var string
      */
     protected $table = 'films';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'title',
+        'poster_image',
+        'description',
+        'director',
+        'run_time',
+        'released',
+        'imdb_id',
+        'status',
+        'video_link',
+    ];
 
     /**
      * Получение пользователей, добавивших этот фильм в "Избранное".
@@ -36,7 +56,7 @@ class Film extends Model
      */
     public function genres(): BelongsToMany
     {
-        return $this->belongsToMany(Genre::class, 'films_genres', 'film_id', 'genre_id');
+        return $this->belongsToMany(Genre::class, 'films_genres', 'film_id', 'genre_id')->withTimestamps();
     }
 
     /**
@@ -46,7 +66,7 @@ class Film extends Model
      */
     public function actors(): BelongsToMany
     {
-        return $this->belongsToMany(Actor::class, 'films_actors', 'film_id', 'actor_id');
+        return $this->belongsToMany(Actor::class, 'films_actors', 'film_id', 'actor_id')->withTimestamps();
     }
 
     /**

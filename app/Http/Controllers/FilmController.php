@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
-use App\services\PermissionCheckService;
+use App\Http\Requests\AddFilmRequest;
+use App\Models\Film;
+use App\Jobs\AddFilmJob;
 
 class FilmController extends Controller
 {
@@ -26,11 +28,11 @@ class FilmController extends Controller
      * @param  Request  $request
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function store(Request $request): ApiSuccessResponse|ApiErrorResponse
+    public function store(AddFilmRequest $request): ApiSuccessResponse|ApiErrorResponse
     {
-        if (!PermissionCheckService::checkPermission()) {
-            abort(Response::HTTP_FORBIDDEN, trans('auth.failed'));
-        }
+        $this->authorize('create', Film::class);
+
+        AddFilmJob::dispatch($request->imdbId);
 
         return new ApiSuccessResponse([], Response::HTTP_CREATED);
     }
@@ -53,12 +55,9 @@ class FilmController extends Controller
      * @param  int  $id
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function update(Request $request,int $id): ApiSuccessResponse|ApiErrorResponse
+    public function update(Request $request, int $id): ApiSuccessResponse|ApiErrorResponse
     {
-        if (!PermissionCheckService::checkPermission()) {
-            abort(Response::HTTP_FORBIDDEN, trans('auth.failed'));
-        }
-
+        $this->authorize('update', Film::class);
         return new ApiSuccessResponse();
     }
 }
