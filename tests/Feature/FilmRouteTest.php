@@ -100,21 +100,21 @@ class FilmRouteTest extends TestCase
     {
         $filmId = 1;
         // Проверка, если пользователь неаутентифицирован
-        $response = $this->postJson("/api/films?imdbId=tt0944947");
+        $response = $this->postJson("/api/films?imdbId=tt0111161");
 
         $response->assertUnauthorized();
 
         // Проверка, если пользователь аутентифицирован
         $user = Sanctum::actingAs(User::factory()->create());
 
-        $response = $this->actingAs($user)->postJson("/api/films?imdbId=tt0944947");
+        $response = $this->actingAs($user)->postJson("/api/films?imdbId=tt0111161");
 
         $response->assertForbidden();
 
         // Проверка, если пользователь аутентифицирован как модератор
         $user = Sanctum::actingAs(User::factory()->moderator()->create());
 
-        $response = $this->actingAs($user)->postJson("/api/films?imdbId=tt0944947");
+        $response = $this->actingAs($user)->postJson("/api/films?imdbId=tt0111161");
 
         $response->assertCreated();
     }
