@@ -24,8 +24,6 @@ class AddFilmJobTest extends TestCase
      */
     public function test_adding_a_film_to_the_database()
     {
-        $imdbId = 'tt0000000';
-
         $referenseFilm = Film::factory()->make()->toArray();
         $referenseActors = Actor::factory(3)->make();
         $referenseGenres = Genre::factory(2)->make();
@@ -48,6 +46,8 @@ class AddFilmJobTest extends TestCase
         $this->mock(FilmService::class, function (MockInterface $mockService) use ($referenseFilm) {
             $mockService->shouldReceive('searchFilm')->andReturn($referenseFilm);
         });
+
+        $imdbId = $referenseFilm['imdb_id'];
 
         $addFilmJob = new AddFilmJob($imdbId, $mockRepository);
         $addFilmJob->handle();
