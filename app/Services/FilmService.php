@@ -19,7 +19,8 @@ use Illuminate\Support\Facades\Log;
 class FilmService
 {
     public function __construct(
-        private readonly MovieRepositoryInterface $movieRepository = new ImdbHtmlAcademyRepository(new Client()),
+        // Закомментировал "readonly MovieRepositoryInterface", т.к. при тестировании на имитируемый репозиториц созданный Mockery\MockInterface выдаёт ошибку ожидаемого типа
+        private /*readonly MovieRepositoryInterface*/ $movieRepository = new ImdbHtmlAcademyRepository(new Client()),
     ) {
     }
 

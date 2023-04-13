@@ -58,5 +58,20 @@ class AddFilmJobTest extends TestCase
         $this->mock(FilmService::class, function (MockInterface $mockService) use ($filmData) {
             $mockService->shouldReceive('searchFilm')->andReturn($filmData);
         });
+
+        $addFilmJob = new AddFilmJob($imdbId, $mockRepository);
+        $addFilmJob->handle();
+
+        // Проверка, что в базе данных появились записи: 1 фильма, 3-х актёров, 2-х жанров
+        $this->assertDatabaseCount('films', 1);
+        $this->assertDatabaseCount('actors', 3);
+        $this->assertDatabaseCount('genres', 2);
+
+        // Проверка наличия эталонных атрибутов в созданных записях таблиц: 'films', 'actors' и 'genres'
+        $this->assertDatabaseHas('films', $referenseFilmAttributes);
+
+        $this->assertDatabaseHas('actors', ['name' => 'actor1', 'name' => 'actor2', 'name' => 'actor3']);
+
+        $this->assertDatabaseHas('genres', ['title' => 'genre1', 'title' => 'genre1']);
     }
 }
