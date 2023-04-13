@@ -50,5 +50,13 @@ class AddFilmJobTest extends TestCase
             'status' => FILM::PENDING,
             'video_link' => $filmData['video'],
         ];
+
+        $mockRepository = $this->mock(MovieRepositoryInterface::class, function (MockInterface $mockRepository) use ($filmData) {
+            $mockRepository->shouldReceive('findById')->once()->andReturn($filmData);
+        });
+
+        $this->mock(FilmService::class, function (MockInterface $mockService) use ($filmData) {
+            $mockService->shouldReceive('searchFilm')->andReturn($filmData);
+        });
     }
 }
