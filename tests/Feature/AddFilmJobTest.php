@@ -74,4 +74,20 @@ class AddFilmJobTest extends TestCase
 
         $this->assertDatabaseHas('genres', ['title' => 'genre1', 'title' => 'genre1']);
     }
+
+    /**
+     * Проверка метода handle класса AddFilmJob по добавлению фильма в базу
+     *
+     * @return void
+     */
+    public function test_for_adding_a_task_to_the_queue()
+    {
+        Queue::fake();
+
+        $imdbId = 'tt0000000';
+
+        AddFilmJob::dispatch($imdbId);
+
+        Queue::assertPushed(AddFilmJob::class);
+    }
 }
