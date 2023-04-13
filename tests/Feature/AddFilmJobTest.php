@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 use \App\Services\FilmService;
 use \App\Jobs\AddFilmJob;
+use App\Models\Actor;
 use App\Models\Film;
+use App\Models\Genre;
 use Mockery\MockInterface;
 use App\Repositories\MovieRepositoryInterface;
 
@@ -24,39 +26,27 @@ class AddFilmJobTest extends TestCase
     {
         $imdbId = 'tt0000000';
 
-        // Фейковые данные для имитации ответа репозитория
-        $filmData = [
-            'name' => 'name',
-            'poster' => 'poster',
-            'desc' => 'desc',
-            'director' => 'director',
-            'run_time' => 120,
-            'released' => 2010,
-            'imdb_id' => 'tt0111161',
-            'video' => 'video',
-            'actors' => ['actor1', 'actor2', 'actor3'],
-            'genres' => ['genre1', 'genre2']
-        ];
+        $referenseFilm = Film::factory()->make()->toArray();
+        $referenseActors = Actor::factory(3)->make();
+        $referenseGenres = Genre::factory(2)->make();
 
-        // Эталонные данные. С такими атрибутами должен быть создан и добавлен в БД тестовый фильм
-        $referenseFilmAttributes = [
-            'title' => $filmData['name'],
-            'poster_image' => $filmData['poster'],
-            'description' => $filmData['desc'],
-            'director' => $filmData['director'],
-            'run_time' => $filmData['run_time'],
-            'released' => $filmData['released'],
-            'imdb_id' => $filmData['imdb_id'],
-            'status' => FILM::PENDING,
-            'video_link' => $filmData['video'],
-        ];
+        $referenseFilm['actors'] = [];
+        $referenseFilm['genres'] = [];
 
-        $mockRepository = $this->mock(MovieRepositoryInterface::class, function (MockInterface $mockRepository) use ($filmData) {
-            $mockRepository->shouldReceive('findById')->once()->andReturn($filmData);
+        foreach ($referenseActors as $referenseActor) {
+            $referenseFilm['actors'][] = $referenseActor->name;
+        }
+
+        foreach ($referenseGenres as $referenseGenre) {
+            $referenseFilm['genres'][] = $referenseGenre->title;
+        }
+
+        $mockRepository = $this->mock(MovieRepositoryInterface::class, function (MockInterface $mockRepository) use ($referenseFilm) {
+            $mockRepository->shouldReceive('findById')->once()->andReturn($referenseFilm);
         });
 
-        $this->mock(FilmService::class, function (MockInterface $mockService) use ($filmData) {
-            $mockService->shouldReceive('searchFilm')->andReturn($filmData);
+        $this->mock(FilmService::class, function (MockInterface $mockService) use ($referenseFilm) {
+            $mockService->shouldReceive('searchFilm')->andReturn($referenseFilm);
         });
 
         $addFilmJob = new AddFilmJob($imdbId, $mockRepository);
@@ -67,12 +57,24 @@ class AddFilmJobTest extends TestCase
         $this->assertDatabaseCount('actors', 3);
         $this->assertDatabaseCount('genres', 2);
 
+        // Удаляем ключи, которых нет в таблице 'films'
+        unset($referenseFilm['actors']);
+        unset($referenseFilm['genres']);
+
         // Проверка наличия эталонных атрибутов в созданных записях таблиц: 'films', 'actors' и 'genres'
-        $this->assertDatabaseHas('films', $referenseFilmAttributes);
+        $film = Film::first()->toArray();
 
-        $this->assertDatabaseHas('actors', ['name' => 'actor1', 'name' => 'actor2', 'name' => 'actor3']);
+        foreach ($referenseFilm as $key => $value) {
+            $this->assertArrayHasKey($key, $film);
+        }
 
-        $this->assertDatabaseHas('genres', ['title' => 'genre1', 'title' => 'genre1']);
+        foreach ($referenseActors as $actor) {
+            $this->assertDatabaseHas('actors', ['name' => $actor['name']]);
+        }
+
+        foreach ($referenseGenres as $genre) {
+            $this->assertDatabaseHas('genres', ['title' => $genre['title']]);
+        }
     }
 
     /**

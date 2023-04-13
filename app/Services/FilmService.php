@@ -46,15 +46,15 @@ class FilmService
     private function createFilm(array $filmData): Film
     {
         return new Film([
-            'title' => $filmData['name'],
-            'poster_image' => $filmData['poster'],
-            'description' => $filmData['desc'],
+            'title' => $filmData['title'],
+            'poster_image' => $filmData['poster_image'],
+            'description' => $filmData['description'],
             'director' => $filmData['director'],
             'run_time' => $filmData['run_time'],
             'released' => $filmData['released'],
             'imdb_id' => $filmData['imdb_id'],
             'status' => FILM::PENDING,
-            'video_link' => $filmData['video'],
+            'video_link' => $filmData['video_link'],
         ]);
     }
 
@@ -67,6 +67,7 @@ class FilmService
      */
     public function saveFilm(array $filmData): void
     {
+      // dd($filmData);
         try {
             $actorsId = [];
             $genresId = [];

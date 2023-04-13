@@ -4,6 +4,8 @@ namespace App\repositories;
 
 use App\repositories\MovieRepositoryInterface;
 
+use function PHPUnit\Framework\arrayHasKey;
+
 /**
  * Репозиторий для класса Film, работающий с учебным сервисом IMDB Proxi (http://guide.phpdemo.ru/api/documentation)
  *
@@ -16,6 +18,14 @@ class ImdbHtmlAcademyRepository implements MovieRepositoryInterface
     private const IMDB_URI = 'http://guide.phpdemo.ru/api/films/';
 
     private $httpClient;
+
+    // Массив с отличающимися от полей таблицы 'films' ключами.
+    private array $names = [
+        'title' => 'name',
+        'poster_image' => 'poster',
+        'description' => 'desc',
+        'video_link' => 'video',
+    ];
 
     public function __construct($httpClient)
     {
@@ -37,6 +47,30 @@ class ImdbHtmlAcademyRepository implements MovieRepositoryInterface
 
         $body = $response->getBody();
 
-        return json_decode($body->getContents(), true);
+        $filmData = json_decode($body->getContents(), true);
+
+        $filmData = $this->renameKeyName($this->names, $filmData);
+
+        return $filmData;
+    }
+
+    /**
+     * Метод для приведения имени ключа массива в соответствие с именем в таблице 'films'
+     *
+     * @param  array $names - массив, где ключ - имя ключа в массиве $filmData, которое надо поменять, а значение - новое имя ключа
+     * @param  array $filmData - массив с данными фильма c ключом названия фильма 'name'
+     *
+     * @return array $filmData - массив с данными фильма c ключом названия фильма 'title'
+     */
+    private function renameKeyName(array $names, array $filmData): array
+    {
+        foreach ($names as $key => $value) {
+            if (array_key_exists($value, $filmData)) {
+                $filmData[$key] = $filmData[$value];
+                unset($filmData[$value]);
+            }
+        }
+
+        return $filmData;
     }
 }
