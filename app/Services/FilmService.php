@@ -19,7 +19,8 @@ use Illuminate\Support\Facades\Log;
 class FilmService
 {
     public function __construct(
-        private readonly MovieRepositoryInterface $movieRepository = new ImdbHtmlAcademyRepository(new Client()),
+        // Закомментировал "readonly MovieRepositoryInterface", т.к. при тестировании на имитируемый репозиториц созданный Mockery\MockInterface выдаёт ошибку ожидаемого типа
+        private /*readonly MovieRepositoryInterface*/ $movieRepository = new ImdbHtmlAcademyRepository(new Client()),
     ) {
     }
 
@@ -45,15 +46,15 @@ class FilmService
     private function createFilm(array $filmData): Film
     {
         return new Film([
-            'title' => $filmData['name'],
-            'poster_image' => $filmData['poster'],
-            'description' => $filmData['desc'],
+            'title' => $filmData['title'],
+            'poster_image' => $filmData['poster_image'],
+            'description' => $filmData['description'],
             'director' => $filmData['director'],
             'run_time' => $filmData['run_time'],
             'released' => $filmData['released'],
             'imdb_id' => $filmData['imdb_id'],
             'status' => FILM::PENDING,
-            'video_link' => $filmData['video'],
+            'video_link' => $filmData['video_link'],
         ]);
     }
 

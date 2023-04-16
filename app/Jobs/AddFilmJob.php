@@ -16,9 +16,12 @@ class AddFilmJob implements ShouldQueue
     /**
      * Create a new job instance.
      *
+     * @param  string $imdbId - Действительный идентификатор IMDb в The Open Movie Database (например, tt1285016)
+     * @param  MovieRepositoryInterface $repository - Репозиторий для класса Film
+     *
      * @return void
      */
-    public function __construct(private string $imdbId)
+    public function __construct(private string $imdbId, private $repository = null)
     {
     }
 
@@ -29,7 +32,12 @@ class AddFilmJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $service = new FilmService();
+        if ($this->repository) {
+            $service = new FilmService($this->repository);
+        } else {
+            $service = new FilmService();
+        }
+
         $filmData = $service->searchFilm($this->imdbId);
         $service->saveFilm($filmData);
     }

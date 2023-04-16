@@ -20,17 +20,17 @@ class ImdbHtmlAcademyRepositoryTest extends TestCase
         $repository = new ImdbHtmlAcademyRepository($httpClient);
         $successData = [
             "imdb_id",
-            "name",
-            "desc",
+            "title",
+            "description",
             "director",
             "actors",
             "run_time",
             "released",
             "genres",
-            "poster",
+            "poster_image",
             "icon",
             "background",
-            "video",
+            "video_link",
             "preview",
         ];
 

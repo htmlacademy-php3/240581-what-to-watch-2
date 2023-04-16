@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 /**
- * Интерфейс репозитория для класса Movie
+ * Интерфейс репозитория для класса Film
  *
  * @property string $id - id фильма
  */
