@@ -3,7 +3,7 @@
 namespace App\services;
 
 use App\Repositories\MovieRepositoryInterface;
-use App\repositories\ImdbHtmlAcademyRepository;
+use App\repositories\OmdbMovieRepository;
 use App\Models\Actor;
 use App\Models\Film;
 use App\Models\Genre;
@@ -14,13 +14,13 @@ use Illuminate\Support\Facades\Log;
 /**
  * Прикладной сервис MovieService,
  * используя MovieRepositoryInterface осуществляет все операции с сущностью Movie
+ *
  * @property MovieRepositoryInterface $movieRepository
  */
 class FilmService
 {
     public function __construct(
-        // Закомментировал "readonly MovieRepositoryInterface", т.к. при тестировании на имитируемый репозиториц созданный Mockery\MockInterface выдаёт ошибку ожидаемого типа
-        private /*readonly MovieRepositoryInterface*/ $movieRepository = new ImdbHtmlAcademyRepository(new Client()),
+        private $movieRepository = new OmdbMovieRepository(new Client()),
     ) {
     }
 
