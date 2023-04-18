@@ -13,6 +13,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    public const ROLE_USER = 'пользователь';
+    public const ROLE_MODERATOR = 'модератор';
+
     /**
      * Таблица БД, ассоциированная с моделью.
      *
