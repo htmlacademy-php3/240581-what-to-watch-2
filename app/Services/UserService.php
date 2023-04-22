@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\UpdateUserRequest;
 
 /**
  * Прикладной сервис для объектов класса User
@@ -15,6 +17,35 @@ class UserService
     public function __construct(
         private User $user,
     ) {
+    }
+
+    /**
+     * Обновление профиля пользователя.
+     *
+     * @param  UpdateUserRequest $request
+     * @param  User $user - одель класса User
+     *
+     * @return string - роль пользователя
+     */
+    public function updateUser(UpdateUserRequest $request, User $user)
+    {
+        $params = $request->toArray();
+
+        if (isset($params['password'])) {
+            $user->password = Hash::make($params['password']);
+        }
+
+        if ($request->hasFile('file')) {
+            $params['file'] = $request->file('file');
+            $user->file = $params['file']->store('avatars');
+        }
+
+        $user->name = $params['name'];
+        $user->email = $params['email'];
+
+        if ($user->isDirty()) {
+            $user->save();
+        }
     }
 
     /**
