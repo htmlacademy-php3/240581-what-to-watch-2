@@ -116,6 +116,7 @@ class UserControllerTest extends TestCase
         $response->assertInvalid('email');
 
         // Проверка, если пользователь аутентифицирован и владелец профиля
+        Storage::fake('avatars');
 
         // а) Проверка работы при отсутствии новых данных
         $response = $this->actingAs($user)->patchJson("/api/user/{$user->id}", [
@@ -126,8 +127,6 @@ class UserControllerTest extends TestCase
         $response->assertStatus(Response::HTTP_ACCEPTED);
 
         // б) Проверка работы при изменении данных пользователя
-        Storage::fake('avatars');
-
         $file = UploadedFile::fake()->image('avatar.jpg');
 
         $response = $this->actingAs($user)->patchJson("/api/user/
@@ -147,5 +146,17 @@ class UserControllerTest extends TestCase
         $this->assertEquals(true, Hash::check('87654321', $user->password));
         Storage::disk('avatars')->assertExists("avatars/{$file->hashName()}");
         $this->assertEquals("avatars/{$file->hashName()}", $user->file);
+
+        // Проверка удаления старого аватара их хранилища
+        $newFile = UploadedFile::fake()->image('newAvatar.jpg');
+
+        $response = $this->actingAs($user)->patchJson("/api/user/
+        {$user->id}", [
+            'name' => 'NotAbigail',
+            'email' => 'newemail@email.com',
+            'file' => $newFile,
+        ]);
+
+        Storage::disk('avatars')->assertMissing("avatars/{$file->hashName()}");
     }
 }

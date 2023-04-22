@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Прикладной сервис для объектов класса User
@@ -35,6 +36,10 @@ class UserService
             $user->password = Hash::make($params['password']);
         }
 
+        if (isset($user->file)) {
+            $oldPath = $user->file;
+        }
+
         if ($request->hasFile('file')) {
             $params['file'] = $request->file('file');
             $user->file = $params['file']->store('avatars');
@@ -46,6 +51,8 @@ class UserService
         if ($user->isDirty()) {
             $user->save();
         }
+
+        Storage::delete($oldPath);
     }
 
     /**
