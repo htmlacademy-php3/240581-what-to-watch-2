@@ -23,33 +23,52 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Film::factory(10)->create();
-        Actor::factory(30)->create();
-        User::factory(10)->create();
+        Film::factory(50)->create();
+        Actor::factory(80)->create();
+        User::factory(100)->create();
         Genre::factory(10)->create();
 
-        FilmActor::factory()
-            ->count(50)
-            ->state(new Sequence(
-                fn ($sequence) => ['film_id' => Film::all()->random(), 'actor_id' => Actor::all()->random()],
-            ))
-            ->create();
+        $filmActorsActorIds = [];
 
-        FilmGenre::factory()
-            ->count(50)
-            ->state(new Sequence(
-                fn ($sequence) => ['film_id' => Film::all()->random(), 'genre_id' => Genre::all()->random()],
-            ))
-            ->create();
+        // У каждого фильма должны быть актёры
+        foreach (Film::all() as $film) {
+            // Количество актёров в фильме задано в диапазоне от 3 до 6
+            for ($i = 0; $i < mt_rand(3, 6); $i++) {
+                if ($i !== 0) {
+                    $filmActorsActorIds[] = FilmActor::where('film_id', $film->id)->value('actor_id');
+                }
+                // В одном фильме актёр должен указываться не более одного раза
+                $actor = Actor::whereNotIn('id', $filmActorsActorIds)->inRandomOrder()
+                    ->first();
+
+                FilmActor::factory()
+                    ->state(new Sequence(
+                        fn ($sequence) => ['film_id' => $film, 'actor_id' => $actor],
+                    ))
+                    ->create();
+            }
+        }
+
+        // У каждого фильма должен быть жанр
+        foreach (Film::all() as $film) {
+            // Пусть жанров у фильма будет от 1 до 3-х
+            for ($i = 0; $i < mt_rand(1, 3); $i++) {
+                FilmGenre::factory()
+                    ->state(new Sequence(
+                        fn ($sequence) => ['film_id' => $film, 'genre_id' => Genre::all()->random()],
+                    ))
+                    ->create();
+            }
+        }
 
         Comment::factory()
-            ->count(50)
+            ->count(500)
             ->state(new Sequence(
                 fn ($sequence) => ['film_id' => Film::all()->random(), 'user_id' => User::all()->random()],
             ))
             ->create();
 
-        Favorite::factory(30)
+        Favorite::factory()
             ->count(50)
             ->state(new Sequence(
                 fn ($sequence) => ['film_id' => Film::all()->random(), 'user_id' => User::all()->random()],
