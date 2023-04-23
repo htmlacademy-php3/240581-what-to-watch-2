@@ -8,6 +8,7 @@ use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
 use App\Http\Requests\AddFilmRequest;
 use App\Models\Film;
+use App\Models\FilmActor;
 use App\Jobs\AddFilmJob;
 
 class FilmController extends Controller
@@ -19,13 +20,16 @@ class FilmController extends Controller
      */
     public function index(): ApiSuccessResponse|ApiErrorResponse
     {
-        return new ApiSuccessResponse();
+        $films = Film::all();
+        dd($films->count());
+        $filmsArr = $films->toArray();
+        return new ApiSuccessResponse($filmsArr);
     }
 
     /**
      * Добавление фильма в базу.
      *
-     * @param  Request  $request
+     * @param  Request $request
      * @return ApiSuccessResponse|ApiErrorResponse
      */
     public function store(AddFilmRequest $request): ApiSuccessResponse|ApiErrorResponse
@@ -40,7 +44,7 @@ class FilmController extends Controller
     /**
      * Получение информации о фильме.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return ApiSuccessResponse|ApiErrorResponse
      */
     public function show(int $id): ApiSuccessResponse|ApiErrorResponse
@@ -51,8 +55,8 @@ class FilmController extends Controller
     /**
      * Редактирование фильма.
      *
-     * @param  Request  $request
-     * @param  int  $id
+     * @param  Request $request
+     * @param  int $id
      * @return ApiSuccessResponse|ApiErrorResponse
      */
     public function update(Request $request, int $id): ApiSuccessResponse|ApiErrorResponse
