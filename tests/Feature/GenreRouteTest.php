@@ -24,7 +24,7 @@ class GenreRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+                //'data' => []
             ]);
 
         // Проверка, если пользователь аутентифицирован
@@ -35,7 +35,7 @@ class GenreRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+               // 'data' => []
             ]);
 
             // Проверка, если пользователь аутентифицирован как модератор
@@ -46,7 +46,7 @@ class GenreRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+               // 'data' => []
             ]);
     }
 
@@ -79,7 +79,7 @@ class GenreRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+                //'data' => []
             ]);
     }
 }

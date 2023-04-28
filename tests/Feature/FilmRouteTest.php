@@ -24,7 +24,7 @@ class FilmRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+               // 'data' => []
             ]);
 
         // Проверка, если пользователь аутентифицирован
@@ -35,7 +35,7 @@ class FilmRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+               // 'data' => []
             ]);
 
         // Проверка, если пользователь аутентифицирован как модератор
@@ -46,7 +46,7 @@ class FilmRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+               // 'data' => []
             ]);
     }
 
@@ -65,7 +65,7 @@ class FilmRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+               // 'data' => []
             ]);
 
         // Проверка, если пользователь аутентифицирован
@@ -76,7 +76,7 @@ class FilmRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+               // 'data' => []
             ]);
 
         // Проверка, если пользователь аутентифицирован как модератор
@@ -87,7 +87,7 @@ class FilmRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+               // 'data' => []
             ]);
     }
 
@@ -98,7 +98,6 @@ class FilmRouteTest extends TestCase
      */
     public function test_post_film()
     {
-        $filmId = 1;
         // Проверка, если пользователь неаутентифицирован
         $response = $this->postJson("/api/films?imdbId=tt0111161");
 
@@ -147,7 +146,7 @@ class FilmRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+               // 'data' => []
             ]);
     }
 }

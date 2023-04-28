@@ -23,7 +23,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Film::factory(50)->create();
+        Film::factory(50)->state(new Sequence(
+            ['status' => Film::READY],
+            ['status' => Film::READY],
+            ['status' => Film::PENDING],
+            ['status' => Film::READY],
+            ['status' => Film::READY],
+            ['status' => Film::READY],
+            ['status' => Film::ON_MODERATION],
+            ['status' => Film::READY],
+            ['status' => Film::READY],
+            ['status' => Film::READY],
+        ))->create();
+
         Actor::factory(80)->create();
         User::factory(100)->create();
         Genre::factory(10)->create();

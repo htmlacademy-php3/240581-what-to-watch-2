@@ -21,7 +21,7 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request): ApiSuccessResponse|ApiErrorResponse
     {
-        if (!Auth::attempt($request->validated())) {
+        if (!Auth::attempt($request->validated(), true)) {
             abort(Response::HTTP_UNAUTHORIZED, trans('auth.failed'));
         }
 

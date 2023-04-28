@@ -27,7 +27,7 @@ class CommentRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+               // 'data' => []
             ]);
 
         // Проверка, если пользователь аутентифицирован
@@ -38,7 +38,7 @@ class CommentRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+               // 'data' => []
             ]);
 
         // Проверка, если пользователь аутентифицирован как модератор
@@ -49,7 +49,7 @@ class CommentRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+               // 'data' => []
             ]);
     }
 
@@ -120,7 +120,7 @@ class CommentRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+               // 'data' => []
             ]);
 
         // Проверка, если пользователь аутентифицирован как модератор
@@ -130,7 +130,7 @@ class CommentRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+               // 'data' => []
             ]);
     }
 

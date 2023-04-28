@@ -13,8 +13,6 @@ class ApiSuccessResponse extends AbstractApiResponse
      */
     protected function makeResponseData(): array
     {
-        return [
-            'data' => $this->prepareData()
-        ];
+        return $this->prepareData();
     }
 }

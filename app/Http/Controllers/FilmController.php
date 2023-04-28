@@ -8,22 +8,25 @@ use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
 use App\Http\Requests\AddFilmRequest;
 use App\Models\Film;
-use App\Models\FilmActor;
+use App\Http\Resources\FilmListResource;
 use App\Jobs\AddFilmJob;
+use App\services\FilmService;
+use Illuminate\Support\Facades\Auth;
 
 class FilmController extends Controller
 {
     /**
      * Получение списка фильмов.
-     *
+     * @param  Request|null $request
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function index(): ApiSuccessResponse|ApiErrorResponse
+    public function index(Request $request): ApiSuccessResponse|ApiErrorResponse
     {
-        $films = Film::all();
-        dd($films->count());
-        $filmsArr = $films->toArray();
-        return new ApiSuccessResponse($filmsArr);
+        $query = FilmService::createRequestForFilmsByParameters($request);
+        $films = $query->paginate(8);
+        $collection = FilmListResource::collection($films);
+
+        return new ApiSuccessResponse($films);
     }
 
     /**
@@ -49,6 +52,10 @@ class FilmController extends Controller
      */
     public function show(int $id): ApiSuccessResponse|ApiErrorResponse
     {
+        $film = Film::find($id);
+        // $favorite = Favorite::where('film_id', $film->id)->get();
+        // $user = $favorite->user();
+        // dd($film->users);
         return new ApiSuccessResponse();
     }
 

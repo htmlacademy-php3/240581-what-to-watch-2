@@ -45,12 +45,12 @@ class UserControllerTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => [
-                    'name',
-                    'email',
-                    'avatar',
-                    'role',
-                ]
+
+                'name',
+                'email',
+                'avatar',
+                'role',
+
             ])
             ->assertJsonFragment([
                 'name' => $user->name,
@@ -104,9 +104,7 @@ class UserControllerTest extends TestCase
         $response->assertInvalid('email');
 
         // Тоже самое в случае пользователя с ролью модератора.
-        $moderator = Sanctum::actingAs(User::factory()->state([
-            'is_moderator' => true,
-        ])->create());
+        $moderator = Sanctum::actingAs(User::factory()->moderator()->create());
 
         $response = $this->actingAs($moderator)->patchJson("/api/user/{$user->id}", [
             'name' => $requestedUser->name,
