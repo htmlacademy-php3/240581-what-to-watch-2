@@ -23,7 +23,7 @@ class FilmControllerTest extends TestCase
      *
      * @return void
      */
-    protected function checkingFilmsByParameters($parameterName, TestResponse $response, $sortBy = 'desc'): void
+    private function checkingFilmsByParameters($parameterName, TestResponse $response, $sortBy = 'desc'): void
     {
         $responseData = $response->json()['data'];
 
@@ -54,7 +54,7 @@ class FilmControllerTest extends TestCase
      *
      * @return void
      */
-    protected function checkingFilmsGenre(Genre $referenceGenre, TestResponse $response): void
+    private function checkingFilmsGenre(Genre $referenceGenre, TestResponse $response): void
     {
         $responseData = $response->json()['data'];
 
@@ -84,7 +84,7 @@ class FilmControllerTest extends TestCase
      *
      * @return void
      */
-    protected function checkingFilmsStatus(string $statusName, TestResponse $response, User $user = null): void
+    private function checkingFilmsStatus(string $statusName, TestResponse $response, User $user = null): void
     {
         $responseData = $response->json()['data'];
         $status = 'ready';
@@ -106,11 +106,11 @@ class FilmControllerTest extends TestCase
      * @param  string $orderBy - правило сортировки. Возможные значения: released, rating
      * Пользователь с ролью 'модератор' может изменить значение на: 'pending', 'on moderate'
      *
-     * @param  array $ordersTo
+     * @param  array $ordersTo - тип сортировки
      *
      * @return void
      */
-    protected function checkingFilmsWithSorted(string $orderBy, array $ordersTo = ['', 'asc']): void
+    private function checkingFilmsWithSorted(string $orderBy, array $ordersTo = ['', 'asc']): void
     {
         $parameter = $orderBy;
 
@@ -176,7 +176,7 @@ class FilmControllerTest extends TestCase
 
         $this->checkingFilmsByParameters('released', $response, $orderTo);
 
-        // Проверка сортировки фильмов по рейтингу, от большего к меньшему (desc)
+        // Проверка сортировки фильмов по рейтингу, от большего к меньшему (desc) и наоборот (asc)
         $this->checkingFilmsWithSorted('rating');
 
         // Проверка фильтрации фильмов по жанру c сортировкой по умолчанию по дате выхода: от новых к старым (desc)
@@ -263,7 +263,7 @@ class FilmControllerTest extends TestCase
 
             $this->checkingFilmsByParameters('released', $response, $orderTo);
 
-            // Проверка сортировки фильмов по рейтингу, от большего к меньшему (desc)
+            // Проверка сортировки фильмов по рейтингу (desc и asc)
             $this->checkingFilmsWithSorted('rating');
 
             // Проверка фильтрации фильмов по жанру c сортировкой по умолчанию по дате выхода: от новых к старым (desc)
