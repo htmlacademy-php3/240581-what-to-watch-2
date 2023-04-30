@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
+use App\Models\Favorite;
+use App\Models\Film;
+use App\Models\User;
+use App\Http\Resources\FilmListResource;
+use Illuminate\Support\Facades\Auth;
 
 class FavoriteController extends Controller
 {
@@ -14,9 +19,22 @@ class FavoriteController extends Controller
      *
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function index(/* TO DO User $User */): ApiSuccessResponse|ApiErrorResponse
+    public function index(): ApiSuccessResponse|ApiErrorResponse
     {
-        return new ApiSuccessResponse();
+       // dd(Auth::id());
+        if (!Auth::id()) {
+            abort(Response::HTTP_UNAUTHORIZED, trans('auth.failed'));
+        }
+
+        $favorite = Film::whereHas('users', function ($q) {
+            $q->where('users.id', '=', Auth::id());
+        })
+            ->orderByDesc('released')
+            ->paginate(8);
+
+        $collection = FilmListResource::collection($favorite);
+
+        return new ApiSuccessResponse($favorite);
     }
 
     /**
