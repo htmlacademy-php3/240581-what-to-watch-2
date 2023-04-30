@@ -29,12 +29,12 @@ class Favorite extends Model
     }
 
     /**
-     * Получение фильмов, добавленных пользователем в "Избранное".
+     * Получение фильма, добавленного пользователем в "Избранное".
      *
-     * @return BelongsToMany
+     * @return BelongsTo
      */
-    public function films(): BelongsToMany
+    public function film(): BelongsTo
     {
-        return $this->belongsToMany(Film::class);
+        return $this->belongsTo(Film::class);
     }
 }

@@ -9,9 +9,9 @@ use App\Http\Responses\ApiErrorResponse;
 use App\Http\Requests\AddFilmRequest;
 use App\Models\Film;
 use App\Http\Resources\FilmListResource;
+use App\Http\Resources\FilmResource;
 use App\Jobs\AddFilmJob;
 use App\services\FilmService;
-use Illuminate\Support\Facades\Auth;
 
 class FilmController extends Controller
 {
@@ -52,11 +52,10 @@ class FilmController extends Controller
      */
     public function show(int $id): ApiSuccessResponse|ApiErrorResponse
     {
-        $film = Film::find($id);
-        // $favorite = Favorite::where('film_id', $film->id)->get();
-        // $user = $favorite->user();
-        // dd($film->users);
-        return new ApiSuccessResponse();
+        $film = new FilmResource(Film::findOrFail($id));
+        $film = $film->toArray($id);
+
+        return new ApiSuccessResponse($film);
     }
 
     /**

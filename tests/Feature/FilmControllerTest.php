@@ -4,11 +4,13 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\TestResponse;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Tests\TestCase;
 use Laravel\Sanctum\Sanctum;
 use \App\Models\Film;
 use \App\Models\Genre;
 use \App\Models\User;
+use App\Models\Favorite;
 
 class FilmControllerTest extends TestCase
 {
@@ -63,14 +65,14 @@ class FilmControllerTest extends TestCase
             $genres = $film->genres;
             $genres = $genres->toArray();
 
-            // Проверка, что среди полученных фильмов нет не имеющих искомый жанр
+            // Проверка, что среди полученных фильмов все имеют искомый жанр
             $presence = false;
             foreach ($genres as $el) {
                 if (in_array($referenceGenre->title, $el, true)) {
                     $presence = true;
                 }
             }
-            assert($presence, true);
+            assert($presence);
         }
     }
 
@@ -291,5 +293,136 @@ class FilmControllerTest extends TestCase
                 }
             }
         }
+    }
+
+    /**
+     * Тест action show() FilmController`а.
+     *
+     * @return void
+     */
+    public function test_show()
+    {
+        // Проверка на возврат 404 ошибки в случае попытки обращения к несуществующему фильму
+
+        // БД не наполнена, таблица 'films' пуста. Можно брать людой id
+        $filmId = 1;
+
+        // Проверим, что таблица в базе данных действительно не содержит записи фильма с таким id
+        $this->assertDatabaseMissing('films', [
+            'id' => $filmId,
+        ]);
+
+        $response = $this->getJson("/api/films/{$filmId}");
+        $response->assertNotFound();
+
+        // Наполняем БД, запустив `DatabaseSeeder`
+        $this->seed();
+
+        // Проверка ответа при запросе фильма неавторизованным пользователем
+
+        $favorite = Favorite::inRandomOrder()->first();
+        $film = $favorite->film;
+
+        $response = $this->getJson("/api/films/{$film->id}");
+
+        $response
+            ->assertOk()
+            ->assertJsonStructure([
+                'id',
+                'name',
+                'poster_image',
+                'preview_image',
+                'background_image',
+                'background_color',
+                'video_link',
+                'preview_video_link',
+                'description',
+                'rating',
+                'scores_count',
+                'director',
+                'starring' => [],
+                'run_time',
+                'genre' => [],
+                'released',
+                'is_favorite'
+            ])
+            ->assertJsonFragment(['is_favorite' => []])
+            ->assertJsonMissing(['is_favorite' => false])
+            ->assertJsonMissing(['is_favorite' => true]);
+
+        // Проверка, что 'is_favorite' содержит пустой массив
+        $responseData = $response->json();
+
+        assert(empty($responseData['is_favorite']));
+
+        // Проверка ответа при запросе фильма, не находящимся у авторизованного пользователя в избранном
+
+        // Создадим авторизованного пользователя, но не добавим ему связи с каким-либо фильмом
+        $user = Sanctum::actingAs(User::factory()->create());
+
+        $film = Film::inRandomOrder()->first();
+
+        $response = $this->actingAs($user)->getJson("/api/films/{$film->id}");
+
+        $response
+            ->assertOk()
+            ->assertJsonStructure([
+                'id',
+                'name',
+                'poster_image',
+                'preview_image',
+                'background_image',
+                'background_color',
+                'video_link',
+                'preview_video_link',
+                'description',
+                'rating',
+                'scores_count',
+                'director',
+                'starring' => [],
+                'run_time',
+                'genre' => [],
+                'released',
+                'is_favorite'
+            ])
+            ->assertJsonFragment(['is_favorite' => false])
+            ->assertJsonMissing(['is_favorite' => []])
+            ->assertJsonMissing(['is_favorite' => true]);
+
+        // Проверка ответа при запросе фильма, находящегося у авторизованного пользователя в избранном
+
+        // Создадим связь созданного авторизованного пользователя с фильмом
+        $favorite = Favorite::factory()
+            ->state(new Sequence(
+                fn ($sequence) => ['film_id' => $film, 'user_id' => $user],
+            ))
+            ->create();
+
+        $response = $this->actingAs($user)->getJson("/api/films/{$film->id}");
+
+        $response
+            ->assertOk()
+            ->assertJsonStructure([
+                'id',
+                'name',
+                'poster_image',
+                'preview_image',
+                'background_image',
+                'background_color',
+                'video_link',
+                'preview_video_link',
+                'description',
+                'rating',
+                'scores_count',
+                'director',
+                'starring' => [],
+                'run_time',
+                'genre' => [],
+                'released',
+                'is_favorite'
+            ])
+            ->assertJsonFragment(['is_favorite' => true])
+            ->assertJsonMissing(['is_favorite' => []])
+            ->assertJsonMissing(['is_favorite' => false]);
     }
 }

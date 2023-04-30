@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Favorite;
 
 class FilmResource extends JsonResource
 {
@@ -18,8 +19,9 @@ class FilmResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->title,
-            'preview_image' => $this->preview_image,
             'poster_image' => $this->poster_image,
+            'preview_image' => $this->preview_image,
+
             'background_image' => $this->background_image,
             'background_color' => $this->background_color,
             'video_link' => $this->video_link,
@@ -33,11 +35,24 @@ class FilmResource extends JsonResource
             'genre' => $this->genres->pluck('title'),
             'released' => $this->released,
             'is_favorite' => $this->when(Auth::user(), function () {
+                /*
+                $favorite = Favorite::where([
+                    ['film_id', $this->id],
+                    ['user_id', Auth::user()->id],
+                ])
+                    ->exists();
+                if ($favorite) {
+                    return true;
+                }*/
+                if (in_array(Auth::id(), $this->users->pluck('id')->toArray())) {
+                    return true;
+                }
+                /*
                 foreach ($this->users->pluck('id') as $element) {
                     if (Auth::id() === $element) {
                         return true;
                     }
-                }
+                }*/
                 return false;
             }),
         ];

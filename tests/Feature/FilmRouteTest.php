@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Laravel\Sanctum\Sanctum;
+use \App\Models\Film;
 use \App\Models\User;
 
 class FilmRouteTest extends TestCase
@@ -24,7 +25,7 @@ class FilmRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-               // 'data' => []
+                // 'data' => []
             ]);
 
         // Проверка, если пользователь аутентифицирован
@@ -35,7 +36,7 @@ class FilmRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-               // 'data' => []
+                // 'data' => []
             ]);
 
         // Проверка, если пользователь аутентифицирован как модератор
@@ -46,7 +47,7 @@ class FilmRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-               // 'data' => []
+                // 'data' => []
             ]);
     }
 
@@ -57,37 +58,37 @@ class FilmRouteTest extends TestCase
      */
     public function test_get_film()
     {
-        $filmsId = 1;
+        $film = Film::factory()->create();
 
         // Проверка, если пользователь неаутентифицирован
-        $response = $this->getJson("/api/films/{$filmsId}");
+        $response = $this->getJson("/api/films/{$film->id}");
 
         $response
             ->assertOk()
             ->assertJsonStructure([
-               // 'data' => []
+                // 'data' => []
             ]);
 
         // Проверка, если пользователь аутентифицирован
         $user = Sanctum::actingAs(User::factory()->create());
 
-        $response = $this->actingAs($user)->getJson("/api/films/{$filmsId}");
+        $response = $this->actingAs($user)->getJson("/api/films/{$film->id}");
 
         $response
             ->assertOk()
             ->assertJsonStructure([
-               // 'data' => []
+                // 'data' => []
             ]);
 
         // Проверка, если пользователь аутентифицирован как модератор
         $user = Sanctum::actingAs(User::factory()->moderator()->create());
 
-        $response = $this->actingAs($user)->getJson("/api/films/{$filmsId}");
+        $response = $this->actingAs($user)->getJson("/api/films/{$film->id}");
 
         $response
             ->assertOk()
             ->assertJsonStructure([
-               // 'data' => []
+                // 'data' => []
             ]);
     }
 
@@ -146,7 +147,7 @@ class FilmRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-               // 'data' => []
+                // 'data' => []
             ]);
     }
 }
