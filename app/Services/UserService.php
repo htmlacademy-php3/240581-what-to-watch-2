@@ -11,12 +11,13 @@ use Illuminate\Support\Facades\Storage;
  * Прикладной сервис для объектов класса User
  *
  * @param  User $user - объект класса User
+ *
  * @return array
  */
 class UserService
 {
     public function __construct(
-        private User $user,
+        private User $user
     ) {
     }
 
@@ -26,9 +27,9 @@ class UserService
      * @param  UpdateUserRequest $request
      * @param  User $user - одель класса User
      *
-     * @return string - роль пользователя
+     * @return void
      */
-    public function updateUser(UpdateUserRequest $request, User $user)
+    public function updateUser(UpdateUserRequest $request, User $user): void
     {
         $params = $request->toArray();
 

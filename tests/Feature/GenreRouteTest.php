@@ -3,8 +3,10 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 use Laravel\Sanctum\Sanctum;
+use \App\Models\Genre;
 use \App\Models\User;
 
 class GenreRouteTest extends TestCase
@@ -35,10 +37,10 @@ class GenreRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-               // 'data' => []
+                // 'data' => []
             ]);
 
-            // Проверка, если пользователь аутентифицирован как модератор
+        // Проверка, если пользователь аутентифицирован как модератор
         $user = Sanctum::actingAs(User::factory()->moderator()->create());
 
         $response = $this->actingAs($user)->getJson('/api/genres');
@@ -46,7 +48,7 @@ class GenreRouteTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-               // 'data' => []
+                // 'data' => []
             ]);
     }
 
@@ -57,27 +59,35 @@ class GenreRouteTest extends TestCase
      */
     public function test_update_genres()
     {
-        $genresId = 1;
+        $genre = Genre::factory()->create();
+        $genresId = $genre->id;
+        $newGenreTitle = 'NewGenre';
 
         // Проверка, если пользователь неаутентифицирован
-        $response = $this->patchJson("/api/genres/{$genresId}");
+        $response = $this->patchJson("/api/genres/{$genresId}", [
+            'title' => $newGenreTitle,
+        ]);
 
         $response->assertUnauthorized();
 
         // Проверка, если пользователь аутентифицирован
         $user = Sanctum::actingAs(User::factory()->create());
 
-        $response = $this->actingAs($user)->patchJson("/api/genres/{$genresId}");
+        $response = $this->actingAs($user)->patchJson("/api/genres/{$genresId}", [
+            'title' => $newGenreTitle,
+        ]);
 
         $response->assertForbidden();
 
         // Проверка, если пользователь аутентифицирован как модератор
         $user = Sanctum::actingAs(User::factory()->moderator()->create());
 
-        $response = $this->actingAs($user)->patchJson("/api/genres/{$genresId}");
+        $response = $this->actingAs($user)->patchJson("/api/genres/{$genresId}", [
+            'title' => $newGenreTitle,
+        ]);
 
         $response
-            ->assertOk()
+            ->assertStatus(Response::HTTP_ACCEPTED)
             ->assertJsonStructure([
                 //'data' => []
             ]);

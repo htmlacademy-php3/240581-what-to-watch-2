@@ -24,6 +24,7 @@ class FilmController extends Controller
     {
         $query = FilmService::createRequestForFilmsByParameters($request);
         $films = $query->paginate(8);
+
         $collection = FilmListResource::collection($films);
 
         return new ApiSuccessResponse($films);

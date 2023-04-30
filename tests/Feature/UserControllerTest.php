@@ -45,12 +45,10 @@ class UserControllerTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-
                 'name',
                 'email',
                 'avatar',
                 'role',
-
             ])
             ->assertJsonFragment([
                 'name' => $user->name,
@@ -96,7 +94,7 @@ class UserControllerTest extends TestCase
         ]));
 
         // Логикой контроллера предусматривается, что производится обновление профиля пользователя, соответствующего текущему пользователю ($user = Auth::user();), независимо от того, какой id указан в uri. Фактически, пользователь будет редактировать свой профиль, поэтому при попытке указать email чужого профиля (обязательный параметр) будет ошибка валидации.
-        $response = $this->patchJson("/api/user/{$requestedUser->id}", [
+        $response = $this->actingAs($user)->patchJson("/api/user/{$requestedUser->id}", [
             'name' => $requestedUser->name,
             'email' => $requestedUser->email,
         ]);
@@ -145,7 +143,7 @@ class UserControllerTest extends TestCase
         Storage::disk('avatars')->assertExists("avatars/{$file->hashName()}");
         $this->assertEquals("avatars/{$file->hashName()}", $user->file);
 
-        // Проверка удаления старого аватара их хранилища
+        // Проверка удаления старого аватара из хранилища
         $newFile = UploadedFile::fake()->image('newAvatar.jpg');
 
         $response = $this->actingAs($user)->patchJson("/api/user/

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\services;
+namespace App\Services;
 
 use App\Repositories\MovieRepositoryInterface;
 use App\repositories\OmdbMovieRepository;
@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Auth;
 class FilmService
 {
     public function __construct(
-        private $movieRepository = new OmdbMovieRepository(new Client()),
+        private $movieRepository = new OmdbMovieRepository(new Client())
     ) {
     }
 
