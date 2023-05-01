@@ -98,4 +98,48 @@ class FavoriteControllerTest extends TestCase
             $released = $film->released;
         }
     }
+    /**
+     * Тест action store() FavoriteController`а
+     *
+     * @return void
+     */
+    public function test_store()
+    {
+        // Проверка, если пользователь неаутентифицирован
+        $film = Film::factory()->create();
+        User::factory()->create();
+
+        $response = $this->postJson("/api/films/{$film->id}/favorite");
+
+        $response->assertUnauthorized();
+
+        // Проверка, если пользователь аутентифицирован и фильма в избранном ещё нет
+        $user = Sanctum::actingAs(User::factory()->create());
+
+        $response = $this->postJson("/api/films/{$film->id}/favorite");
+
+        $response
+            ->assertCreated()
+            ->assertJsonStructure([
+                'id',
+                'film_id',
+                'user_id',
+            ])
+            ->assertJsonFragment([
+                'film_id' => $film->id,
+                'user_id' => $user->id,
+            ]);
+
+        // Проверка, если пользователь аутентифицирован, а фильм уже находится в списке избранного
+        $response = $this->postJson("/api/films/{$film->id}/favorite");
+
+        $response
+            ->assertUnprocessable()
+            ->assertJsonStructure([
+                'message',
+            ])
+            ->assertJsonFragment([
+                'message' => 'Этот фильм уже присутствует в Вашем списке',
+            ]);
+    }
 }

@@ -43,9 +43,27 @@ class FavoriteController extends Controller
      * @param  Request  $request
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function store(Request $request/* TO DO , User $User */): ApiSuccessResponse|ApiErrorResponse
+    public function store(int $id): ApiSuccessResponse|ApiErrorResponse
     {
-        return new ApiSuccessResponse([], Response::HTTP_CREATED);
+        $film = Film::findOrFail($id);
+
+        // Вот хорошо бы так, да ТЗ не велит!
+        /*
+        $favorite = Favorite::firstOrCreate(
+            ['user_id' => Auth::id(), 'film_id' => $film->id],
+            ['user_id' => Auth::id(), 'film_id' => $film->id]
+        );*/
+
+        if (Favorite::firstWhere(['user_id' => Auth::id(), 'film_id' => $film->id])) {
+            return new ApiErrorResponse([], Response::HTTP_UNPROCESSABLE_ENTITY, 'Этот фильм уже присутствует в Вашем списке');
+        }
+
+        $favorite = Favorite::create([
+            'user_id' => Auth::id(),
+            'film_id' => $film->id
+        ]);
+
+        return new ApiSuccessResponse($favorite, Response::HTTP_CREATED);
     }
 
     /**

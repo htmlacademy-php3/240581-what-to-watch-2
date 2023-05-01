@@ -18,6 +18,16 @@ class Favorite extends Model
      */
     protected $table = 'favorites';
 
+     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'user_id',
+        'film_id',
+    ];
+
     /**
      * Получение пользователя, который добавил фильм в "Избранное".
      *
