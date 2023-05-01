@@ -40,7 +40,7 @@ class FavoriteController extends Controller
     /**
      * Добавление фильма в избранное.
      *
-     * @param  Request  $request
+     * @param  int $id - $id фильма, добавляемого в избранные
      * @return ApiSuccessResponse|ApiErrorResponse
      */
     public function store(int $id): ApiSuccessResponse|ApiErrorResponse
