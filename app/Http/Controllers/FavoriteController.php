@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
 use App\Models\Favorite;
 use App\Models\Film;
-use App\Models\User;
 use App\Http\Resources\FilmListResource;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class FavoriteController extends Controller
 {
@@ -47,13 +44,6 @@ class FavoriteController extends Controller
     {
         $film = Film::findOrFail($id);
 
-        // Вот хорошо бы так, да ТЗ не велит!
-        /*
-        $favorite = Favorite::firstOrCreate(
-            ['user_id' => Auth::id(), 'film_id' => $film->id],
-            ['user_id' => Auth::id(), 'film_id' => $film->id]
-        );*/
-
         if (Favorite::firstWhere(['user_id' => Auth::id(), 'film_id' => $film->id])) {
             return new ApiErrorResponse([], Response::HTTP_UNPROCESSABLE_ENTITY, 'Этот фильм уже присутствует в Вашем списке');
         }
@@ -69,11 +59,21 @@ class FavoriteController extends Controller
     /**
      * Удаление фильма из избранного.
      *
-     * @param  int  $id
+     * @param  int  $id - $id фильма, удаляемого из избранных
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function destroy(int $id/* TO DO , User $User */): ApiSuccessResponse|ApiErrorResponse
+    public function destroy(int $id): ApiSuccessResponse|ApiErrorResponse
     {
-        return new ApiSuccessResponse();
+        $film = Film::findOrFail($id);
+
+        $favorite = Favorite::firstWhere(['user_id' => Auth::id(), 'film_id' => $film->id]);
+
+        if (!$favorite) {
+            return new ApiErrorResponse([], Response::HTTP_UNPROCESSABLE_ENTITY, 'Этот фильм отсутствует в Вашем списке');
+        }
+
+        Favorite::destroy($favorite->id);
+
+        return new ApiSuccessResponse([], Response::HTTP_NO_CONTENT);
     }
 }

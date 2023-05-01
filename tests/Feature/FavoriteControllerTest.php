@@ -98,6 +98,7 @@ class FavoriteControllerTest extends TestCase
             $released = $film->released;
         }
     }
+
     /**
      * Тест action store() FavoriteController`а
      *
@@ -140,6 +141,48 @@ class FavoriteControllerTest extends TestCase
             ])
             ->assertJsonFragment([
                 'message' => 'Этот фильм уже присутствует в Вашем списке',
+            ]);
+    }
+
+    /**
+     * Тест action destroy() FavoriteController`а
+     *
+     * @return void
+     */
+    public function test_destroy()
+    {
+        // Проверка, если пользователь неаутентифицирован
+        $film = Film::factory()->create();
+
+        User::factory()->create();
+
+        $response = $this->deleteJson("/api/films/{$film->id}/favorite");
+
+        $response->assertUnauthorized();
+
+        // Проверка, если пользователь аутентифицирован, фильм находится в избранном
+        $user = Sanctum::actingAs(User::factory()->create());
+
+        Favorite::factory()->state([
+            'film_id' => $film->id,
+            'user_id' => $user->id,
+        ])->create();
+
+        $response = $this->deleteJson("/api/films/{$film->id}/favorite");
+
+        $response
+            ->assertNoContent();
+
+        // Проверка, если пользователь аутентифицирован, фильм не находится в списке избранного
+        $response = $this->deleteJson("/api/films/{$film->id}/favorite");
+
+        $response
+            ->assertUnprocessable()
+            ->assertJsonStructure([
+                'message',
+            ])
+            ->assertJsonFragment([
+                'message' => 'Этот фильм отсутствует в Вашем списке',
             ]);
     }
 }
