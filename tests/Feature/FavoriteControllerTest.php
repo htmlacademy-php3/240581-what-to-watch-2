@@ -13,6 +13,8 @@ use \App\Models\User;
 
 class FavoriteControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * Тест action index() FavoriteController`а
      *
@@ -20,17 +22,18 @@ class FavoriteControllerTest extends TestCase
      */
     public function test_index()
     {
+        // Количество избранных фильмов у пользователя
+        $filmsCount = 15;
+
+        // Текущая страница в ответе согласно ТЗ
+        $currentPage = 1;
+
+        // Количество выводимых моделей на одной странице согласно ТЗ
+        $paginateCount = 8;
+
+
         // Проверка, если пользователь неаутентифицирован
-        $unloggedUser = User::factory()->create();
-
-        Film::factory(20)->create();
-
-        Favorite::factory()
-            ->count(5)
-            ->state(new Sequence(
-                fn ($sequence) => ['film_id' => Film::all()->random(), 'user_id' => $unloggedUser],
-            ))
-            ->create();
+        User::factory()->has(Film::factory($filmsCount))->create();
 
         $response = $this->getJson('/api/favorite');
 
@@ -44,17 +47,12 @@ class FavoriteControllerTest extends TestCase
         // Проверка, что по его запросу приходят только его фильмы.
         $response
             ->assertOk()
-            // Проверка, что возвращено 0 фильмов
+            // Проверка, что возвращено 0 фильмов и текущая страница - "1"
             ->assertJsonCount(0, 'data.*')
-            ->assertJsonFragment(['current_page' => 1]);
+            ->assertJsonFragment(['current_page' => $currentPage]);
 
-        // Генерация избранных фильмов для зарегистрированного пользователя.
-        Favorite::factory()
-            ->count(15)
-            ->state(new Sequence(
-                fn ($sequence) => ['film_id' => Film::all()->random(), 'user_id' => $user],
-            ))
-            ->create();
+        // Генерация авторизированного пользователя с избранными им фильмами.
+        $user = Sanctum::actingAs(User::factory()->has(Film::factory($filmsCount))->create());
 
         $response = $this->actingAs($user)->getJson('/api/favorite');
 
@@ -76,9 +74,12 @@ class FavoriteControllerTest extends TestCase
                 'per_page',
                 'total',
             ])
-            // Проверка, что возвращено 8 фильмов
-            ->assertJsonCount(8, 'data.*')
-            ->assertJsonFragment(['current_page' => 1]);
+            // Проверка, что возвращено 8 фильмов (пагинация), текущая страница "1" и найдены все фильмы
+            ->assertJsonCount($paginateCount, 'data.*')
+            ->assertJsonFragment([
+                'current_page' => $currentPage,
+                'total' => $filmsCount
+            ]);
 
         // Проверка сортировки по дате выхода фильмов: от новых к старым (desc)
         $responseData = $response->json()['data'];

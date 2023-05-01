@@ -11,6 +11,7 @@ use App\Models\Film;
 use App\Models\User;
 use App\Http\Resources\FilmListResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class FavoriteController extends Controller
 {
@@ -21,7 +22,6 @@ class FavoriteController extends Controller
      */
     public function index(): ApiSuccessResponse|ApiErrorResponse
     {
-       // dd(Auth::id());
         if (!Auth::id()) {
             abort(Response::HTTP_UNAUTHORIZED, trans('auth.failed'));
         }
