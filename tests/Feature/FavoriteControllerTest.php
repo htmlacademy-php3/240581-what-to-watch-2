@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Tests\TestCase;
 use Laravel\Sanctum\Sanctum;
 use \App\Models\Favorite;
