@@ -182,5 +182,13 @@ class FavoriteControllerTest extends TestCase
             ->assertJsonFragment([
                 'message' => 'Этот фильм отсутствует в Вашем списке',
             ]);
+
+        // Проверка попытки удаления несуществующего фильма
+        $filmId = $film->id + 1;
+
+        $response = $this->deleteJson("/api/films/{$filmId}/favorite");
+
+        $response
+            ->assertNotFound();
     }
 }
