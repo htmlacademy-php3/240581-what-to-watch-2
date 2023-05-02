@@ -22,6 +22,8 @@ class Film extends Model
      */
     protected $table = 'films';
 
+    protected $hidden = array('pivot');
+
     /**
      * The attributes that are mass assignable.
      *

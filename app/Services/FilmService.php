@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
+use App\Http\Resources\FilmListResource;
 
 /**
  * Прикладной сервис MovieService,
@@ -162,5 +164,41 @@ class FilmService
         $query->orderBy($orderBy, $orderTo);
 
         return $query;
+    }
+
+    /**
+     * Метод получения похожих (с таким же жанром) фильмов
+     * @param  int $id - $id фильма
+     *
+     * @return Collection $fourFilmsCollection - коллекция из случайно отобранных фильмов того же жанра
+     */
+    public static function createRequestSimilarFilms(int $id)/*: Collection*/
+    {
+        // Количество фильмов с похожим жанром, которое будет извлечено из БД
+        $countFilms = 4;
+
+        $film = Film::findOrFail($id);
+
+        $genres = $film->genres;
+
+        $filmsCollection = new Collection();
+
+        foreach ($genres as $genre) {
+            $genre = Genre::find($genre->id);
+
+            $films = $genre->films()->select(
+                'films.id',
+                'title',
+                'poster_image',
+                'preview_video_link'
+            )->inRandomOrder()
+                ->take($countFilms)->get();
+
+            $filmsCollection = $filmsCollection->push($films);
+        }
+
+        $fourFilmsCollection = $filmsCollection->collapse()->unique('id')->random(4);
+
+        return FilmListResource::collection($fourFilmsCollection)->toArray($fourFilmsCollection);
     }
 }

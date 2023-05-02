@@ -23,7 +23,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Film::factory(50)->hasActors(mt_rand(3, 6))->hasGenres(mt_rand(1, 3))->hasUsers(1)->state(new Sequence(
+        User::factory(15)->create();
+        Genre::factory(10)->create();
+
+        Film::factory(50)->hasActors(mt_rand(3, 6))->state(new Sequence(
             ['status' => Film::READY],
             ['status' => Film::READY],
             ['status' => Film::PENDING],
@@ -35,6 +38,26 @@ class DatabaseSeeder extends Seeder
             ['status' => Film::READY],
             ['status' => Film::READY],
         ))->create();
+
+        // Зададим случайному количеству пользователей случайное количество избранных фильмов
+        foreach (User::all()->random(mt_rand(6, 12)) as $user) {
+            foreach (Film::all()->random(mt_rand(2, 7)) as $randomFilm) {
+                Favorite::factory()->state([
+                    'user_id' => $user->id,
+                    'film_id' => $randomFilm->id,
+                ])->create();
+            }
+        }
+
+        // У каждого фильма должен быть жанр
+        foreach (Film::all() as $film) {
+            foreach (Genre::all()->random(mt_rand(1, 3)) as $randomGenre) {
+                FilmGenre::factory()->state([
+                    'film_id' => $film->id,
+                    'genre_id' => $randomGenre->id,
+                ])->create();
+            }
+        }
 
         Comment::factory(500)
             ->state(new Sequence(
