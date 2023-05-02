@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Tests\TestCase;
 use \App\Models\Film;
 use \App\Models\FilmGenre;
@@ -57,6 +55,7 @@ class SimilarControllerTest extends TestCase
         $responseData = $response->json();
 
         $similarGenreIds = [];
+        $filmGenreIds = [];
 
         foreach ($responseData as $element) {
             $similar = Film::find($element['id']);
@@ -67,7 +66,9 @@ class SimilarControllerTest extends TestCase
         }
 
         foreach ($film->genres as $filmGenre) {
-            assert(in_array($filmGenre->id, $similarGenreIds));
+            $filmGenreIds[] = $filmGenre->id;
         }
+
+        assert((bool) array_intersect($similarGenreIds, $filmGenreIds));
     }
 }

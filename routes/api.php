@@ -32,7 +32,7 @@ Route::prefix('films')->middleware('auth:sanctum')->group(function () {
         Route::get('/', [FilmController::class, 'index']);
         Route::get('/{id}', [FilmController::class, 'show']);
         Route::get('/{id}/similar', [SimilarController::class, 'index']);
-        Route::get('/{id}/comments', [CommentController::class, 'index']);
+        //Route::get('/{id}/comments', [CommentController::class, 'index']);
     });
     Route::post('/', [FilmController::class, 'store']);
     Route::patch('/{id}', [FilmController::class, 'update']);
@@ -40,6 +40,8 @@ Route::prefix('films')->middleware('auth:sanctum')->group(function () {
     Route::post('/{id}/favorite', [FavoriteController::class, 'store']);
     Route::delete('/{id}/favorite', [FavoriteController::class, 'destroy']);
 });
+
+Route::get('comments/{id}', [CommentController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('genres', [GenreController::class, 'index'])->withoutMiddleware('auth:sanctum');

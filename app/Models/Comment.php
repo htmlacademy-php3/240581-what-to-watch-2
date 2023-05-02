@@ -18,6 +18,13 @@ class Comment extends Model
     protected $table = 'comments';
 
     /**
+     * Атрибуты, которые должны быть скрыты из массивов.
+     *
+     * @var array
+     */
+    //protected $hidden = ['password'];
+
+    /**
      * Получение фильма, к которому принадлежит комментарий.
      *
      * @return BelongsTo

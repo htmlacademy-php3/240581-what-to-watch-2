@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
 use \App\Models\Comment;
+use App\Models\Film;
+use App\Http\Resources\CommentResource;
 
 
 class CommentController extends Controller
@@ -16,9 +18,15 @@ class CommentController extends Controller
      *
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function index(/* TO DO Film $Film */): ApiSuccessResponse|ApiErrorResponse
+    public function index(int $id): ApiSuccessResponse|ApiErrorResponse
     {
-        return new ApiSuccessResponse();
+        $film = Film::findOrFail($id);
+
+        $comments = $film->comments->sortByDesc('created_at');
+
+        $commentsCollection = CommentResource::collection($comments)->toArray($comments);
+
+        return new ApiSuccessResponse($commentsCollection);
     }
 
 
