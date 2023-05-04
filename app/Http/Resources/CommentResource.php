@@ -21,6 +21,7 @@ class CommentResource extends JsonResource
             'created_at' => Carbon::parse($this->created_at)->locale('ru')->isoFormat('D MMMM Y, h:mm:ss'),
             'rating' => $this->rating,
             'author' => $this->user->name,
+            'threadComments' => CommentResource::collection($this->getThreadedComments()),
         ];
     }
 }

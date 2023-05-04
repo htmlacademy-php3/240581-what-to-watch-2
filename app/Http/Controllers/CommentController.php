@@ -10,7 +10,6 @@ use \App\Models\Comment;
 use App\Models\Film;
 use App\Http\Resources\CommentResource;
 
-
 class CommentController extends Controller
 {
     /**
@@ -22,7 +21,7 @@ class CommentController extends Controller
     {
         $film = Film::findOrFail($id);
 
-        $comments = $film->comments->sortByDesc('created_at');
+        $comments = $film->comments->where('parent_id', null)->sortByDesc('created_at');
 
         $commentsCollection = CommentResource::collection($comments)->toArray($comments);
 

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Collection;
 
 class Comment extends Model
 {
@@ -16,13 +17,6 @@ class Comment extends Model
      * @var string
      */
     protected $table = 'comments';
-
-    /**
-     * Атрибуты, которые должны быть скрыты из массивов.
-     *
-     * @var array
-     */
-    //protected $hidden = ['password'];
 
     /**
      * Получение фильма, к которому принадлежит комментарий.
@@ -46,5 +40,21 @@ class Comment extends Model
             ->withDefault([
                 'name' => 'Гость',
             ]);
+    }
+
+    /*
+    public function newCollection(array $models = [])
+    {
+        return new CommentCollection($models);
+    }
+    */
+    /**
+     * Метод получения дочерних комментариев комментария с сортировкой
+     *
+     * @return Collection
+     */
+    public function getThreadedComments(): Collection
+    {
+        return Comment::where('parent_id', $this->id)->get()->sortByDesc('created_at');
     }
 }

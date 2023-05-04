@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Storage;
  *
  * @param  User $user - объект класса User
  *
- * @return array
  */
 class UserService
 {

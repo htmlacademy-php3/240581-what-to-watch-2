@@ -9,8 +9,6 @@ use App\Http\Requests\UpdateGenreRequest;
  * Прикладной сервис для объектов класса Genre
  *
  * @param  Genre $genre - объект класса Genre
- *
- * @return array
  */
 class GenreService
 {
@@ -23,7 +21,7 @@ class GenreService
      * Обновление жанра.
      *
      * @param  UpdateGenreRequest $request
-     * @param  Genre $genre - одель класса Genre
+     * @param  Genre $genre - модель класса Genre
      *
      * @return void
      */

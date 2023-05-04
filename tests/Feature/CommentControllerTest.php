@@ -3,10 +3,8 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Tests\TestCase;
-use Carbon\Carbon;
 use \App\Models\Comment;
 use \App\Models\Film;
 use \App\Models\User;
@@ -45,7 +43,8 @@ class CommentControllerTest extends TestCase
                     'text',
                     'created_at',
                     'rating',
-                    'author'
+                    'author',
+                    'threadComments' => []
                 ]
             ]);
 
@@ -67,7 +66,6 @@ class CommentControllerTest extends TestCase
         }
 
         //Проверка, что в отсутствие id пользователя, оставившего комментарий, возвращается его имя как "Гость"
-
         Comment::factory()
             ->state(new Sequence(
                 fn ($sequence) => ['film_id' => $film, 'user_id' => null,]
@@ -84,11 +82,80 @@ class CommentControllerTest extends TestCase
                     'text',
                     'created_at',
                     'rating',
-                    'author'
+                    'author',
+                    'threadComments' => []
                 ]
             ])
             ->assertJsonFragment([
                 'author' => 'Гость'
+            ]);
+
+        //Проверка вложенности комментариев
+        $referenceFilm = Film::factory()->create();
+        $parentCommenter = User::orderByRaw("RAND()")->first();
+        $childCommentAuthor = User::orderByRaw("RAND()")->first();
+        $parentComment = Comment::factory()
+            ->state(new Sequence(
+                fn ($sequence) => [
+                    'film_id' => $referenceFilm,
+                    'user_id' => $parentCommenter,
+                ]
+            ))
+            ->create();
+
+        $childComment = Comment::factory()
+            ->state(new Sequence(
+                fn ($sequence) => [
+                    'film_id' => $referenceFilm,
+                    'user_id' => $childCommentAuthor,
+                    'parent_id' => $parentComment,
+                ]
+            ))
+            ->create();
+
+        $childOfChildComment = Comment::factory()
+            ->state(new Sequence(
+                fn ($sequence) => [
+                    'film_id' => $referenceFilm,
+                    'user_id' => $parentCommenter,
+                    'parent_id' => $childComment,
+                ]
+            ))
+            ->create();
+
+        $response = $this->getJson("/api/comments/{$referenceFilm->id}");
+
+        $responseData = $response->json();
+
+        $response
+            ->assertOk()
+            ->assertJsonStructure([
+                '*' => [
+                    'id',
+                    'text',
+                    'created_at',
+                    'rating',
+                    'author',
+                    'threadComments' => [
+                        '*' => [
+                            'id',
+                            'text',
+                            'created_at',
+                            'rating',
+                            'author',
+                            'threadComments' => [
+                                '*' => [
+                                    'id',
+                                    'text',
+                                    'created_at',
+                                    'rating',
+                                    'author',
+                                    'threadComments' => []
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             ]);
     }
 }
