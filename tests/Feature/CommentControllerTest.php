@@ -59,7 +59,7 @@ class CommentControllerTest extends TestCase
 
         foreach ($responseData as $element) {
             $comment = Comment::find($element['id']);
-            // dd($element);
+
             if ($commentData) {
                 $parameter1 = $commentData;
                 $parameter2 = $comment->created_at;
@@ -218,10 +218,8 @@ class CommentControllerTest extends TestCase
 
         // Проверка добавления комментария на комментарий
         $commentator = Sanctum::actingAs(User::factory()->create());
-        // dd($response->json());
 
         $reguestData['comment_id'] = $response->json()['id'];
-        // dd([$reguestData, $response->json()['id']]);
 
         $response = $this->actingAs($commentator)->postJson("/api/comments/{$film->id}", $reguestData);
 
@@ -268,7 +266,6 @@ class CommentControllerTest extends TestCase
             'text' => 'Modi cum perspiciatis minima nesciunt eveniet non deleniti. Qui ducimus deleniti excepturi. Minima et voluptatem in.',
             'rating' => 5,
         ];
-
 
         // Проверка, если пользователь неаутентифицирован
         $response = $this->patchJson("/api/comments/{$comment->id}", $commentData);
