@@ -40,17 +40,11 @@ Route::prefix('films')->middleware('auth:sanctum')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::patch('genres/{id}', [GenreController::class, 'update']);
-
     Route::resource('favorite', FavoriteController::class);
-
     Route::post('/logout', [AuthController::class, 'logout']);
-
     Route::post('comments/{id}', [CommentController::class, 'store']);
-    Route::patch('comments/{id}', [CommentController::class, 'update']);
-    Route::delete('comments/{id}', [CommentController::class, 'destroy']);
-
+    Route::resource('comments', CommentController::class);
     Route::resource('user', UserController::class);
-
     Route::prefix('promo')->group(function () {
         Route::get('/', [PromoController::class, 'index'])->withoutMiddleware('auth:sanctum');
         Route::post('/{id}', [PromoController::class, 'store']);

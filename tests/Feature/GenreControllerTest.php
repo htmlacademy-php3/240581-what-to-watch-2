@@ -53,7 +53,7 @@ class GenreControllerTest extends TestCase
         $newGenreTitle = 'NewGenre';
         $existingGenreTitle = 'ExistingGenre';
 
-        // Эталоный и контрольный (существующий) жанры
+        // Эталоный и контрольный (существующие) жанры
         $requestedGenre = Genre::factory()->create([
             'title' => 'Genre',
         ]);

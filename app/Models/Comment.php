@@ -28,7 +28,7 @@ class Comment extends Model
         'rating',
         'user_id',
         'film_id',
-        'parent_id',
+        'comment_id',
     ];
 
     /**
@@ -68,6 +68,6 @@ class Comment extends Model
      */
     public function getThreadedComments(): Collection
     {
-        return Comment::where('parent_id', $this->id)->get()->sortByDesc('created_at');
+        return Comment::where('comment_id', $this->id)->get()->sortByDesc('created_at');
     }
 }

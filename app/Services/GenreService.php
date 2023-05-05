@@ -21,15 +21,12 @@ class GenreService
      * Обновление жанра.
      *
      * @param  UpdateGenreRequest $request
-     * @param  Genre $genre - модель класса Genre
      *
      * @return void
      */
     public function updateGenre(UpdateGenreRequest $request): void
     {
-        $params = $request->toArray();
-
-        $this->genre->title = $params['title'];
+        $this->genre->title = $request->title;
 
         if ($this->genre->isDirty()) {
             $this->genre->save();

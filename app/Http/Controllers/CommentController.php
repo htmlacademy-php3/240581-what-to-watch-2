@@ -10,6 +10,7 @@ use \App\Models\Comment;
 use App\Models\Film;
 use App\Http\Resources\CommentResource;
 use App\Http\Requests\AddCommentRequest;
+use App\Http\Requests\UpdateCommentRequest;
 use App\services\CommentService;
 
 class CommentController extends Controller
@@ -25,7 +26,7 @@ class CommentController extends Controller
     {
         $film = Film::findOrFail($id);
 
-        $comments = $film->comments->where('parent_id', null)->sortByDesc('created_at');
+        $comments = $film->comments->where('comment_id', null)->sortByDesc('created_at');
 
         $commentsCollection = CommentResource::collection($comments)->toArray($comments);
 
@@ -59,11 +60,16 @@ class CommentController extends Controller
      * @param  int  $id - id отзыва
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function update(Request $request, int $id/* TO DO , Film $Film */): ApiSuccessResponse|ApiErrorResponse
+    public function update(UpdateCommentRequest $request): ApiSuccessResponse|ApiErrorResponse
     {
-        $comment = Comment::find($id);
+        $comment = Comment::find($request->comment);
+
         $this->authorize('update', $comment);
-        return new ApiSuccessResponse();
+
+        $commentService = new CommentService();
+        $commentService->updateComment($request, $comment);
+
+        return new ApiSuccessResponse([], Response::HTTP_ACCEPTED);
     }
 
     /**

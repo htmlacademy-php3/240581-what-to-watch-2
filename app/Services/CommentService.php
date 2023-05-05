@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Http\Resources\CommentResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use App\Http\Requests\AddCommentRequest;
+use App\Http\Requests\UpdateCommentRequest;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -18,6 +19,26 @@ use Illuminate\Support\Facades\Auth;
 class CommentService
 {
     /**
+     * Обновление комментария.
+     *
+     * @param  UpdateCommentRequest $request
+     *
+     * @return void
+     */
+    public function updateComment(UpdateCommentRequest $request, Comment $сomment): void
+    {
+        $сomment->text = $request->text;
+
+        if (isset($request->rating)) {
+            $сomment->rating = $request->rating;
+        }
+
+        if ($сomment->isDirty()) {
+            $сomment->save();
+        }
+    }
+
+    /**
      * Метод получения комментариев к родительскому комментарию.
      *
      * @param  int $id - id родительского комментария
@@ -26,7 +47,7 @@ class CommentService
      */
     public static function getThreadedComments($id): AnonymousResourceCollection
     {
-        $threadedComments = Comment::where('parent_id', $id)->with('user')->get()->groupBy('parent_id')->sortByDesc('created_at');
+        $threadedComments = Comment::where('comment_id', $id)->with('user')->get()->groupBy('comment_id')->sortByDesc('created_at');
 
         return CommentResource::collection($threadedComments);
     }
@@ -48,8 +69,8 @@ class CommentService
             'film_id' => $request->id,
         ]);
 
-        if (isset($request->parent_id)) {
-            $comment->parent_id = $request->parent_id;
+        if (isset($request->comment_id)) {
+            $comment->comment_id = $request->comment_id;
         }
 
         $comment->save();
