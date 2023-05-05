@@ -9,11 +9,15 @@ use App\Http\Responses\ApiErrorResponse;
 use \App\Models\Comment;
 use App\Models\Film;
 use App\Http\Resources\CommentResource;
+use App\Http\Requests\AddCommentRequest;
+use App\services\CommentService;
 
 class CommentController extends Controller
 {
     /**
      * Получение списка отзывов к фильму.
+     *
+     * @param  int $id - id фильма
      *
      * @return ApiSuccessResponse|ApiErrorResponse
      */
@@ -32,12 +36,19 @@ class CommentController extends Controller
     /**
      * Добавление отзыва к фильму.
      *
-     * @param  Request  $request
+     * @param  AddCommentRequest  $request
+     * @param  int $id - id комментируемого фильма
+     *
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function store(Request $request/* TO DO , Film $Film */): ApiSuccessResponse|ApiErrorResponse
+    public function store(AddCommentRequest $request): ApiSuccessResponse|ApiErrorResponse
     {
-        return new ApiSuccessResponse([], Response::HTTP_CREATED);
+        // На случай, если фильма с таким id в БД нет
+        Film::findOrFail($request->id);
+
+        $newComment = CommentService::createComment($request);
+
+        return new ApiSuccessResponse($newComment, Response::HTTP_CREATED);
     }
 
     /**

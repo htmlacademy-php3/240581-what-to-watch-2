@@ -19,6 +19,19 @@ class Comment extends Model
     protected $table = 'comments';
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'text',
+        'rating',
+        'user_id',
+        'film_id',
+        'parent_id',
+    ];
+
+    /**
      * Получение фильма, к которому принадлежит комментарий.
      *
      * @return BelongsTo
