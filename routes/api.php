@@ -47,7 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('user', UserController::class);
     Route::prefix('promo')->group(function () {
         Route::get('/', [PromoController::class, 'show'])->withoutMiddleware('auth:sanctum');
-        Route::resource('/{id}', PromoController::class);
-        //Route::delete('/{id}', [PromoController::class, 'destroy']);
+        Route::post('/{id}', [PromoController::class, 'store']);
+        Route::delete('/{id}', [PromoController::class, 'destroy']);
     });
 });

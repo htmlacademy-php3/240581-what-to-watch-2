@@ -319,7 +319,6 @@ class FilmControllerTest extends TestCase
         $this->seed();
 
         // Проверка ответа при запросе фильма неавторизованным пользователем
-
         $favorite = Favorite::inRandomOrder()->first();
         $film = $favorite->film;
 

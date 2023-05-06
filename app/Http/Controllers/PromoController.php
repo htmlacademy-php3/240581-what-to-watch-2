@@ -8,6 +8,7 @@ use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
 use App\Models\Film;
 use App\Http\Resources\FilmResource;
+use App\services\FilmService;
 
 class PromoController extends Controller
 {
@@ -30,8 +31,16 @@ class PromoController extends Controller
      * @param  Request  $request
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function store(Request $request, int $id): ApiSuccessResponse|ApiErrorResponse
+    public function store(Request $request): ApiSuccessResponse|ApiErrorResponse
     {
+        $this->authorize('create', Film::class);
+
+        $responseCode = FilmService::createPromo($request);
+
+        if (Response::HTTP_INTERNAL_SERVER_ERROR === $responseCode) {
+            return new ApiErrorResponse([], Response::HTTP_INTERNAL_SERVER_ERROR, 'Добавить фильм к Promo не удалось. Попробуйте позже!');
+        }
+
         return new ApiSuccessResponse([], Response::HTTP_CREATED);
     }
 

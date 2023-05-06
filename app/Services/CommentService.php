@@ -47,7 +47,7 @@ class CommentService
      *
      * @param  Comment $сomment
      *
-     * @return int
+     * @return int Код состояния HTTP
      */
     public function deleteComment(Comment $сomment): int
     {
@@ -70,7 +70,7 @@ class CommentService
 
             $commentsCollection = $this->getAllChildIds($childCommentsIds);
             $commentsCollection->push($сomment->id);
-            //dd($commentsCollection);
+
             try {
                 DB::beginTransaction();
 

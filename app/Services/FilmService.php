@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 use App\Http\Resources\FilmListResource;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Прикладной сервис MovieService,
@@ -104,6 +105,48 @@ class FilmService
         } catch (\Exception $exception) {
             DB::rollBack();
             Log::warning($exception->getMessage());
+        }
+    }
+
+    /**
+     * Метод удаления фильма из Promo
+     *
+     *
+     * @return void
+     */
+    private function deletePromo()
+    {
+        $promo = Film::where('promo', true)->get();
+        if ($promo->count()) {
+            dd($promo);
+        }
+    }
+
+    /**
+     * Метод добавления фильма к Promo
+     *
+     * @param  Request $request
+     *
+     * @return int Код состояния HTTP
+     */
+    public static function createPromo(Request $request): int
+    {
+        try {
+            DB::beginTransaction();
+
+            Film::where('promo', true)
+                ->update(['promo' => false]);
+
+            $newPromo = Film::findOrFail($request->id);
+            $newPromo->promo = true;
+            $newPromo->save();
+
+            DB::commit();
+            return Response::HTTP_CREATED;
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            Log::warning($exception->getMessage());
+            return Response::HTTP_INTERNAL_SERVER_ERROR;
         }
     }
 
