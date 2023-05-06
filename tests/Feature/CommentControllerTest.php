@@ -10,7 +10,6 @@ use \App\Models\Comment;
 use \App\Models\Film;
 use \App\Models\User;
 use Laravel\Sanctum\Sanctum;
-
 use function PHPUnit\Framework\assertEquals;
 
 class CommentControllerTest extends TestCase
@@ -327,11 +326,11 @@ class CommentControllerTest extends TestCase
         $this->assertEquals($commentData['rating'], $updatedComment->rating);
 
         // Проверка, если не выставлен необязательный при обновлении рейтинг
-        $commentData['text'] = 'Repellendus animi in et. Ex quas nulla nihil at qui ea rerum. Quae ex aut rerum reiciendis delectus est animi ea. Soluta occaecati quo et totam voluptates neque.';
+        $newText = 'Repellendus animi in et. Ex quas nulla nihil at qui ea rerum. Quae ex aut rerum reiciendis delectus est animi ea. Soluta occaecati quo et totam voluptates neque.';
 
-        $response = $this->actingAs($user)->patchJson("/api/comments/{$comment->id}", $commentData);
+        $response = $this->actingAs($user)->patchJson("/api/comments/{$comment->id}", ['text' => $newText]);
         $updatedComment = Comment::find($comment->id);
-        $this->assertEquals($commentData['text'], $updatedComment->text);
+        $this->assertEquals($newText, $updatedComment->text);
         $this->assertEquals($commentData['rating'], $updatedComment->rating);
     }
 }
