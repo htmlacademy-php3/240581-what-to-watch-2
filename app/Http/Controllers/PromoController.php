@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
+use App\Models\Film;
+use App\Http\Resources\FilmResource;
 
 class PromoController extends Controller
 {
@@ -14,9 +16,12 @@ class PromoController extends Controller
      *
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function index(): ApiSuccessResponse|ApiErrorResponse
+    public function show(): ApiSuccessResponse|ApiErrorResponse
     {
-        return new ApiSuccessResponse();
+        $promo = new FilmResource(Film::where('promo', true)->firstOrFail());
+        $promoData = $promo->toArray($promo);
+
+        return new ApiSuccessResponse($promoData);
     }
 
     /**
@@ -25,7 +30,7 @@ class PromoController extends Controller
      * @param  Request  $request
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function store(Request $request,int $id): ApiSuccessResponse|ApiErrorResponse
+    public function store(Request $request, int $id): ApiSuccessResponse|ApiErrorResponse
     {
         return new ApiSuccessResponse([], Response::HTTP_CREATED);
     }
