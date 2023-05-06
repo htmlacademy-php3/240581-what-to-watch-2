@@ -244,7 +244,7 @@ class CommentControllerTest extends TestCase
     }
 
     /**
-     * Тест action test_update() CommentController`а.
+     * Тест action update() CommentController`а.
      *
      * @return void
      */
@@ -332,5 +332,120 @@ class CommentControllerTest extends TestCase
         $updatedComment = Comment::find($comment->id);
         $this->assertEquals($newText, $updatedComment->text);
         $this->assertEquals($commentData['rating'], $updatedComment->rating);
+    }
+
+    /**
+     * Тест action destroy() CommentController`а.
+     *
+     * @return void
+     */
+    public function test_destroy()
+    {
+        $author = User::factory()->create();
+
+        $anotherCommentator = User::factory()->create();
+
+        $parentComment = Comment::factory()
+            ->state(new Sequence(
+                fn ($sequence) => [
+                    'film_id' => Film::factory()->create(),
+                    'user_id' => $author,
+                ],
+            ))
+            ->create();
+
+        $childComment = Comment::factory()
+            ->state(new Sequence(
+                fn ($sequence) => [
+                    'film_id' => Film::factory()->create(),
+                    'user_id' => $anotherCommentator,
+                    'comment_id' => $parentComment->id,
+                ],
+            ))
+            ->create();
+
+        $commentChildChild = Comment::factory()
+            ->state(new Sequence(
+                fn ($sequence) => [
+                    'film_id' => Film::factory()->create(),
+                    'user_id' => $author,
+                    'comment_id' => $childComment->id,
+                ],
+            ))
+            ->create();
+
+        $commentWithNoChildren = Comment::factory()
+            ->state(new Sequence(
+                fn ($sequence) => [
+                    'film_id' => Film::factory()->create(),
+                    'user_id' => $author,
+                ],
+            ))
+            ->create();
+
+        $someoneElseSComment = Comment::factory()
+            ->state(new Sequence(
+                fn ($sequence) => [
+                    'film_id' => Film::factory()->create(),
+                    'user_id' => $anotherCommentator,
+                ],
+            ))
+            ->create();
+
+        // Проверка, что комментарии существуют
+        $this->assertModelExists($parentComment);
+        $this->assertModelExists($childComment);
+        $this->assertModelExists($commentChildChild);
+        $this->assertModelExists($someoneElseSComment);
+
+        // Проверка, если пользователь неаутентифицирован
+        $response = $this->deleteJson("/api/comments/{$parentComment->id}");
+
+        $response->assertUnauthorized();
+
+        // Проверка, что комментарий не удалён
+        $this->assertModelExists($parentComment);
+
+        // Проверка, если пользователь аутентифицирован, но не модератор, а комментарий чужой
+        $user = Sanctum::actingAs($author);
+
+        $response = $this->actingAs($user)->deleteJson("/api/comments/{$someoneElseSComment->id}");
+
+        $response->assertForbidden();
+
+        // Проверка, что чужой комментарий не удалён
+        $this->assertModelExists($someoneElseSComment);
+
+        // Проверка, если пользователь аутентифицирован, но не модератор, комментарий его, но имеет потомков
+        $user = Sanctum::actingAs($author);
+
+        $response = $this->actingAs($user)->deleteJson("/api/comments/{$parentComment->id}");
+
+        $response->assertForbidden();
+
+        // Проверка, что комментарий, имеющий потомков не удалён
+        $this->assertModelExists($parentComment);
+
+        // Проверка, если пользователь аутентифицирован, но не модератор, комментарий его и без потомков
+        $user = Sanctum::actingAs($author);
+
+        $response = $this->actingAs($user)->deleteJson("/api/comments/{$commentWithNoChildren->id}");
+
+        $response->assertNoContent();
+
+        // Проверка, что комментарий без потомков удалён
+        $this->assertModelMissing($commentWithNoChildren);
+
+        // Проверка, если пользователь аутентифицирован как модератор, комментарий чужой и имеет потомков
+        $moderator = Sanctum::actingAs(User::factory()->moderator()->create());
+
+        $response = $this->actingAs($moderator)->deleteJson("/api/comments/{$parentComment->id}");
+
+        $response->assertNoContent();
+
+        // Проверка, что комментарий-родитель и все его потомки удалены
+        $this->assertModelMissing($parentComment);
+        $this->assertModelMissing($childComment);
+        $this->assertModelMissing($commentChildChild);
     }
 }

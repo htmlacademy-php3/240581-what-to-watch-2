@@ -62,7 +62,7 @@ class CommentController extends Controller
      */
     public function update(UpdateCommentRequest $request): ApiSuccessResponse|ApiErrorResponse
     {
-        $comment = Comment::find($request->comment);
+        $comment = Comment::findOrFail($request->comment);
 
         $this->authorize('update', $comment);
 
@@ -79,10 +79,24 @@ class CommentController extends Controller
      * @param  int  $id - id отзыва
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function destroy(int $id/* TO DO , Film $Film */): ApiSuccessResponse|ApiErrorResponse
+    public function destroy(int $id): ApiSuccessResponse|ApiErrorResponse
     {
-        $comment = Comment::find($id);
+        $comment = Comment::findOrFail($id);
+
         $this->authorize('delete', $comment);
+
+        $commentService = new CommentService();
+
+        $responseCode = $commentService->deleteComment($comment);
+
+        if (Response::HTTP_INTERNAL_SERVER_ERROR === $responseCode) {
+            return new ApiErrorResponse([], Response::HTTP_INTERNAL_SERVER_ERROR, 'Комментарий удалить не удалось. Попробуйте позже!');
+        }
+
+        if (Response::HTTP_FORBIDDEN === $responseCode) {
+            return new ApiErrorResponse([], Response::HTTP_FORBIDDEN, 'Комментарий удалить невозможно');
+        }
+
         return new ApiSuccessResponse([], Response::HTTP_NO_CONTENT);
     }
 }
