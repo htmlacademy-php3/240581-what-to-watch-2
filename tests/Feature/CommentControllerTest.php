@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -14,7 +15,7 @@ use function PHPUnit\Framework\assertEquals;
 
 class CommentControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     /**
      * Тест action index() CommentController`а.
@@ -172,8 +173,8 @@ class CommentControllerTest extends TestCase
         $film = Film::factory()->create();
 
         $reguestData = [
-            'text' => 'Consequatur nobis voluptas quam debitis nihil. Non laborum autem hic provident et nemo. Praesentium nam ut optio atque.',
-            'rating' => 5,
+            'text' => $this->faker->paragraph(),
+            'rating' => $this->faker->numberBetween(1, 10),
         ];
 
         // Проверка, если пользователь неаутентифицирован
@@ -255,15 +256,15 @@ class CommentControllerTest extends TestCase
                 fn ($sequence) => [
                     'film_id' => Film::factory()->create(),
                     'user_id' => User::factory()->create(),
-                    'text' => 'Consequatur nobis voluptas quam debitis nihil. Non laborum autem hic provident et nemo. Praesentium nam ut optio atque.',
-                    'rating' => 10,
+                    'text' => $this->faker->paragraph(),
+                    'rating' => $this->faker->numberBetween(1, 7),
                 ],
             ))
             ->create();
 
         $commentData = [
-            'text' => 'Modi cum perspiciatis minima nesciunt eveniet non deleniti. Qui ducimus deleniti excepturi. Minima et voluptatem in.',
-            'rating' => 5,
+            'text' => $this->faker->paragraph(),
+            'rating' => $comment->rating + 1,
         ];
 
         // Проверка, если пользователь неаутентифицирован
@@ -310,8 +311,8 @@ class CommentControllerTest extends TestCase
                 fn ($sequence) => [
                     'film_id' => Film::factory()->create(),
                     'user_id' => $user,
-                    'text' => 'Numquam rerum dicta non aut omnis error. Aliquam tempora atque non sit aut itaque rerum sunt. Assumenda cumque eos voluptas maxime est.',
-                    'rating' => 7,
+                    'text' => $this->faker->paragraph(),
+                    'rating' => $this->faker->numberBetween(1, 10),
                 ],
             ))
             ->create();
@@ -326,7 +327,7 @@ class CommentControllerTest extends TestCase
         $this->assertEquals($commentData['rating'], $updatedComment->rating);
 
         // Проверка, если не выставлен необязательный при обновлении рейтинг
-        $newText = 'Repellendus animi in et. Ex quas nulla nihil at qui ea rerum. Quae ex aut rerum reiciendis delectus est animi ea. Soluta occaecati quo et totam voluptates neque.';
+        $newText = $this->faker->paragraph();
 
         $response = $this->actingAs($user)->patchJson("/api/comments/{$comment->id}", ['text' => $newText]);
         $updatedComment = Comment::find($comment->id);

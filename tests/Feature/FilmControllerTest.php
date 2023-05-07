@@ -3,8 +3,10 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\TestResponse;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 use Laravel\Sanctum\Sanctum;
 use \App\Models\Film;
@@ -14,7 +16,7 @@ use App\Models\Favorite;
 
 class FilmControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     /**
      * Метод проверки правильности сортировки полученных фильмов в соответствии с параметром запроса
@@ -193,8 +195,8 @@ class FilmControllerTest extends TestCase
         }
 
         $statuses = [
-            'pending',
-            'on moderation'
+            Film::FILM_STATUS_MAP['pending'],
+            Film::FILM_STATUS_MAP['on moderation'],
         ];
 
         foreach ($statuses as $status) {
@@ -280,8 +282,8 @@ class FilmControllerTest extends TestCase
             }
 
             $statuses = [
-                'pending',
-                'on moderation'
+                Film::FILM_STATUS_MAP['pending'],
+                Film::FILM_STATUS_MAP['on moderation'],
             ];
 
             foreach ($statuses as $status) {
@@ -423,5 +425,115 @@ class FilmControllerTest extends TestCase
             ->assertJsonFragment(['is_favorite' => true])
             ->assertJsonMissing(['is_favorite' => []])
             ->assertJsonMissing(['is_favorite' => false]);
+    }
+
+    /**
+     * Проверка метода update() FilmController`а
+     *
+     * @return void
+     */
+    public function test_update()
+    {
+        $film = Film::factory()
+            ->state([
+                'imdb_id' => 'tt0944947',
+            ])
+            ->create();
+
+        $reguestData = [
+            'name' => $this->faker->sentence(),
+            'imdb_id' => $film->imdb_id,
+            'status' => FILM::FILM_STATUS_MAP['ready'],
+            'poster_image' => $this->faker->imageUrl(),
+            'preview_image' => $this->faker->imageUrl(),
+            'background_image' => $this->faker->imageUrl(),
+            'background_color' => '#ffffff',
+            'video_link' => $this->faker->url(),
+            'preview_video_link' => $this->faker->url(),
+            'description' => $this->faker->text(),
+            'director' => $this->faker->name(),
+            'run_time' => $this->faker->numberBetween(30, 200),
+            'released' => $this->faker->year(),
+            'starring' => [$this->faker->name(), $this->faker->name(), $this->faker->name(), $this->faker->name(), $this->faker->name()],
+            'genre' => [$this->faker->word()],
+        ];
+
+        // Проверка, если пользователь неаутентифицирован
+        $response = $this->patchJson("/api/films/{$film->id}", $reguestData);
+
+        $response->assertUnauthorized();
+
+        // Проверка, если пользователь аутентифицирован, но не модератор
+        $user = Sanctum::actingAs(User::factory()->create());
+
+        $response = $this->actingAs($user)->patchJson("/api/films/{$film->id}", $reguestData);
+
+        $response->assertForbidden();
+
+        // Проверка, если пользователь - модератор
+        $moderator = Sanctum::actingAs(User::factory()->moderator()->create());
+
+        $response = $this->actingAs($moderator)->patchJson("/api/films/{$film->id}", $reguestData);
+
+        $response->assertStatus(Response::HTTP_ACCEPTED);
+
+        // Проверка данных жанра
+        $updatedFilm = Film::find($film->id);
+        $this->assertEquals($reguestData['name'], $updatedFilm->name);
+        $this->assertEquals($reguestData['status'], $updatedFilm->status);
+        $this->assertEquals($reguestData['poster_image'], $updatedFilm->poster_image);
+        $this->assertEquals($reguestData['preview_image'], $updatedFilm->preview_image);
+        $this->assertEquals($reguestData['background_image'], $updatedFilm->background_image);
+        $this->assertEquals($reguestData['background_color'], $updatedFilm->background_color);
+        $this->assertEquals($reguestData['video_link'], $updatedFilm->video_link);
+        $this->assertEquals($reguestData['preview_video_link'], $updatedFilm->preview_video_link);
+        $this->assertEquals($reguestData['description'], $updatedFilm->description);
+        $this->assertEquals($reguestData['director'], $updatedFilm->director);
+        $this->assertEquals($reguestData['run_time'], $updatedFilm->run_time);
+        $this->assertEquals($reguestData['released'], $updatedFilm->released);
+
+        // Проверка "привязки" актеров
+        $actorsName = [];
+        foreach ($updatedFilm->actors as $actor) {
+            $actorsName[] = $actor->name;
+        }
+
+        foreach ($reguestData['starring'] as $actor) {
+            $this->assertTrue(in_array($actor, $actorsName));
+        }
+
+        // Проверка "привязки" жанров
+        $genresName = [];
+        foreach ($updatedFilm->genres as $genre) {
+            $genresName[] = $genre->title;
+        }
+
+        foreach ($reguestData['genre'] as $genre) {
+            $this->assertTrue(in_array($genre, $genresName));
+        }
+
+        // Проверка работы только с обязательным набором параметров
+        $reguestData = [
+            'name' => $this->faker->sentence(),
+            'imdb_id' => $film->imdb_id,
+            'status' => FILM::FILM_STATUS_MAP['pending'],
+        ];
+
+        $response = $this->actingAs($moderator)->patchJson("/api/films/{$film->id}", $reguestData);
+
+        $response->assertStatus(Response::HTTP_ACCEPTED);
+
+        // Проверка данных жанра
+        $updatedFilm = Film::find($film->id);
+        $this->assertEquals($reguestData['name'], $updatedFilm->name);
+        $this->assertEquals($reguestData['status'], $updatedFilm->status);
+
+        // Проверка работы при попытке обновления несуществующего фильма
+        $nonExistentId = $film->id + 1;
+        $reguestData['imdb_id'] = 'tt0944949';
+
+        $response = $this->actingAs($moderator)->patchJson("/api/films/{$nonExistentId}", $reguestData);
+
+        $response->assertNotFound();
     }
 }

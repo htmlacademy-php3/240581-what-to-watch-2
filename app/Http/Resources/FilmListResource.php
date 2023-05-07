@@ -16,7 +16,7 @@ class FilmListResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->title,
+            'name' => $this->name,
             'poster_image' => $this->poster_image,
             'preview_video_link' => $this->preview_video_link,
         ];

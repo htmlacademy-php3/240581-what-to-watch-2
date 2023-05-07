@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 use \App\Models\Genre;
@@ -11,7 +12,7 @@ use \App\Models\User;
 
 class GenreControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     /**
      * Проверка метода index() GenreController`а
@@ -49,13 +50,13 @@ class GenreControllerTest extends TestCase
     public function test_update()
     {
         // Эталонные названия жанров
-        $genreTitle = 'Genre';
-        $newGenreTitle = 'NewGenre';
-        $existingGenreTitle = 'ExistingGenre';
+        $genreTitle = $this->faker->unique()->word();
+        $newGenreTitle = $this->faker->unique()->word();
+        $existingGenreTitle = $this->faker->unique()->word();
 
         // Эталоный и контрольный (существующие) жанры
         $requestedGenre = Genre::factory()->create([
-            'title' => 'Genre',
+            'title' => $genreTitle,
         ]);
 
         Genre::factory()->create([

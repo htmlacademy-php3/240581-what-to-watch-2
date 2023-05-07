@@ -17,7 +17,7 @@ class FilmResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->title,
+            'name' => $this->name,
             'poster_image' => $this->poster_image,
             'preview_image' => $this->preview_image,
             'background_image' => $this->background_image,

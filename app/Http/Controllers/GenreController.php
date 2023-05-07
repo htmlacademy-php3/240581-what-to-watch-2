@@ -29,14 +29,14 @@ class GenreController extends Controller
      * Редактирование жанра.
      *
      * @param  UpdateGenreRequest $request
-     * @param  int $id - id жанра
+     *
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function update(UpdateGenreRequest $request, int $id): ApiSuccessResponse|ApiErrorResponse
+    public function update(UpdateGenreRequest $request): ApiSuccessResponse|ApiErrorResponse
     {
         $this->authorize('update', Genre::class);
 
-        $genreService = new GenreService(Genre::findOrFail($id));
+        $genreService = new GenreService(Genre::findOrFail($request->id));
 
         $genreService->updateGenre($request);
 

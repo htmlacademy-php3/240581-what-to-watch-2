@@ -11,9 +11,11 @@ class Film extends Model
 {
     use HasFactory;
 
-    public const PENDING = 'pending';
-    public const ON_MODERATION = 'on moderation';
-    public const READY = 'ready';
+    public const FILM_STATUS_MAP = [
+        'pending' => 'pending',
+        'on moderation' => 'on moderation',
+        'ready' => 'ready',
+    ];
 
     /**
      * Таблица БД, ассоциированная с моделью.
@@ -30,8 +32,11 @@ class Film extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'title',
+        'name',
         'poster_image',
+        'preview_image',
+        'background_image',
+        'background_color',
         'description',
         'director',
         'run_time',
@@ -39,6 +44,7 @@ class Film extends Model
         'imdb_id',
         'status',
         'video_link',
+        'preview_video_link',
     ];
 
     /**

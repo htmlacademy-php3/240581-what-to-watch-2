@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 use App\Http\Resources\FilmListResource;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\UpdateFilmRequest;
 
 /**
  * Прикладной сервис MovieService,
@@ -54,17 +55,56 @@ class FilmService
     private function createFilm(array $filmData): Film
     {
         return new Film([
-            'title' => $filmData['title'],
+            'name' => $filmData['name'],
             'poster_image' => $filmData['poster_image'],
             'description' => $filmData['description'],
             'director' => $filmData['director'],
             'run_time' => $filmData['run_time'],
             'released' => $filmData['released'],
             'imdb_id' => $filmData['imdb_id'],
-            'status' => FILM::PENDING,
+            'status' => FILM::FILM_STATUS_MAP['pending'],
             'video_link' => $filmData['video_link'],
         ]);
     }
+
+    /**
+     * Метод получения id актёров для создания-обновления фильма
+     *
+     * @param  array $actors - массив с именами актёров, участвоваших в фильме
+     *
+     * @return array $actorsId - массив с id актёров, участвоваших в фильме
+     */
+    private function getIdOfFilmActors(array $actors = null): array
+    {
+        $actorsId = [];
+
+        if (is_iterable($actors)) {
+            foreach ($actors as $actor) {
+                $actorsId[] = Actor::firstOrCreate(['name' => $actor])->id;
+            }
+        }
+        return $actorsId;
+    }
+
+    /**
+     * Метод получения id жанров для создания-обновления фильма
+     *
+     * @param  array $genres - массив с названиями жанров фильма
+     *
+     * @return array $genresId - массив с id жанров фильма
+     */
+    private function getIdOfFilmGenres(array $genres = null): array
+    {
+        $genresId = [];
+
+        if (is_iterable($genres)) {
+            foreach ($genres as $genre) {
+                $genresId[] = Genre::firstOrCreate(['title' => $genre])->id;
+            }
+        }
+        return $genresId;
+    }
+
 
     /**
      * Метод сохранения фильма в базе
@@ -76,24 +116,10 @@ class FilmService
     public function saveFilm(array $filmData): void
     {
         try {
-            $actorsId = [];
-            $genresId = [];
-            $actors = $filmData['actors'];
-            $genres = $filmData['genres'];
-
             DB::beginTransaction();
 
-            if (is_iterable($actors)) {
-                foreach ($actors as $actor) {
-                    $actorsId[] = Actor::firstOrCreate(['name' => $actor])->id;
-                }
-            }
-
-            if (is_iterable($genres)) {
-                foreach ($genres as $genre) {
-                    $genresId[] = Genre::firstOrCreate(['title' => $genre])->id;
-                }
-            }
+            $actorsId = $this->getIdOfFilmActors($filmData['actors']);
+            $genresId = $this->getIdOfFilmGenres($filmData['genres']);
 
             $film = $this->createFilm($filmData);
             $film->save();
@@ -109,16 +135,47 @@ class FilmService
     }
 
     /**
-     * Метод удаления фильма из Promo
+     * Редактирование фильма.
      *
+     * @param  UpdateFilmRequest $request
      *
      * @return void
      */
-    private function deletePromo()
+    public function updateFilm(UpdateFilmRequest $request, Film $film): void
     {
-        $promo = Film::where('promo', true)->get();
-        if ($promo->count()) {
-            dd($promo);
+        $film->fill([
+            'name' => $request->name,
+            'poster_image' => $request->poster_image,
+            'preview_image' => $request->preview_image,
+            'background_image' => $request->background_image,
+            'video_link' => $request->video_link,
+            'preview_video_link' => $request->preview_video_link,
+            'director' => $request->director,
+            'background_color' => $request->background_color,
+            'description' => $request->description,
+            'run_time' => $request->run_time,
+            'released' => $request->released,
+            'imdb_id' => $request->imdb_id,
+            'status' => $request->status,
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $actorsId = $this->getIdOfFilmActors($request->starring);
+            $genresId = $this->getIdOfFilmGenres($request->genre);
+
+            if ($film->isDirty()) {
+                $film->save();
+            }
+
+            $film->actors()->sync($actorsId);
+            $film->genres()->sync($genresId);
+
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            Log::warning($exception->getMessage());
         }
     }
 
@@ -231,7 +288,7 @@ class FilmService
 
             $films = $genre->films()->select(
                 'films.id',
-                'title',
+                'name',
                 'poster_image',
                 'preview_video_link'
             )->inRandomOrder()

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -13,7 +14,7 @@ use \App\Models\User;
 
 class CommentRouteTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     /**
      * Проверка метода get роута "/api/comments/{filmId}"
@@ -65,8 +66,8 @@ class CommentRouteTest extends TestCase
     {
         $film = Film::factory()->create();
         $reguestData = [
-            'text' => 'Consequatur nobis voluptas quam debitis nihil. Non laborum autem hic provident et nemo. Praesentium nam ut optio atque.',
-            'rating' => 5,
+            'text' => $this->faker->paragraph(),
+            'rating' => $this->faker->numberBetween(1, 10),
         ];
 
         // Проверка, если пользователь неаутентифицирован
@@ -106,8 +107,8 @@ class CommentRouteTest extends TestCase
             ->create();
 
         $reguestData = [
-            'text' => 'Consequatur nobis voluptas quam debitis nihil. Non laborum autem hic provident et nemo. Praesentium nam ut optio atque.',
-            'rating' => 5,
+            'text' => $this->faker->paragraph(),
+            'rating' => $this->faker->numberBetween(1, 10),
         ];
 
         // Проверка, если пользователь неаутентифицирован

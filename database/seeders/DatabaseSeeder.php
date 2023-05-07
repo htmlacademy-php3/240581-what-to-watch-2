@@ -25,16 +25,16 @@ class DatabaseSeeder extends Seeder
         Genre::factory(10)->create();
 
         Film::factory(50)->hasActors(mt_rand(3, 6))->state(new Sequence(
-            ['status' => Film::READY],
-            ['status' => Film::READY],
-            ['status' => Film::PENDING],
-            ['status' => Film::READY],
-            ['status' => Film::READY],
-            ['status' => Film::READY],
-            ['status' => Film::ON_MODERATION],
-            ['status' => Film::READY],
-            ['status' => Film::READY],
-            ['status' => Film::READY],
+            ['status' => Film::FILM_STATUS_MAP['ready']],
+            ['status' => Film::FILM_STATUS_MAP['ready']],
+            ['status' => Film::FILM_STATUS_MAP['pending']],
+            ['status' => Film::FILM_STATUS_MAP['ready']],
+            ['status' => Film::FILM_STATUS_MAP['ready']],
+            ['status' => Film::FILM_STATUS_MAP['ready']],
+            ['status' => Film::FILM_STATUS_MAP['on moderation']],
+            ['status' => Film::FILM_STATUS_MAP['ready']],
+            ['status' => Film::FILM_STATUS_MAP['ready']],
+            ['status' => Film::FILM_STATUS_MAP['ready']],
         ))->create();
 
         // Зададим случайному количеству пользователей случайное количество избранных фильмов

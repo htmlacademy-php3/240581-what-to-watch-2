@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 use Laravel\Sanctum\Sanctum;
@@ -11,7 +12,7 @@ use \App\Models\User;
 
 class GenreRouteTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     /**
      * Проверка метода get роута '/api/genres'
@@ -61,7 +62,7 @@ class GenreRouteTest extends TestCase
     {
         $genre = Genre::factory()->create();
         $genresId = $genre->id;
-        $newGenreTitle = 'NewGenre';
+        $newGenreTitle = $this->faker->word();
 
         // Проверка, если пользователь неаутентифицирован
         $response = $this->patchJson("/api/genres/{$genresId}", [

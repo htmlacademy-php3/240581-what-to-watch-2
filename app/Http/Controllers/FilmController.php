@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
 use App\Http\Requests\AddFilmRequest;
+use App\Http\Requests\UpdateFilmRequest;
 use App\Models\Film;
 use App\Http\Resources\FilmListResource;
 use App\Http\Resources\FilmResource;
@@ -62,13 +63,18 @@ class FilmController extends Controller
     /**
      * Редактирование фильма.
      *
-     * @param  Request $request
-     * @param  int $id
+     * @param  UpdateFilmRequest $request
+     *
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function update(Request $request, int $id): ApiSuccessResponse|ApiErrorResponse
+    public function update(UpdateFilmRequest $request): ApiSuccessResponse|ApiErrorResponse
     {
         $this->authorize('update', Film::class);
-        return new ApiSuccessResponse();
+
+        $service = new FilmService();
+
+        $service->updateFilm($request, Film::findOrFail($request->id));
+
+        return new ApiSuccessResponse([], Response::HTTP_ACCEPTED);
     }
 }

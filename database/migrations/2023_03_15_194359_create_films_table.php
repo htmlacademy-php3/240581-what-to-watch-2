@@ -16,7 +16,7 @@ class CreateFilmsTable extends Migration
     {
         Schema::create('films', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 255)->comment('Название фильма');
+            $table->string('name', 255)->comment('Название фильма');
             $table->string('poster_image', 255)->nullable()->comment('Большой постер');
             $table->string('preview_image', 255)->nullable()->comment('Превью (маленькое изображение)');
             $table->string('background_image', 255)->nullable()->comment('Обложка фильма');
