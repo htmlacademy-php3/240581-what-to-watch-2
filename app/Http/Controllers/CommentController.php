@@ -33,7 +33,6 @@ class CommentController extends Controller
         return new ApiSuccessResponse($commentsCollection);
     }
 
-
     /**
      * Добавление отзыва к фильму.
      *

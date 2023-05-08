@@ -29,6 +29,7 @@ class Comment extends Model
         'user_id',
         'film_id',
         'comment_id',
+        'created_at'
     ];
 
     /**
@@ -55,12 +56,6 @@ class Comment extends Model
             ]);
     }
 
-    /*
-    public function newCollection(array $models = [])
-    {
-        return new CommentCollection($models);
-    }
-    */
     /**
      * Метод получения дочерних комментариев комментария с сортировкой
      *

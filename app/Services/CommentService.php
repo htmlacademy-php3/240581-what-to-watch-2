@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Comment;
+use App\Models\Film;
 use App\Http\Resources\CommentResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Collection;
@@ -12,6 +13,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
+use GuzzleHttp\Client;
+use App\Repositories\ImdbProxyCommentRepository;
+use App\Jobs\AddExternalCommentJob;
 
 /**
  * Прикладной сервис для объектов класса Comment
@@ -29,32 +33,32 @@ class CommentService
      *
      * @return void
      */
-    public function updateComment(UpdateCommentRequest $request, Comment $сomment): void
+    public function updateComment(UpdateCommentRequest $request, Comment $comment): void
     {
-        $сomment->text = $request->text;
+        $comment->text = $request->text;
 
         if (isset($request->rating)) {
-            $сomment->rating = $request->rating;
+            $comment->rating = $request->rating;
         }
 
-        if ($сomment->isDirty()) {
-            $сomment->save();
+        if ($comment->isDirty()) {
+            $comment->save();
         }
     }
 
     /**
      * Метод удаления комментария со всеми потомками.
      *
-     * @param  Comment $сomment
+     * @param  Comment $comment
      *
      * @return int Код состояния HTTP
      */
-    public function deleteComment(Comment $сomment): int
+    public function deleteComment(Comment $comment): int
     {
         // Удаление комментария при отсутствии потомков.
-        if (!self::getThreadedComments($сomment->id)->count()) {
+        if (!self::getThreadedComments($comment->id)->count()) {
             try {
-                $сomment->delete();
+                $comment->delete();
                 return Response::HTTP_NO_CONTENT;
             } catch (\Exception $exception) {
                 return Response::HTTP_INTERNAL_SERVER_ERROR;
@@ -62,14 +66,14 @@ class CommentService
         }
 
         // Удаление комментария при наличии у него потомков.
-        if (Auth::user()->is_moderator && self::getThreadedComments($сomment->id)->count()) {
+        if (Auth::user()->is_moderator && self::getThreadedComments($comment->id)->count()) {
 
             $allChildIds = [];
 
-            $childCommentsIds = $this->getTreeIdOfChildren($сomment->id, $allChildIds);
+            $childCommentsIds = $this->getTreeIdOfChildren($comment->id, $allChildIds);
 
             $commentsCollection = $this->getAllChildIds($childCommentsIds);
-            $commentsCollection->push($сomment->id);
+            $commentsCollection->push($comment->id);
 
             try {
                 DB::beginTransaction();
@@ -90,16 +94,16 @@ class CommentService
     /**
      * Метод получения id всех дочерних коментариев в виде многомерного массива.
      *
-     * @param  int $сommentId - id родительского комментария
+     * @param  int $commentId - id родительского комментария
      * @param  array &$ids - массив для наполнения полученными результатами
      *
      * @return array $ids - массив, заполненый полученными результатами
      *
      */
 
-    public function getTreeIdOfChildren(int $сommentId, array &$ids): array
+    public function getTreeIdOfChildren(int $commentId, array &$ids): array
     {
-        $commentIds = Comment::select('id')->where('comment_id', $сommentId)->get()->toArray();
+        $commentIds = Comment::select('id')->where('comment_id', $commentId)->get()->toArray();
         $ids[] = $commentIds;
 
         if (count($commentIds)) {
@@ -125,7 +129,6 @@ class CommentService
 
         return $commentsCollection->flatten();
     }
-
 
     /**
      * Метод получения комментариев к родительскому комментарию.
@@ -163,9 +166,38 @@ class CommentService
         }
 
         $comment->save();
-
         $newCommentResource = new CommentResource($comment);
 
         return $newCommentResource->toArray($comment);
+    }
+
+    /**
+     * Метод получения новых комментариев ко всем фильмам из внешнего сервиса http://guide.phpdemo.ru/api
+     *
+     * @return array - массив с новоми комментариями
+     */
+    public function getAllNewComments(): array
+    {
+        $commentRepository = new ImdbProxyCommentRepository(new Client());
+
+        return $commentRepository->findAllNew();
+    }
+
+    /**
+     * Метод распределения полученных комментариев по фильмам, к которым они относятся и запуска задач по добавлению этих комментариев к фильмам
+     *
+     * @param  array $сomments - массив с комментариями
+     *
+     * @return void - массив с данными нового комментария
+     */
+    public function attachNewCommentToFilm($сomments): void
+    {
+        foreach ($сomments as $сomment) {
+            $film = Film::firstWhere('imdb_id', $сomment['imdb_id']);
+
+            if ($film) {
+                AddExternalCommentJob::dispatch($film, $сomment)->afterCommit();
+            }
+        }
     }
 }

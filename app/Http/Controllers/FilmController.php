@@ -41,7 +41,7 @@ class FilmController extends Controller
     {
         $this->authorize('create', Film::class);
 
-        AddFilmJob::dispatch($request->imdbId);
+        AddFilmJob::dispatch($request->imdbId)->afterCommit();
 
         return new ApiSuccessResponse([], Response::HTTP_CREATED);
     }

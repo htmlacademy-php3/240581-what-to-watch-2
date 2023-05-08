@@ -7,7 +7,6 @@ use Tests\TestCase;
 use \App\Models\Film;
 use \App\Models\User;
 use Laravel\Sanctum\Sanctum;
-//use function PHPUnit\Framework\assertEquals;
 
 class PromoControllerTest extends TestCase
 {

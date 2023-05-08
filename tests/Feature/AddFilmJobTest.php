@@ -78,7 +78,7 @@ class AddFilmJobTest extends TestCase
     }
 
     /**
-     * Проверка метода handle класса AddFilmJob по добавлению фильма в базу
+     * Проверка постановки задачи в очередь
      *
      * @return void
      */
