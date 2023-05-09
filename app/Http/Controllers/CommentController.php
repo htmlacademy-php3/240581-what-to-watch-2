@@ -43,12 +43,12 @@ class CommentController extends Controller
      */
     public function store(AddCommentRequest $request): ApiSuccessResponse|ApiErrorResponse
     {
-        // На случай, если фильма с таким id в БД нет
         Film::findOrFail($request->id);
 
-        $newComment = CommentService::createComment($request);
-
-        return new ApiSuccessResponse($newComment, Response::HTTP_CREATED);
+        if ($newComment = CommentService::createComment($request)) {
+            return new ApiSuccessResponse($newComment, Response::HTTP_CREATED);
+        }
+        return new ApiErrorResponse([], Response::HTTP_NOT_FOUND);
     }
 
     /**

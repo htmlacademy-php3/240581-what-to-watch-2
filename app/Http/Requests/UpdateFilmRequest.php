@@ -52,4 +52,26 @@ class UpdateFilmRequest extends FormRequest
             'genre' => 'nullable|array',
         ];
     }
+
+    /**
+     * Сообщения об ошибках валидации
+     *
+     */
+    public function messages()
+    {
+        return [
+            'name.required' => 'Поле Имя обязательно для заполнения.',
+            'poster_image.max' => 'Превышена длина имени файла.',
+            'preview_image.max' => 'Превышена длина имени файла.',
+            'background_image.max' => 'Превышена длина имени файла.',
+            'video_link.max' => 'Превышена длина имени файла.',
+            'director.max' => 'Длина имени должна быть не более 255 символов.',
+            'background_color.max' => 'Должно быть не более 9 символов.',
+            'description.max' => 'Описание должно быть не более 1000 символов.',
+            'imdbId.required' => 'Поле imdbId обязательно для заполнения.',
+            'imdbId.regex' => 'Поле imdbId должно быть в формате tt0000000.',
+            'imdbId.unique' => 'Такой фильм уже есть в базе',
+            'status.required' => 'Поле Статус обязательно для заполнения.',
+        ];
+    }
 }

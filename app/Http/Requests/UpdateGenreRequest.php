@@ -33,4 +33,16 @@ class UpdateGenreRequest extends FormRequest
             ],
         ];
     }
+
+    /**
+     * Сообщения об ошибках валидации
+     *
+     */
+    public function messages()
+    {
+        return [
+            'text.required' => 'Поле Текст обязательно для заполнения.',
+            'text.max' => 'В поле Текст должно быть не более 255 символов.',
+        ];
+    }
 }

@@ -34,4 +34,17 @@ class AddFilmRequest extends FormRequest
             'imdbId' => 'required|regex:/^tt\d+$/|unique:films,imdb_id'
         ];
     }
+
+    /**
+     * Сообщения об ошибках валидации
+     *
+     */
+    public function messages()
+    {
+        return [
+            'imdbId.required' => 'Поле imdbId обязательно для заполнения.',
+            'imdbId.regex' => 'Поле imdbId должно быть в формате tt0000000.',
+            'imdbId.unique' => 'Такой фильм уже есть в базе',
+        ];
+    }
 }

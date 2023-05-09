@@ -29,4 +29,20 @@ class AddCommentRequest extends FormRequest
             'comment_id' => 'nullable|int|exists:comments,id',
         ];
     }
+
+    /**
+     * Сообщения об ошибках валидации
+     *
+     */
+    public function messages()
+    {
+        return [
+            'text.required' => 'Поле Текст обязательно для заполнения.',
+            'text.min' => 'В поле Текст должно быть не менее 50 символов.',
+            'text.max' => 'В поле Текст должно быть не более 400 символов.',
+            'rating.required'  => 'Поле Рейтинг обязательно для заполнения',
+            'rating.min'  => 'Значение Рейтинг должно быть не менее 1',
+            'rating.max'  => 'Значение Рейтинг должно быть не более 10',
+        ];
+    }
 }

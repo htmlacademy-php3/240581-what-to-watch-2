@@ -150,9 +150,9 @@ class CommentService
      * @param  AddCommentRequest $request - HTTP-запрос с данными нового комментария
      * @param  int $id - id комментируемого фильма
      *
-     * @return array - массив с данными нового комментария
+     * @return array|null - массив с данными нового комментария
      */
-    public static function createComment(AddCommentRequest $request): array
+    public static function createComment(AddCommentRequest $request): array|null
     {
         $comment = new Comment([
             'text' => $request->text,
@@ -162,6 +162,11 @@ class CommentService
         ]);
 
         if (isset($request->comment_id)) {
+            $parentComment = Comment::findOrFail($request->comment_id);
+
+            if ($parentComment->film->id !== (int) $request->id) {
+                return null;
+            }
             $comment->comment_id = $request->comment_id;
         }
 

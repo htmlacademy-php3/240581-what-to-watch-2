@@ -38,4 +38,20 @@ class UpdateUserRequest extends FormRequest
             'file' => 'nullable|sometimes|image|max:10240',
         ];
     }
+    /**
+     * Сообщения об ошибках валидации
+     *
+     */
+    public function messages()
+    {
+        return [
+            'name.required' => 'Поле Имя обязательно для заполнения.',
+            'name.max' => 'В поле Имя должно быть не более 255 символов.',
+            'email.required' => 'Поле E-Mail адрес обязательно для заполнения.',
+            'email.email' => 'Введён не корректный E-Mail адрес.',
+            'password.min'  => 'Слишком короткий Пароль',
+            'file.image'  => 'Файл должен быть изображением',
+            'file.max' => 'Превышен разрешённый размер файла.',
+        ];
+    }
 }

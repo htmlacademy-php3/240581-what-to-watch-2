@@ -20,7 +20,7 @@ class SimilarControllerTest extends TestCase
     public function test_index()
     {
         Film::factory(30)->create();
-        Genre::factory(10)->create();
+        Genre::factory(5)->create();
 
         // У каждого фильма должен быть жанр
         foreach (Film::all() as $film) {

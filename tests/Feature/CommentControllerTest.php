@@ -242,6 +242,12 @@ class CommentControllerTest extends TestCase
         assertEquals($commentOnComment->rating, $reguestData['rating']);
         assertEquals($commentOnComment->user_id, $commentator->id);
         assertEquals($commentOnComment->comment_id, $reguestData['comment_id']);
+
+        // Проверка добавления комментария на комментарий, если в запросе указан фильм, отличный от того, которому принадлежит родительский комментарий
+        $anotherFilm = Film::factory()->create();
+        $response = $this->actingAs($commentator)->postJson("/api/comments/{$anotherFilm->id}", $reguestData);
+
+        $response->assertNotFound();
     }
 
     /**
