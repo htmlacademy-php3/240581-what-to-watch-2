@@ -18,7 +18,7 @@ class CreateCommentsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade')->comment('id пользователя, оставившего комментарий. Комментарии, загруженные из внешнего источника, не имеют связи с пользователем сайта. Для них поле user_id оставляем пустым');
             $table->foreignId('film_id')->constrained('films')->onDelete('cascade')->comment('id комментируемого фильма');
-            $table->unsignedInteger('parent_id')->nullable()->comment('id комментария, к которому оставлен этот комментарий (при наличии)');
+            $table->unsignedInteger('comment_id')->nullable()->comment('id комментария, к которому оставлен этот комментарий (при наличии)');
             $table->string('text', 400)->comment('текст комментария');
             $table->tinyInteger('rating')->nullable()->comment('Оценка фильма');
             $table->timestamps();

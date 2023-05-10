@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Collection;
 
 class Comment extends Model
 {
@@ -16,6 +17,20 @@ class Comment extends Model
      * @var string
      */
     protected $table = 'comments';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'text',
+        'rating',
+        'user_id',
+        'film_id',
+        'comment_id',
+        'created_at'
+    ];
 
     /**
      * Получение фильма, к которому принадлежит комментарий.
@@ -39,5 +54,15 @@ class Comment extends Model
             ->withDefault([
                 'name' => 'Гость',
             ]);
+    }
+
+    /**
+     * Метод получения дочерних комментариев комментария с сортировкой
+     *
+     * @return Collection
+     */
+    public function getThreadedComments(): Collection
+    {
+        return Comment::where('comment_id', $this->id)->get()->sortByDesc('created_at');
     }
 }

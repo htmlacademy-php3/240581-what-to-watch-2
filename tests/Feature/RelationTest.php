@@ -3,14 +3,12 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use \App\Models\Actor;
 use \App\Models\Comment;
 use \App\Models\Film;
 use \App\Models\Genre;
 use \App\Models\User;
-use Database\Seeders\DatabaseSeeder;
 
 class RelationTest extends TestCase
 {
@@ -23,8 +21,8 @@ class RelationTest extends TestCase
      */
     public function test_relation(): void
     {
-        $databaseSeeder = new DatabaseSeeder;
-        $databaseSeeder->run();
+        // Запустить `DatabaseSeeder`
+        $this->seed();
 
         $actor = Actor::all()->random();
         $film = Film::all()->random();

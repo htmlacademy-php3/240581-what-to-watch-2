@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\UpdateGenreRequest;
+use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
+use App\Models\Genre;
+use App\services\GenreService;
 
 class GenreController extends Controller
 {
@@ -15,19 +18,28 @@ class GenreController extends Controller
      */
     public function index(): ApiSuccessResponse|ApiErrorResponse
     {
-        return new ApiSuccessResponse();
+        $genres = [
+            'data' => Genre::all()
+        ];
+
+        return new ApiSuccessResponse($genres);
     }
 
     /**
      * Редактирование жанра.
      *
-     * @param  Request  $request
-     * @param  int  $id
+     * @param  UpdateGenreRequest $request
+     *
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function update(Request $request,int $id): ApiSuccessResponse|ApiErrorResponse
+    public function update(UpdateGenreRequest $request): ApiSuccessResponse|ApiErrorResponse
     {
         $this->authorize('update', Genre::class);
-        return new ApiSuccessResponse();
+
+        $genreService = new GenreService(Genre::findOrFail($request->id));
+
+        $genreService->updateGenre($request);
+
+        return new ApiSuccessResponse([], Response::HTTP_ACCEPTED);
     }
 }

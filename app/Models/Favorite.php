@@ -18,6 +18,16 @@ class Favorite extends Model
      */
     protected $table = 'favorites';
 
+     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'user_id',
+        'film_id',
+    ];
+
     /**
      * Получение пользователя, который добавил фильм в "Избранное".
      *
@@ -29,12 +39,12 @@ class Favorite extends Model
     }
 
     /**
-     * Получение фильмов, добавленных пользователем в "Избранное".
+     * Получение фильма, добавленного пользователем в "Избранное".
      *
-     * @return BelongsToMany
+     * @return BelongsTo
      */
-    public function films(): BelongsToMany
+    public function film(): BelongsTo
     {
-        return $this->belongsToMany(Film::class);
+        return $this->belongsTo(Film::class);
     }
 }

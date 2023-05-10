@@ -28,4 +28,17 @@ class LoginRequest extends FormRequest
             'password' => 'required|string',
         ];
     }
+
+    /**
+     * Сообщения об ошибках валидации
+     *
+     */
+    public function messages()
+    {
+        return [
+            'email.required' => 'Поле E-Mail адрес обязательно для заполнения.',
+            'email.email' => 'Введён не корректный E-Mail адрес.',
+            'password.required'  => 'Поле Пароль обязательно для заполнения',
+        ];
+    }
 }

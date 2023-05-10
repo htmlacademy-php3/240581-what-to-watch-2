@@ -2,10 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 
 class RegisterRequest extends FormRequest
 {
@@ -28,36 +25,27 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-
-            'email' => [
-                'required',
-                'string',
-                'email',
-                'max:255',
-                $this->getUniqRule(),
-            ],
-            'password' => [
-                $this->getPasswordRequiredRule(),
-                'string',
-                'min:8',
-                'confirmed',
-            ],
+            'email' => 'required|string|email|unique:users',
+            'password' => 'required|string|min:8|confirmed',
             'file' => 'nullable|image|max:10240'
         ];
     }
 
-    private function getUniqRule()
+    /**
+     * Сообщения об ошибках валидации
+     *
+     */
+    public function messages()
     {
-        $rule = Rule::unique(User::class);
-
-        if ($this->isMethod('patch') && Auth::check()) {
-            return $rule->ignore(Auth::user());
-        }
-        return $rule;
-    }
-
-    private function getPasswordRequiredRule()
-    {
-        return $this->isMethod('patch') ? 'sometimes' : 'required';
+        return [
+            'name.required' => 'Поле Имя обязательно для заполнения.',
+            'name.max' => 'В поле Имя должно быть не более 255 символов.',
+            'email.required' => 'Поле E-Mail адрес обязательно для заполнения.',
+            'email.email' => 'Введён не корректный E-Mail адрес.',
+            'email.unique' => 'Пользователь с таким E-Mail адресом уже существует.',
+            'password.required'  => 'Поле Пароль обязательно для заполнения',
+            'file.image'  => 'Файл должен быть изображением',
+            'file.max' => 'Превышен разрешённый размер файла.',
+        ];
     }
 }

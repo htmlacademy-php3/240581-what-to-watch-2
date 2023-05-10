@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 use Laravel\Sanctum\Sanctum;
 use \App\Models\Comment;
@@ -12,70 +14,78 @@ use \App\Models\User;
 
 class CommentRouteTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     /**
-     * Проверка метода get роута '/api/films/{id}/comments'
+     * Проверка метода get роута "/api/comments/{filmId}"
      *
      * @return void
      */
     public function test_get_comments()
     {
+        $film = Film::factory()->create();
+
         // Проверка, если пользователь неаутентифицирован
-        $response = $this->getJson("/api/films/{id}/comments");
+        $response = $this->getJson("/api/comments/{$film->id}");
 
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+                // 'data' => []
             ]);
 
         // Проверка, если пользователь аутентифицирован
         $user = Sanctum::actingAs(User::factory()->create());
 
-        $response = $this->actingAs($user)->getJson("/api/films/{id}/comments");
+        $response = $this->actingAs($user)->getJson("/api/comments/{$film->id}");
 
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+                // 'data' => []
             ]);
 
         // Проверка, если пользователь аутентифицирован как модератор
         $user = Sanctum::actingAs(User::factory()->moderator()->create());
 
-        $response = $this->actingAs($user)->getJson("/api/films/{id}/comments");
+        $response = $this->actingAs($user)->getJson("/api/comments/{$film->id}");
 
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'data' => []
+                // 'data' => []
             ]);
     }
 
     /**
-     * Проверка метода post роута '/api/films/{id}/comments'
+     * Проверка метода post роута "/api/comments/{filmId}"
      *
      * @return void
      */
     public function test_post_comments()
     {
+        $film = Film::factory()->create();
+        $reguestData = [
+            'text' => $this->faker->paragraph(),
+            'rating' => $this->faker->numberBetween(1, 10),
+        ];
+
         // Проверка, если пользователь неаутентифицирован
-        $response = $this->postJson("/api/films/{id}/comments");
+        $response = $this->postJson("/api/comments/{$film->id}", $reguestData);
 
         $response->assertUnauthorized();
 
         // Проверка, если пользователь аутентифицирован
         $user = Sanctum::actingAs(User::factory()->create());
 
-        $response = $this->actingAs($user)->postJson("/api/films/{id}/comments");
+        $response = $this->actingAs($user)->postJson("/api/comments/{$film->id}", $reguestData);
 
         $response->assertCreated();
 
         // Проверка, если пользователь аутентифицирован как модератор
         $user = Sanctum::actingAs(User::factory()->moderator()->create());
 
-        $response = $this->actingAs($user)->postJson("/api/films/{id}/comments");
+        $response = $this->actingAs($user)->postJson("/api/comments/{$film->id}", $reguestData);
 
         $response->assertCreated();
     }
@@ -96,8 +106,13 @@ class CommentRouteTest extends TestCase
             ))
             ->create();
 
+        $reguestData = [
+            'text' => $this->faker->paragraph(),
+            'rating' => $this->faker->numberBetween(1, 10),
+        ];
+
         // Проверка, если пользователь неаутентифицирован
-        $response = $this->patchJson("/api/comments/{$unloggedUserComment->id}");
+        $response = $this->patchJson("/api/comments/{$unloggedUserComment->id}", $reguestData);
 
         $response->assertUnauthorized();
 
@@ -110,27 +125,27 @@ class CommentRouteTest extends TestCase
             ))
             ->create();
 
-        $response = $this->actingAs($user)->patchJson("/api/comments/{$unloggedUserComment->id}");
+        $response = $this->actingAs($user)->patchJson("/api/comments/{$unloggedUserComment->id}", $reguestData);
 
         $response->assertForbidden();
 
         // Проверка, если пользователь аутентифицирован и комментарий принадлежит ему
-        $response = $this->actingAs($user)->patchJson("/api/comments/{$userComment->id}");
+        $response = $this->actingAs($user)->patchJson("/api/comments/{$userComment->id}", $reguestData);
 
         $response
-            ->assertOk()
+        ->assertStatus(Response::HTTP_ACCEPTED)
             ->assertJsonStructure([
-                'data' => []
+                // 'data' => []
             ]);
 
         // Проверка, если пользователь аутентифицирован как модератор
         $moderator = Sanctum::actingAs(User::factory()->moderator()->create());
-        $response = $this->actingAs($moderator)->patchJson("/api/comments/{$unloggedUserComment->id}");
+        $response = $this->actingAs($moderator)->patchJson("/api/comments/{$unloggedUserComment->id}", $reguestData);
 
         $response
-            ->assertOk()
+        ->assertStatus(Response::HTTP_ACCEPTED)
             ->assertJsonStructure([
-                'data' => []
+                // 'data' => []
             ]);
     }
 

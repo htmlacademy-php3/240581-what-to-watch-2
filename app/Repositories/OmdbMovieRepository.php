@@ -29,7 +29,7 @@ class OmdbMovieRepository implements MovieRepositoryInterface
      * @return array|null - массив с информацией о фильме, полученный из базы данных OMDB через конкретную реализацию интерфейса репозитория MovieRepositoryInterface
      *
      */
-    public function findById(string $imdbId): ?array
+    public function findById(string $imdbId): array|null
     {
         $query = [
             'i' => $imdbId,

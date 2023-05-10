@@ -21,10 +21,9 @@ use App\Http\Controllers\UserController;
 |
 */
 
+Route::get('comments/{id}', [CommentController::class, 'index']);
+Route::get('genres', [GenreController::class, 'index']);
 Route::post('/login', [AuthController::class, 'login']);
-
-Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
-
 Route::post('/register', [AuthController::class, 'register']);
 
 Route::prefix('films')->middleware('auth:sanctum')->group(function () {
@@ -32,25 +31,23 @@ Route::prefix('films')->middleware('auth:sanctum')->group(function () {
         Route::get('/', [FilmController::class, 'index']);
         Route::get('/{id}', [FilmController::class, 'show']);
         Route::get('/{id}/similar', [SimilarController::class, 'index']);
-        Route::get('/{id}/comments', [CommentController::class, 'index']);
     });
     Route::post('/', [FilmController::class, 'store']);
     Route::patch('/{id}', [FilmController::class, 'update']);
-    Route::post('/{id}/comments', [CommentController::class, 'store']);
     Route::post('/{id}/favorite', [FavoriteController::class, 'store']);
     Route::delete('/{id}/favorite', [FavoriteController::class, 'destroy']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('genres', [GenreController::class, 'index'])->withoutMiddleware('auth:sanctum');
     Route::patch('genres/{id}', [GenreController::class, 'update']);
     Route::resource('favorite', FavoriteController::class);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('comments/{id}', [CommentController::class, 'store']);
     Route::resource('comments', CommentController::class);
+    Route::resource('user', UserController::class);
     Route::prefix('promo')->group(function () {
-        Route::get('/', [PromoController::class, 'index'])->withoutMiddleware('auth:sanctum');
+        Route::get('/', [PromoController::class, 'show'])->withoutMiddleware('auth:sanctum');
         Route::post('/{id}', [PromoController::class, 'store']);
         Route::delete('/{id}', [PromoController::class, 'destroy']);
     });
 });
-
-Route::middleware('auth:sanctum')->resource('user', UserController::class);

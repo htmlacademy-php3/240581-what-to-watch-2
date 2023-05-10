@@ -14,7 +14,7 @@ class FilmFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->paragraph(1),
+            'name' => $this->faker->paragraph(1),
             'poster_image' => $this->faker->imageUrl(),
             'preview_image' => $this->faker->imageUrl(),
             'background_image' => $this->faker->imageUrl(),
