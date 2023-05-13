@@ -32,6 +32,8 @@ class UserService
     {
         $params = $request->toArray();
 
+        $oldPath = null;
+
         if (isset($params['password'])) {
             $user->password = Hash::make($params['password']);
         }
@@ -51,8 +53,9 @@ class UserService
         if ($user->isDirty()) {
             $user->save();
         }
-
-        Storage::delete($oldPath);
+        if (isset($oldPath)) {
+            Storage::delete($oldPath);
+        }
     }
 
     /**
