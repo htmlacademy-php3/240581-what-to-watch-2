@@ -6,13 +6,14 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
-use \App\Jobs\AddExternalCommentJob;
+use App\Jobs\AddExternalCommentJob;
 use App\Models\Film;
 use App\services\CommentService;
 
 class CommentServiceTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /**
      * Проверка работы метода attachNewCommentToFilm() CommentService`а.

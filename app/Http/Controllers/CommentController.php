@@ -6,12 +6,12 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
-use \App\Models\Comment;
+use App\Models\Comment;
 use App\Models\Film;
 use App\Http\Resources\CommentResource;
 use App\Http\Requests\AddCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
-use App\services\CommentService;
+use App\Services\CommentService;
 
 class CommentController extends Controller
 {
@@ -43,9 +43,7 @@ class CommentController extends Controller
      */
     public function store(AddCommentRequest $request): ApiSuccessResponse|ApiErrorResponse
     {
-        Film::findOrFail($request->id);
-
-        if ($newComment = CommentService::createComment($request)) {
+        if (Film::find((int) $request->id) && $newComment = CommentService::createComment($request)) {
             return new ApiSuccessResponse($newComment, Response::HTTP_CREATED);
         }
         return new ApiErrorResponse([], Response::HTTP_NOT_FOUND);
@@ -55,13 +53,13 @@ class CommentController extends Controller
      * Редактирование отзыва к фильму.
      * Доступно только автору отзыва и модератору
      *
-     * @param  Request  $request
+     * @param  UpdateCommentRequest  $request
      * @param  int  $id - id отзыва
      * @return ApiSuccessResponse|ApiErrorResponse
      */
     public function update(UpdateCommentRequest $request): ApiSuccessResponse|ApiErrorResponse
     {
-        $comment = Comment::findOrFail($request->comment);
+        $comment = Comment::findOrFail($request->id);
 
         $this->authorize('update', $comment);
 

@@ -4,11 +4,11 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use \App\Models\Actor;
-use \App\Models\Comment;
-use \App\Models\Film;
-use \App\Models\Genre;
-use \App\Models\User;
+use App\Models\Actor;
+use App\Models\Comment;
+use App\Models\Film;
+use App\Models\Genre;
+use App\Models\User;
 
 class RelationTest extends TestCase
 {

@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 use Laravel\Sanctum\Sanctum;
-use \App\Models\Comment;
-use \App\Models\Film;
-use \App\Models\User;
+use App\Models\Comment;
+use App\Models\Film;
+use App\Models\User;
 
 class CommentRouteTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /**
      * Проверка метода get роута "/api/comments/{filmId}"

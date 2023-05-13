@@ -5,9 +5,9 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Laravel\Sanctum\Sanctum;
-use \App\Models\Favorite;
-use \App\Models\Film;
-use \App\Models\User;
+use App\Models\Favorite;
+use App\Models\Film;
+use App\Models\User;
 
 class FavoriteControllerTest extends TestCase
 {

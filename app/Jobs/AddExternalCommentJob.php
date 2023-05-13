@@ -12,7 +12,10 @@ use App\Models\Film;
 
 class AddExternalCommentJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Количество секунд, по истечении которых уникальная блокировка задания будет снята.

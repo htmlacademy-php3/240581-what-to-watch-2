@@ -4,9 +4,9 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Database\Eloquent\Factories\Sequence;
-use \App\Models\Comment;
-use \App\Models\Film;
-use \App\Models\User;
+use App\Models\Comment;
+use App\Models\Film;
+use App\Models\User;
 use Tests\TestCase;
 
 class CommentTest extends TestCase

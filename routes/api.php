@@ -43,7 +43,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('favorite', FavoriteController::class);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('comments/{id}', [CommentController::class, 'store']);
-    Route::resource('comments', CommentController::class);
+    Route::patch('comments/{id}', [CommentController::class, 'update']);
+    Route::delete('comments/{id}', [CommentController::class, 'destroy']);
+    Route::get('user', [UserController::class, 'show']);
+    Route::patch('user', [UserController::class, 'update']);
     Route::resource('user', UserController::class);
     Route::prefix('promo')->group(function () {
         Route::get('/', [PromoController::class, 'show'])->withoutMiddleware('auth:sanctum');

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class FilmActor extends Model
 {
     use HasFactory;
+
     /**
      * Таблица БД, ассоциированная с моделью.
      *

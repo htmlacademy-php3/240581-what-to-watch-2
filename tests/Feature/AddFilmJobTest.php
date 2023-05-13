@@ -5,8 +5,8 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
-use \App\Services\FilmService;
-use \App\Jobs\AddFilmJob;
+use App\Services\FilmService;
+use App\Jobs\AddFilmJob;
 use App\Models\Actor;
 use App\Models\Film;
 use App\Models\Genre;
@@ -39,17 +39,17 @@ class AddFilmJobTest extends TestCase
             $referenseFilm['genres'][] = $referenseGenre->title;
         }
 
-        $mockRepository = $this->mock(MovieRepositoryInterface::class, function (MockInterface $mockRepository) use ($referenseFilm) {
-            $mockRepository->shouldReceive('findById')->once()->andReturn($referenseFilm);
+        $this->mock(MovieRepositoryInterface::class, function (MockInterface $mockRepository) use ($referenseFilm) {
+            $mockRepository->shouldReceive('findById')->andReturn($referenseFilm);
         });
 
-        $this->mock(FilmService::class, function (MockInterface $mockService) use ($referenseFilm) {
+        $this->partialMock(FilmService::class, function (MockInterface $mockService) use ($referenseFilm) {
             $mockService->shouldReceive('searchFilm')->andReturn($referenseFilm);
         });
 
         $imdbId = $referenseFilm['imdb_id'];
 
-        $addFilmJob = new AddFilmJob($imdbId, $mockRepository);
+        $addFilmJob = new AddFilmJob($imdbId);
         $addFilmJob->handle();
 
         // Проверка, что в базе данных появились записи: 1 фильма, 3-х актёров, 2-х жанров

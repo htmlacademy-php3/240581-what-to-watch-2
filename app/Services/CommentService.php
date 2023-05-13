@@ -67,7 +67,6 @@ class CommentService
 
         // Удаление комментария при наличии у него потомков.
         if (Auth::user()->is_moderator && self::getThreadedComments($comment->id)->count()) {
-
             $allChildIds = [];
 
             $childCommentsIds = $this->getTreeIdOfChildren($comment->id, $allChildIds);
@@ -135,7 +134,7 @@ class CommentService
      *
      * @param  int $id - id родительского комментария
      *
-     * @return Collection
+     * @return AnonymousResourceCollection
      */
     public static function getThreadedComments($id): AnonymousResourceCollection
     {
@@ -170,18 +169,20 @@ class CommentService
             $comment->comment_id = $request->comment_id;
         }
 
-        $comment->save();
-        $newCommentResource = new CommentResource($comment);
+        if ($comment->save()) {
+            $newCommentResource = new CommentResource($comment);
 
-        return $newCommentResource->toArray($comment);
+            return $newCommentResource->toArray($comment);
+        }
+        return null;
     }
 
     /**
      * Метод получения новых комментариев ко всем фильмам из внешнего сервиса http://guide.phpdemo.ru/api
      *
-     * @return array - массив с новоми комментариями
+     * @return array|null - массив с новоми комментариями
      */
-    public function getAllNewComments(): array
+    public function getAllNewComments(): array|null
     {
         $commentRepository = new ImdbProxyCommentRepository(new Client());
 

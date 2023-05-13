@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\services\CommentService;
+use App\Services\CommentService;
 
 class ExternalComments extends Command
 {
@@ -34,12 +34,12 @@ class ExternalComments extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $commentService = new CommentService();
         $allComments = $commentService->getAllNewComments();
-        $setComments = $commentService->attachNewCommentToFilm($allComments);
+        $commentService->attachNewCommentToFilm($allComments);
     }
 }

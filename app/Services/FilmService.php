@@ -19,6 +19,7 @@ use Illuminate\Support\Collection;
 use App\Http\Resources\FilmListResource;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\UpdateFilmRequest;
+use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * Прикладной сервис MovieService,
@@ -63,7 +64,6 @@ class FilmService
             'released' => $filmData['released'],
             'imdb_id' => $filmData['imdb_id'],
             'status' => FILM::FILM_STATUS_MAP['pending'],
-            'video_link' => $filmData['video_link'],
         ]);
     }
 
@@ -109,11 +109,11 @@ class FilmService
     /**
      * Метод сохранения фильма в базе
      *
-     * @param  array $filmData - массив с данными фильма из базы данных OMDB
+     * @param  array|null $filmData - массив с данными фильма из базы данных OMDB
      *
      * @return void
      */
-    public function saveFilm(array $filmData): void
+    public function saveFilm(?array $filmData): void
     {
         try {
             DB::beginTransaction();
@@ -218,10 +218,11 @@ class FilmService
     public static function isFavorite(Film $film, User $user): bool
     {
         $favoriteUsers = $film->users;
-        foreach ($favoriteUsers as $favoriteUser)
+        foreach ($favoriteUsers as $favoriteUser) {
             if ($favoriteUser->id === $user->id) {
                 return true;
             }
+        }
         return false;
     }
 
@@ -229,7 +230,7 @@ class FilmService
      * Метод создания запроса в БД на получение списка фильмов согласно парамертам в $request
      * @param  Request $request
      *
-     * @return Illuminate\Database\Eloquent\Builder $query - экземпляр построителя запросов в БД, сформированный согласно входным параметрам
+     * @return Builder $query - экземпляр построителя запросов в БД, сформированный согласно входным параметрам
      */
     public static function createRequestForFilmsByParameters(Request $request): Builder
     {
@@ -270,9 +271,9 @@ class FilmService
      * Метод получения похожих (с таким же жанром) фильмов
      * @param  int $id - $id фильма
      *
-     * @return Collection $fourFilmsCollection - коллекция из случайно отобранных фильмов того же жанра
+     * @return array|Arrayable|\JsonSerializable $fourFilmsCollection - массив из случайно отобранных фильмов того же жанра
      */
-    public static function createRequestSimilarFilms(int $id)/*: Collection*/
+    public static function createRequestSimilarFilms(int $id): array|Arrayable|\JsonSerializable
     {
         // Количество фильмов с похожим жанром, которое будет извлечено из БД
         $countFilms = 4;

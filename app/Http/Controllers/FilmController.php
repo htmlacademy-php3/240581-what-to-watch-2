@@ -21,7 +21,7 @@ class FilmController extends Controller
      * @param  Request|null $request
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function index(Request $request): ApiSuccessResponse|ApiErrorResponse
+    public function index(?Request $request): ApiSuccessResponse|ApiErrorResponse
     {
         $query = FilmService::createRequestForFilmsByParameters($request);
         $films = $query->paginate(8);
@@ -34,7 +34,7 @@ class FilmController extends Controller
     /**
      * Добавление фильма в базу.
      *
-     * @param  Request $request
+     * @param  AddFilmRequest $request
      * @return ApiSuccessResponse|ApiErrorResponse
      */
     public function store(AddFilmRequest $request): ApiSuccessResponse|ApiErrorResponse

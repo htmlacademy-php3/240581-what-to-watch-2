@@ -4,9 +4,9 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use \App\Models\Film;
-use \App\Models\FilmGenre;
-use \App\Models\Genre;
+use App\Models\Film;
+use App\Models\FilmGenre;
+use App\Models\Genre;
 
 class SimilarControllerTest extends TestCase
 {

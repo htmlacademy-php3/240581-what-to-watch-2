@@ -4,12 +4,13 @@ namespace App\Providers;
 
 use App\Models\Comment;
 use App\Models\Film;
+use App\Models\Genre;
 use App\Models\User;
 use App\Policies\CommentPolicy;
 use App\Policies\FilmPolicy;
+use App\Policies\GenrePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {

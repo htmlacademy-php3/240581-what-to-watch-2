@@ -4,13 +4,12 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
-use \App\Models\Comment;
-use \App\Models\Favorite;
-use \App\Models\Film;
-use \App\Models\FilmGenre;
-use \App\Models\Genre;
-use \App\Models\User;
-
+use App\Models\Comment;
+use App\Models\Favorite;
+use App\Models\Film;
+use App\Models\FilmGenre;
+use App\Models\Genre;
+use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
