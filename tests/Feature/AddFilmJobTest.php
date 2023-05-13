@@ -40,10 +40,10 @@ class AddFilmJobTest extends TestCase
         }
 
         $mockRepository = $this->mock(MovieRepositoryInterface::class, function (MockInterface $mockRepository) use ($referenseFilm) {
-            $mockRepository->shouldReceive('findById')->once()->andReturn($referenseFilm);
+            $mockRepository->shouldReceive('findById')->andReturn($referenseFilm);
         });
 
-        $this->mock(FilmService::class, function (MockInterface $mockService) use ($referenseFilm) {
+        $this->partialMock(FilmService::class, function (MockInterface $mockService) use ($referenseFilm) {
             $mockService->shouldReceive('searchFilm')->andReturn($referenseFilm);
         });
 
