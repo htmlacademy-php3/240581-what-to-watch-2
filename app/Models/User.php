@@ -11,7 +11,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
 
     public const ROLE_USER = 'пользователь';
     public const ROLE_MODERATOR = 'модератор';

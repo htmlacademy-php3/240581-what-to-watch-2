@@ -6,12 +6,12 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
-use \App\Models\Comment;
+use App\Models\Comment;
 use App\Models\Film;
 use App\Http\Resources\CommentResource;
 use App\Http\Requests\AddCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
-use App\services\CommentService;
+use App\Services\CommentService;
 
 class CommentController extends Controller
 {
@@ -53,7 +53,7 @@ class CommentController extends Controller
      * Редактирование отзыва к фильму.
      * Доступно только автору отзыва и модератору
      *
-     * @param  Request  $request
+     * @param  UpdateCommentRequest  $request
      * @param  int  $id - id отзыва
      * @return ApiSuccessResponse|ApiErrorResponse
      */

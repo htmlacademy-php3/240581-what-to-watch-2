@@ -45,7 +45,7 @@ class UserController extends Controller
 
         $userService = new UserService($user);
 
-        $user = $userService->updateUser($request, $user);
+        $userService->updateUser($request, $user);
 
         return new ApiSuccessResponse([], Response::HTTP_ACCEPTED);
     }
