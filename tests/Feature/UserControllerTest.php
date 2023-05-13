@@ -10,12 +10,13 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 use Laravel\Sanctum\Sanctum;
-use \App\Models\User;
+use App\Models\User;
 use App\Services\UserService;
 
 class UserControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /**
      * Тест action show() UserController`а.

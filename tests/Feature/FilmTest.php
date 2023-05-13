@@ -5,8 +5,8 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Database\Eloquent\Factories\Sequence;
-use \App\Models\Comment;
-use \App\Models\Film;
+use App\Models\Comment;
+use App\Models\Film;
 
 class FilmTest extends TestCase
 {

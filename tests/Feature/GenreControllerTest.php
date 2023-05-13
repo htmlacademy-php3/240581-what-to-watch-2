@@ -6,13 +6,14 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
-use \App\Models\Genre;
+use App\Models\Genre;
 use Laravel\Sanctum\Sanctum;
-use \App\Models\User;
+use App\Models\User;
 
 class GenreControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /**
      * Проверка метода index() GenreController`а

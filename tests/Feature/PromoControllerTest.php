@@ -4,8 +4,8 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use \App\Models\Film;
-use \App\Models\User;
+use App\Models\Film;
+use App\Models\User;
 use Laravel\Sanctum\Sanctum;
 
 class PromoControllerTest extends TestCase

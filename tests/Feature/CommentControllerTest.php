@@ -7,15 +7,17 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
-use \App\Models\Comment;
-use \App\Models\Film;
-use \App\Models\User;
+use App\Models\Comment;
+use App\Models\Film;
+use App\Models\User;
 use Laravel\Sanctum\Sanctum;
+
 use function PHPUnit\Framework\assertEquals;
 
 class CommentControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /**
      * Тест action index() CommentController`а.

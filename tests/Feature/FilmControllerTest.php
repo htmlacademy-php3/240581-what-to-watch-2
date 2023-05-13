@@ -9,14 +9,15 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 use Laravel\Sanctum\Sanctum;
-use \App\Models\Film;
-use \App\Models\Genre;
-use \App\Models\User;
+use App\Models\Film;
+use App\Models\Genre;
+use App\Models\User;
 use App\Models\Favorite;
 
 class FilmControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /**
      * Метод проверки правильности сортировки полученных фильмов в соответствии с параметром запроса

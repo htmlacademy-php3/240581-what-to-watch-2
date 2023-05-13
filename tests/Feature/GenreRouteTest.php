@@ -7,12 +7,13 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 use Laravel\Sanctum\Sanctum;
-use \App\Models\Genre;
-use \App\Models\User;
+use App\Models\Genre;
+use App\Models\User;
 
 class GenreRouteTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /**
      * Проверка метода get роута '/api/genres'

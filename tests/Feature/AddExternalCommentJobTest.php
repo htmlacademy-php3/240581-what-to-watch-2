@@ -11,7 +11,8 @@ use App\Jobs\AddExternalCommentJob;
 
 class AddExternalCommentJobTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /**
      * Проверка метода handle класса AddFilmJob по добавлению фильма в базу
