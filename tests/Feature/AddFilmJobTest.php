@@ -39,7 +39,7 @@ class AddFilmJobTest extends TestCase
             $referenseFilm['genres'][] = $referenseGenre->title;
         }
 
-        $mockRepository = $this->mock(MovieRepositoryInterface::class, function (MockInterface $mockRepository) use ($referenseFilm) {
+        $this->mock(MovieRepositoryInterface::class, function (MockInterface $mockRepository) use ($referenseFilm) {
             $mockRepository->shouldReceive('findById')->andReturn($referenseFilm);
         });
 
@@ -49,7 +49,7 @@ class AddFilmJobTest extends TestCase
 
         $imdbId = $referenseFilm['imdb_id'];
 
-        $addFilmJob = new AddFilmJob($imdbId, $mockRepository);
+        $addFilmJob = new AddFilmJob($imdbId);
         $addFilmJob->handle();
 
         // Проверка, что в базе данных появились записи: 1 фильма, 3-х актёров, 2-х жанров

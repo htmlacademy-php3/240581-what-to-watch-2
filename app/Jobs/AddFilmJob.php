@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
 use App\Services\FilmService;
 
 class AddFilmJob implements ShouldQueue
@@ -17,11 +18,10 @@ class AddFilmJob implements ShouldQueue
      * Create a new job instance.
      *
      * @param  string $imdbId - Действительный идентификатор IMDb в The Open Movie Database (например, tt1285016)
-     * @param  MovieRepositoryInterface $repository - Репозиторий для класса Film
      *
      * @return void
      */
-    public function __construct(private string $imdbId, private $repository = null)
+    public function __construct(private string $imdbId)
     {
     }
 
@@ -32,13 +32,9 @@ class AddFilmJob implements ShouldQueue
      */
     public function handle(): void
     {
-        if ($this->repository) {
-            $service = new FilmService($this->repository);
-        } else {
-            $service = new FilmService();
-        }
+        $filmService = App::make(FilmService::class);
 
-        $filmData = $service->searchFilm($this->imdbId);
-        $service->saveFilm($filmData);
+        $filmData = $filmService->searchFilm($this->imdbId);
+        $filmService->saveFilm($filmData);
     }
 }
