@@ -24,6 +24,7 @@ https://10.react.pages.academy/static/spec/wtw.yaml
 https://laravel.su/docs/8.x/installation
 
 3. Примеры настройки файла .env имеются в файле .env.example
+
 Проверьте правильность имени базы данных, пользователя и пароля. 
 Также установите параметр QUEUE_CONNECTION в QUEUE_CONNECTION=database 
 
@@ -37,6 +38,7 @@ https://laravel.su/docs/8.x/installation
 
 7. Встроенные тесты
 
+Внимание!
 Имеющиеся в проекте тесты сбрасывают базу данных!
 Поэтому, чтобы не повредить данные в рабочей базе проекта, проводите тесты с подключением к тестовой базе данных.
 
