@@ -18,18 +18,15 @@ class OmdbMovieRepositoryTest extends TestCase
         $httpClient = new Client();
         $repository = new OmdbMovieRepository($httpClient);
         $successDataKeys = [
-            "Title",
-            "Year",
-            "Rated",
-            "Released",
-            "Runtime",
-            "Genre",
-            "Director",
-            "Writer",
-            "Actors",
-            "Plot",
-            "Poster",
-            "imdbID",
+            "name",
+            "poster_image",
+            "description",
+            "director",
+            "run_time",
+            "released",
+            "imdb_id",
+            "actors",
+            "genres",
         ];
 
         // Действительный идентификатор фильма
@@ -62,8 +59,6 @@ class OmdbMovieRepositoryTest extends TestCase
 
         $responseData = $repository->findById($imdbId);
 
-        foreach ($errorDataKeys as $key) {
-            $this->assertArrayHasKey($key, $responseData);
-        }
+        $this->assertEquals($responseData, null);
     }
 }
