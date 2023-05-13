@@ -63,7 +63,6 @@ class FilmService
             'released' => $filmData['released'],
             'imdb_id' => $filmData['imdb_id'],
             'status' => FILM::FILM_STATUS_MAP['pending'],
-            'video_link' => $filmData['video_link'],
         ]);
     }
 
@@ -109,11 +108,11 @@ class FilmService
     /**
      * Метод сохранения фильма в базе
      *
-     * @param  array $filmData - массив с данными фильма из базы данных OMDB
+     * @param  array|null $filmData - массив с данными фильма из базы данных OMDB
      *
      * @return void
      */
-    public function saveFilm(array $filmData): void
+    public function saveFilm(?array $filmData): void
     {
         try {
             DB::beginTransaction();

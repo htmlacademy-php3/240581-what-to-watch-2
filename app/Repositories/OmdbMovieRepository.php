@@ -3,6 +3,7 @@
 namespace App\repositories;
 
 use App\repositories\MovieRepositoryInterface;
+use Illuminate\Support\Str;
 
 /**
  * Репозиторий The Open Movie Database для класса Film
@@ -40,6 +41,52 @@ class OmdbMovieRepository implements MovieRepositoryInterface
 
         $body = $response->getBody();
 
-        return json_decode($body->getContents(), true);
+        $data = json_decode($body->getContents(), true);
+
+        if (isset($data['Response']) && 'False' === $data['Response']) {
+            return null;
+        }
+        return $this->convertFilmDataToFormat($data);
+    }
+
+    /**
+     * Метод получения массива из строки ответа с перечислениями
+     *
+     * @param  string $responseString
+     *
+     * @return array - массив с элементами, перечисленными в строке ответа
+     */
+    private function getArrayFromResponseString(string $responseString): array
+    {
+        if (!$responseString || 'N/A' === $responseString) {
+            return [];
+        }
+        return Str::of($responseString)->explode(', ')->toArray();
+    }
+
+    /**
+     * Метод приведения полученных данных фильма из базы данных OMDB к формату БД приложения
+     *
+     * @param  array $data - массив с данными фильма из базы данных OMDB
+     *
+     * @return array массив с данными фильма из базы данных OMDB, приведёнными к формату БД приложения
+     */
+    private function convertFilmDataToFormat(array $data): array
+    {
+        if ('N/A' === $data['Year']) {
+            $data['Year'] = null;
+        }
+
+        return [
+            'name' => $data['Title'],
+            'poster_image' => $data['Poster'],
+            'description' => $data['Plot'],
+            'director' => $data['Director'],
+            'run_time' => intval($data['Runtime']),
+            'released' => $data['Year'],
+            'imdb_id' => $data['imdbID'],
+            'actors' => $this->getArrayFromResponseString($data['Actors']),
+            'genres' => $this->getArrayFromResponseString($data['Genre']),
+        ];
     }
 }
