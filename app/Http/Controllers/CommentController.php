@@ -43,9 +43,7 @@ class CommentController extends Controller
      */
     public function store(AddCommentRequest $request): ApiSuccessResponse|ApiErrorResponse
     {
-        Film::findOrFail($request->id);
-
-        if ($newComment = CommentService::createComment($request)) {
+        if (Film::find((int) $request->id) && $newComment = CommentService::createComment($request)) {
             return new ApiSuccessResponse($newComment, Response::HTTP_CREATED);
         }
         return new ApiErrorResponse([], Response::HTTP_NOT_FOUND);
@@ -61,7 +59,7 @@ class CommentController extends Controller
      */
     public function update(UpdateCommentRequest $request): ApiSuccessResponse|ApiErrorResponse
     {
-        $comment = Comment::findOrFail($request->comment);
+        $comment = Comment::findOrFail($request->id);
 
         $this->authorize('update', $comment);
 
