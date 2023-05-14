@@ -24,7 +24,7 @@ class CommentControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_index()
+    public function test_index(): void
     {
         // Проверка попытки обратиться к комментариям несуществующего фильма
         $filmId = 1;
@@ -119,7 +119,7 @@ class CommentControllerTest extends TestCase
             ))
             ->create();
 
-        $childOfChildComment = Comment::factory()
+        Comment::factory()
             ->state(new Sequence(
                 fn ($sequence) => [
                     'film_id' => $referenceFilm,
@@ -170,7 +170,7 @@ class CommentControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_store()
+    public function test_store(): void
     {
         $film = Film::factory()->create();
 
@@ -257,7 +257,7 @@ class CommentControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_update()
+    public function test_update(): void
     {
         $comment = Comment::factory()
             ->state(new Sequence(
@@ -348,7 +348,7 @@ class CommentControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_destroy()
+    public function test_destroy(): void
     {
         $author = User::factory()->create();
 

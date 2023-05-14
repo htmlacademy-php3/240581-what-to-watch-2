@@ -17,7 +17,7 @@ class SimilarControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_index()
+    public function test_index(): void
     {
         Film::factory(30)->create();
         Genre::factory(5)->create();

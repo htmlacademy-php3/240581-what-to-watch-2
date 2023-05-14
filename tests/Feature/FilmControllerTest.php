@@ -130,7 +130,6 @@ class FilmControllerTest extends TestCase
         }
     }
 
-
     /**
      * Тест action index() FilmController`а для незалогиненного пользователя (Guest).
      *
@@ -215,7 +214,7 @@ class FilmControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_index_for_logged_user()
+    public function test_index_for_logged_user(): void
     {
         // Запустить `DatabaseSeeder`
         $this->seed();
@@ -303,7 +302,7 @@ class FilmControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_show()
+    public function test_show(): void
     {
         // Проверка на возврат 404 ошибки в случае попытки обращения к несуществующему фильму
 
@@ -433,7 +432,7 @@ class FilmControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_update()
+    public function test_update(): void
     {
         $film = Film::factory()
             ->state([

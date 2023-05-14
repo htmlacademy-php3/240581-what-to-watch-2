@@ -27,7 +27,6 @@ class ImdbProxyCommentRepository implements ExternalCommentRepositoryInterface
      * Метод получения всех комментариев в базе данных imdb proxy (http://guide.phpdemo.ru/api)
      *
      * @return array|null - массив с комментариями, созданными после даты, определённой в $cutoffDate
-     *
      */
     public function findAllNew(): array|null
     {

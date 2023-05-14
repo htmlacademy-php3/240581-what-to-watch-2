@@ -105,7 +105,6 @@ class FilmService
         return $genresId;
     }
 
-
     /**
      * Метод сохранения фильма в базе
      *
@@ -122,6 +121,7 @@ class FilmService
             $genresId = $this->getIdOfFilmGenres($filmData['genres']);
 
             $film = $this->createFilm($filmData);
+
             $film->save();
 
             $film->actors()->attach($actorsId);
@@ -300,6 +300,6 @@ class FilmService
 
         $fourFilmsCollection = $filmsCollection->collapse()->unique('id')->random(4);
 
-        return FilmListResource::collection($fourFilmsCollection)->toArray($fourFilmsCollection);
+        return FilmListResource::collection($fourFilmsCollection)->all();
     }
 }

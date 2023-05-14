@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 use App\Jobs\AddExternalCommentJob;
 use App\Models\Film;
-use App\services\CommentService;
+use App\Services\CommentService;
 
 class CommentServiceTest extends TestCase
 {
@@ -20,7 +20,7 @@ class CommentServiceTest extends TestCase
      *
      * @return void
      */
-    public function test_attach_new_comment_to_film()
+    public function test_attach_new_comment_to_film(): void
     {
         Queue::fake();
 

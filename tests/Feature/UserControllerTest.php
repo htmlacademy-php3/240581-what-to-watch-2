@@ -23,24 +23,19 @@ class UserControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_show()
+    public function test_index(): void
     {
-        $requestedUser = User::factory()->create();
+        User::factory()->create();
 
         // Проверка, если пользователь неаутентифицирован
-        $response = $this->getJson("/api/user/{$requestedUser->id}");
+        $response = $this->getJson('/api/user');
 
         $response->assertUnauthorized();
 
-        // Проверка, если пользователь аутентифицирован, но не владелец профиля
+        // Проверка, если пользователь аутентифицирован
         $user = Sanctum::actingAs(User::factory()->create());
 
-        $response = $this->actingAs($user)->getJson("/api/user/{$requestedUser->id}");
-
-        $response->assertForbidden();
-
-        // Проверка, если пользователь аутентифицирован и владелец профиля
-        $response = $this->actingAs($user)->getJson("/api/user/{$user->id}");
+        $response = $this->actingAs($user)->getJson('/api/user');
 
         $userService = new UserService($user);
 
@@ -58,15 +53,6 @@ class UserControllerTest extends TestCase
                 'avatar' => $user->file,
                 'role' => $userService->getRole(),
             ]);
-
-        // Проверка, если пользователь аутентифицирован, не владелец профиля, но модератор
-        $moderator = Sanctum::actingAs(User::factory()->state([
-            'is_moderator' => true,
-        ])->create());
-
-        $response = $this->actingAs($moderator)->getJson("/api/user/{$user->id}");
-
-        $response->assertForbidden();
     }
 
     /**
@@ -74,12 +60,12 @@ class UserControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_update()
+    public function test_update(): void
     {
         $requestedUser = User::factory()->create();
 
         // Проверка, если пользователь неаутентифицирован
-        $response = $this->patchJson("/api/user/{$requestedUser->id}", [
+        $response = $this->patchJson('/api/user/', [
             'name' => $requestedUser->name,
             'email' => $requestedUser->email,
         ]);
@@ -96,17 +82,7 @@ class UserControllerTest extends TestCase
         ]));
 
         // Логикой контроллера предусматривается, что производится обновление профиля пользователя, соответствующего текущему пользователю ($user = Auth::user();), независимо от того, какой id указан в uri. Фактически, пользователь будет редактировать свой профиль, поэтому при попытке указать email чужого профиля (обязательный параметр) будет ошибка валидации.
-        $response = $this->actingAs($user)->patchJson("/api/user/{$requestedUser->id}", [
-            'name' => $requestedUser->name,
-            'email' => $requestedUser->email,
-        ]);
-
-        $response->assertInvalid('email');
-
-        // Тоже самое в случае пользователя с ролью модератора.
-        $moderator = Sanctum::actingAs(User::factory()->moderator()->create());
-
-        $response = $this->actingAs($moderator)->patchJson("/api/user/{$user->id}", [
+        $response = $this->actingAs($user)->patchJson('/api/user/', [
             'name' => $requestedUser->name,
             'email' => $requestedUser->email,
         ]);
@@ -117,7 +93,7 @@ class UserControllerTest extends TestCase
         Storage::fake('avatars');
 
         // а) Проверка работы при отсутствии новых данных
-        $response = $this->actingAs($user)->patchJson("/api/user/{$user->id}", [
+        $response = $this->actingAs($user)->patchJson('/api/user/', [
             'name' => $user->name,
             'email' => $user->email,
         ]);
@@ -127,8 +103,7 @@ class UserControllerTest extends TestCase
         // б) Проверка работы при изменении данных пользователя
         $file = UploadedFile::fake()->image('avatar.jpg');
 
-        $response = $this->actingAs($user)->patchJson("/api/user/
-        {$user->id}", [
+        $response = $this->actingAs($user)->patchJson('/api/user/', [
             'name' => 'NotAbigail',
             'email' => 'newemail@email.com',
             'password' => '87654321',
@@ -142,19 +117,18 @@ class UserControllerTest extends TestCase
         $this->assertEquals('NotAbigail', $user->name);
         $this->assertEquals('newemail@email.com', $user->email);
         $this->assertEquals(true, Hash::check('87654321', $user->password));
-        Storage::disk('avatars')->assertExists("avatars/{$file->hashName()}");
+        Storage::disk()->assertExists("avatars/{$file->hashName()}");
         $this->assertEquals("avatars/{$file->hashName()}", $user->file);
 
         // Проверка удаления старого аватара из хранилища
         $newFile = UploadedFile::fake()->image('newAvatar.jpg');
 
-        $response = $this->actingAs($user)->patchJson("/api/user/
-        {$user->id}", [
+        $response = $this->actingAs($user)->patchJson('/api/user/', [
             'name' => 'NotAbigail',
             'email' => 'newemail@email.com',
             'file' => $newFile,
         ]);
 
-        Storage::disk('avatars')->assertMissing("avatars/{$file->hashName()}");
+        Storage::disk()->assertMissing("avatars/{$file->hashName()}");
     }
 }

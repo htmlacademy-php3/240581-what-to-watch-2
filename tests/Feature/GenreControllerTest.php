@@ -20,7 +20,7 @@ class GenreControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_index()
+    public function test_index(): void
     {
         $count = 10;
         Genre::factory($count)->create();
@@ -48,7 +48,7 @@ class GenreControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_update()
+    public function test_update(): void
     {
         // Эталонные названия жанров
         $genreTitle = $this->faker->unique()->word();

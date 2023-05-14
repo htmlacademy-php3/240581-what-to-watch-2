@@ -20,16 +20,14 @@ class FilmRouteTest extends TestCase
      *
      * @return void
      */
-    public function test_get_films()
+    public function test_get_films(): void
     {
         // Проверка, если пользователь неаутентифицирован
         $response = $this->getJson('/api/films');
 
         $response
             ->assertOk()
-            ->assertJsonStructure([
-                // 'data' => []
-            ]);
+            ->assertJsonStructure([]);
 
         // Проверка, если пользователь аутентифицирован
         $user = Sanctum::actingAs(User::factory()->create());
@@ -38,9 +36,7 @@ class FilmRouteTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertJsonStructure([
-                // 'data' => []
-            ]);
+            ->assertJsonStructure([]);
 
         // Проверка, если пользователь аутентифицирован как модератор
         $user = Sanctum::actingAs(User::factory()->moderator()->create());
@@ -49,9 +45,7 @@ class FilmRouteTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertJsonStructure([
-                // 'data' => []
-            ]);
+            ->assertJsonStructure([]);
     }
 
     /**
@@ -59,7 +53,7 @@ class FilmRouteTest extends TestCase
      *
      * @return void
      */
-    public function test_get_film()
+    public function test_get_film(): void
     {
         $film = Film::factory()->create();
 
@@ -68,9 +62,7 @@ class FilmRouteTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertJsonStructure([
-                // 'data' => []
-            ]);
+            ->assertJsonStructure([]);
 
         // Проверка, если пользователь аутентифицирован
         $user = Sanctum::actingAs(User::factory()->create());
@@ -79,9 +71,7 @@ class FilmRouteTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertJsonStructure([
-                // 'data' => []
-            ]);
+            ->assertJsonStructure([]);
 
         // Проверка, если пользователь аутентифицирован как модератор
         $user = Sanctum::actingAs(User::factory()->moderator()->create());
@@ -90,9 +80,7 @@ class FilmRouteTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertJsonStructure([
-                // 'data' => []
-            ]);
+            ->assertJsonStructure([]);
     }
 
     /**
@@ -100,7 +88,7 @@ class FilmRouteTest extends TestCase
      *
      * @return void
      */
-    public function test_post_film()
+    public function test_post_film(): void
     {
         // Проверка, если пользователь неаутентифицирован
         $response = $this->postJson("/api/films?imdbId=tt0111161");
@@ -127,7 +115,7 @@ class FilmRouteTest extends TestCase
      *
      * @return void
      */
-    public function test_update_film()
+    public function test_update_film(): void
     {
         $film = Film::factory()->create();
 
@@ -152,8 +140,6 @@ class FilmRouteTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_ACCEPTED)
-            ->assertJsonStructure([
-                // 'data' => []
-            ]);
+            ->assertJsonStructure([]);
     }
 }

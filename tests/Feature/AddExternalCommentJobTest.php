@@ -19,7 +19,7 @@ class AddExternalCommentJobTest extends TestCase
      *
      * @return void
      */
-    public function test_adding_a_new_comment_to_the_database()
+    public function test_adding_a_new_comment_to_the_database(): void
     {
         $film = Film::factory()->create();
 
@@ -47,7 +47,7 @@ class AddExternalCommentJobTest extends TestCase
      *
      * @return void
      */
-    public function test_for_adding_a_task_to_the_queue()
+    public function test_for_adding_a_task_to_the_queue(): void
     {
         Queue::fake();
 

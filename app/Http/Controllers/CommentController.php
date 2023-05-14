@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
@@ -28,7 +27,7 @@ class CommentController extends Controller
 
         $comments = $film->comments->where('comment_id', null)->sortByDesc('created_at');
 
-        $commentsCollection = CommentResource::collection($comments)->toArray($comments);
+        $commentsCollection = CommentResource::collection($comments)->all();
 
         return new ApiSuccessResponse($commentsCollection);
     }

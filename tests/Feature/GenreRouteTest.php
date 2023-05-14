@@ -20,16 +20,14 @@ class GenreRouteTest extends TestCase
      *
      * @return void
      */
-    public function test_get_genres()
+    public function test_get_genres(): void
     {
         // Проверка, если пользователь неаутентифицирован
         $response = $this->getJson('/api/genres');
 
         $response
             ->assertOk()
-            ->assertJsonStructure([
-                //'data' => []
-            ]);
+            ->assertJsonStructure([]);
 
         // Проверка, если пользователь аутентифицирован
         $user = Sanctum::actingAs(User::factory()->create());
@@ -38,9 +36,7 @@ class GenreRouteTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertJsonStructure([
-                // 'data' => []
-            ]);
+            ->assertJsonStructure([]);
 
         // Проверка, если пользователь аутентифицирован как модератор
         $user = Sanctum::actingAs(User::factory()->moderator()->create());
@@ -49,9 +45,7 @@ class GenreRouteTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertJsonStructure([
-                // 'data' => []
-            ]);
+            ->assertJsonStructure([]);
     }
 
     /**
@@ -59,7 +53,7 @@ class GenreRouteTest extends TestCase
      *
      * @return void
      */
-    public function test_update_genres()
+    public function test_update_genres(): void
     {
         $genre = Genre::factory()->create();
         $genresId = $genre->id;
@@ -90,8 +84,6 @@ class GenreRouteTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_ACCEPTED)
-            ->assertJsonStructure([
-                //'data' => []
-            ]);
+            ->assertJsonStructure([]);
     }
 }

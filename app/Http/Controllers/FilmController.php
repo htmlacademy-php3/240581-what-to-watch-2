@@ -12,13 +12,15 @@ use App\Models\Film;
 use App\Http\Resources\FilmListResource;
 use App\Http\Resources\FilmResource;
 use App\Jobs\AddFilmJob;
-use App\services\FilmService;
+use App\Services\FilmService;
 
 class FilmController extends Controller
 {
     /**
      * Получение списка фильмов.
+     *
      * @param  Request|null $request
+     *
      * @return ApiSuccessResponse|ApiErrorResponse
      */
     public function index(?Request $request): ApiSuccessResponse|ApiErrorResponse
@@ -35,6 +37,7 @@ class FilmController extends Controller
      * Добавление фильма в базу.
      *
      * @param  AddFilmRequest $request
+     *
      * @return ApiSuccessResponse|ApiErrorResponse
      */
     public function store(AddFilmRequest $request): ApiSuccessResponse|ApiErrorResponse
@@ -50,6 +53,7 @@ class FilmController extends Controller
      * Получение информации о фильме.
      *
      * @param  int $id
+     *
      * @return ApiSuccessResponse|ApiErrorResponse
      */
     public function show(int $id): ApiSuccessResponse|ApiErrorResponse
