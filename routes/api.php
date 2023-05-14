@@ -45,9 +45,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('comments/{id}', [CommentController::class, 'store']);
     Route::patch('comments/{id}', [CommentController::class, 'update']);
     Route::delete('comments/{id}', [CommentController::class, 'destroy']);
-    Route::get('user', [UserController::class, 'show']);
+    Route::get('user', [UserController::class, 'index']);
     Route::patch('user', [UserController::class, 'update']);
-    Route::resource('user', UserController::class);
     Route::prefix('promo')->group(function () {
         Route::get('/', [PromoController::class, 'show'])->withoutMiddleware('auth:sanctum');
         Route::post('/{id}', [PromoController::class, 'store']);

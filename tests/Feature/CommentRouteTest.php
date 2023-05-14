@@ -22,7 +22,7 @@ class CommentRouteTest extends TestCase
      *
      * @return void
      */
-    public function test_get_comments()
+    public function test_get_comments(): void
     {
         $film = Film::factory()->create();
 
@@ -31,9 +31,7 @@ class CommentRouteTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertJsonStructure([
-                // 'data' => []
-            ]);
+            ->assertJsonStructure([]);
 
         // Проверка, если пользователь аутентифицирован
         $user = Sanctum::actingAs(User::factory()->create());
@@ -42,9 +40,7 @@ class CommentRouteTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertJsonStructure([
-                // 'data' => []
-            ]);
+            ->assertJsonStructure([]);
 
         // Проверка, если пользователь аутентифицирован как модератор
         $user = Sanctum::actingAs(User::factory()->moderator()->create());
@@ -53,9 +49,7 @@ class CommentRouteTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertJsonStructure([
-                // 'data' => []
-            ]);
+            ->assertJsonStructure([]);
     }
 
     /**
@@ -63,7 +57,7 @@ class CommentRouteTest extends TestCase
      *
      * @return void
      */
-    public function test_post_comments()
+    public function test_post_comments(): void
     {
         $film = Film::factory()->create();
         $reguestData = [
@@ -96,7 +90,7 @@ class CommentRouteTest extends TestCase
      *
      * @return void
      */
-    public function test_patch_comments()
+    public function test_patch_comments(): void
     {
         $film = Film::factory()->create();
         $unloggedUser = User::factory()->create();
@@ -134,20 +128,16 @@ class CommentRouteTest extends TestCase
         $response = $this->actingAs($user)->patchJson("/api/comments/{$userComment->id}", $reguestData);
 
         $response
-        ->assertStatus(Response::HTTP_ACCEPTED)
-            ->assertJsonStructure([
-                // 'data' => []
-            ]);
+            ->assertStatus(Response::HTTP_ACCEPTED)
+            ->assertJsonStructure([]);
 
         // Проверка, если пользователь аутентифицирован как модератор
         $moderator = Sanctum::actingAs(User::factory()->moderator()->create());
         $response = $this->actingAs($moderator)->patchJson("/api/comments/{$unloggedUserComment->id}", $reguestData);
 
         $response
-        ->assertStatus(Response::HTTP_ACCEPTED)
-            ->assertJsonStructure([
-                // 'data' => []
-            ]);
+            ->assertStatus(Response::HTTP_ACCEPTED)
+            ->assertJsonStructure([]);
     }
 
     /**
@@ -155,7 +145,7 @@ class CommentRouteTest extends TestCase
      *
      * @return void
      */
-    public function test_delete_comments()
+    public function test_delete_comments(): void
     {
         $film = Film::factory()->create();
         $unloggedUser = User::factory()->create();

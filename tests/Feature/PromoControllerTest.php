@@ -17,7 +17,7 @@ class PromoControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_show()
+    public function test_show(): void
     {
         // Проверка на возврат 404 ошибки если к Promo не добавлен ни один фильм
         Film::factory(5)->create();
@@ -26,7 +26,7 @@ class PromoControllerTest extends TestCase
         $response->assertNotFound();
 
         // Проверка получения promo-фильма
-        $promo = Film::factory(1)->state([
+        Film::factory(1)->state([
             'promo' => true,
         ])->create();
 
@@ -63,7 +63,7 @@ class PromoControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_store()
+    public function test_store(): void
     {
         Film::factory(5)->state([
             'promo' => false,

@@ -22,7 +22,7 @@ class AddFilmJobTest extends TestCase
      *
      * @return void
      */
-    public function test_adding_a_film_to_the_database()
+    public function test_adding_a_film_to_the_database(): void
     {
         $referenseFilm = Film::factory()->make()->toArray();
         $referenseActors = Actor::factory(3)->make();
@@ -82,7 +82,7 @@ class AddFilmJobTest extends TestCase
      *
      * @return void
      */
-    public function test_for_adding_a_task_to_the_queue()
+    public function test_for_adding_a_task_to_the_queue(): void
     {
         Queue::fake();
 

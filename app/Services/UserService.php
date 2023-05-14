@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Storage;
  * Прикладной сервис для объектов класса User
  *
  * @param  User $user - объект класса User
- *
  */
 class UserService
 {
@@ -43,8 +42,7 @@ class UserService
         }
 
         if ($request->hasFile('file')) {
-            $params['file'] = $request->file('file');
-            $user->file = $params['file']->store('avatars');
+            $user->file = $request->file('file')->store('avatars');
         }
 
         $user->name = $params['name'];
@@ -53,6 +51,7 @@ class UserService
         if ($user->isDirty()) {
             $user->save();
         }
+
         if (isset($oldPath)) {
             Storage::delete($oldPath);
         }
@@ -75,8 +74,6 @@ class UserService
 
     /**
      * Получение роли пользователя.
-     *
-     * @param User $user - одель класса User
      *
      * @return string - роль пользователя
      */

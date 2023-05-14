@@ -97,7 +97,6 @@ class CommentService
      * @param  array &$ids - массив для наполнения полученными результатами
      *
      * @return array $ids - массив, заполненый полученными результатами
-     *
      */
 
     public function getTreeIdOfChildren(int $commentId, array &$ids): array
@@ -119,9 +118,7 @@ class CommentService
      * @param  array $getTreeIdOfChildren - массив с id всех дочерних коментариев в виде многомерного массива
      *
      * @return Collection $ids - одномерная коллекция с id всех дочерних коментариев
-     *
      */
-
     public function getAllChildIds(array $getTreeIdOfChildren): Collection
     {
         $commentsCollection = new Collection($getTreeIdOfChildren);

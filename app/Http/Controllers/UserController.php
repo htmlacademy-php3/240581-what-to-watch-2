@@ -19,11 +19,11 @@ class UserController extends Controller
      *
      * @return ApiSuccessResponse|ApiErrorResponse
      */
-    public function show(int $id): ApiSuccessResponse|ApiErrorResponse
+    public function index(): ApiSuccessResponse|ApiErrorResponse
     {
-        $user = User::find($id);
+        $user = User::find(Auth::id());
 
-        $this->authorize('show', $user);
+        $this->authorize('index', $user);
 
         $userService = new UserService($user);
 
@@ -34,7 +34,7 @@ class UserController extends Controller
      * Обновление профиля пользователя.
      *
      * @param  UpdateUserRequest $request
-     * @param  int  $id
+     *
      * @return ApiSuccessResponse|ApiErrorResponse
      */
     public function update(UpdateUserRequest $request): ApiSuccessResponse|ApiErrorResponse

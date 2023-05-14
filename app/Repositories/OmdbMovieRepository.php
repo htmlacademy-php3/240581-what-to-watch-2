@@ -28,7 +28,6 @@ class OmdbMovieRepository implements MovieRepositoryInterface
      * @param  string $imdbId - Действительный идентификатор IMDb в The Open Movie Database (например, tt1285016)
      *
      * @return array|null - массив с информацией о фильме, полученный из базы данных OMDB через конкретную реализацию интерфейса репозитория MovieRepositoryInterface
-     *
      */
     public function findById(string $imdbId): array|null
     {

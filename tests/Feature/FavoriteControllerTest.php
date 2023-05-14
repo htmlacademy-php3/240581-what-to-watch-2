@@ -18,7 +18,7 @@ class FavoriteControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_index()
+    public function test_index(): void
     {
         // Количество избранных фильмов у пользователя
         $filmsCount = 15;
@@ -28,7 +28,6 @@ class FavoriteControllerTest extends TestCase
 
         // Количество выводимых моделей на одной странице согласно ТЗ
         $paginateCount = 8;
-
 
         // Проверка, если пользователь неаутентифицирован
         User::factory()->has(Film::factory($filmsCount))->create();
@@ -102,7 +101,7 @@ class FavoriteControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_store()
+    public function test_store(): void
     {
         // Проверка, если пользователь неаутентифицирован
         $film = Film::factory()->create();
@@ -147,7 +146,7 @@ class FavoriteControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_destroy()
+    public function test_destroy(): void
     {
         // Проверка, если пользователь неаутентифицирован
         $film = Film::factory()->create();
