@@ -8,7 +8,7 @@ use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
 use App\Models\Film;
 use App\Http\Resources\FilmResource;
-use App\services\FilmService;
+use App\Services\FilmService;
 
 class PromoController extends Controller
 {

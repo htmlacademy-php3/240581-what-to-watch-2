@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
 use App\Models\Genre;
-use App\services\GenreService;
+use App\Services\GenreService;
 
 class GenreController extends Controller
 {

@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use App\repositories\OmdbMovieRepository;
+use App\Repositories\OmdbMovieRepository;
 use GuzzleHttp\Client;
 
 class OmdbMovieRepositoryTest extends TestCase

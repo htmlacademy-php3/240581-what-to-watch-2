@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
-use App\services\FilmService;
+use App\Services\FilmService;
 
 class SimilarController extends Controller
 {
