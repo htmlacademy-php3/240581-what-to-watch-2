@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\MovieRepositoryInterface;
-use App\repositories\OmdbMovieRepository;
+use App\Repositories\OmdbMovieRepository;
 use App\Models\Actor;
 use App\Models\Comment;
 use App\Models\Film;

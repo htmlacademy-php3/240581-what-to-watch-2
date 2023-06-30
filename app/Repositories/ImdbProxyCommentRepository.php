@@ -1,8 +1,8 @@
 <?php
 
-namespace App\repositories;
+namespace App\Repositories;
 
-use App\repositories\ExternalCommentRepositoryInterface;
+use App\Repositories\ExternalCommentRepositoryInterface;
 use Carbon\Carbon;
 
 /**

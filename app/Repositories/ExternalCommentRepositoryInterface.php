@@ -1,6 +1,6 @@
 <?php
 
-namespace App\repositories;
+namespace App\Repositories;
 
 /**
  * Интерфейс репозитория для класса Comment
